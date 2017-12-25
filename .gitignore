@@ -235,5 +235,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-NewBuildOland/NewBuildOland.vcxproj
-NewBuildOland/NewBuildOland.vcxproj.filters
+# Ignoring visual studio project files
+*.vcxproj
+*.vcxproj.filters
