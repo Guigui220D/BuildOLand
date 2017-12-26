@@ -5,5 +5,5 @@
 StateBase::StateBase(Game& game) 
 	: game(&game)
 {
-
+	
 }

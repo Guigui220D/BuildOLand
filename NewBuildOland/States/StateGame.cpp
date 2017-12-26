@@ -18,5 +18,6 @@ void StateGame::update(float dt) {
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
+	window.setView(game->worldView);
 	window.draw(circle);
 }

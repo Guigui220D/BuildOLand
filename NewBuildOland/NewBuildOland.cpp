@@ -10,6 +10,7 @@ int main()
 {
 	//Starts the game
 	Game game;
+
 	game.run();
 	
 	return 0;
