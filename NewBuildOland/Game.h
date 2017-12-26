@@ -19,11 +19,3 @@ private:
 	sf::RenderWindow window;
 	StateBase *currentState;
 };
-
-class Game
-{
-public:
-	Game();
-	~Game();
-};
-
