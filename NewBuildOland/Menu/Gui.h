@@ -4,10 +4,7 @@
 class Gui : sf::RectangleShape
 {
 public:
-	Gui(StateBase& state);
+	Gui();
 	~Gui();
-	StateBase* state = nullptr;
-	Game* game = nullptr;
-
 };
 

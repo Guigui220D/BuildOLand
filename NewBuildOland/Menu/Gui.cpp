@@ -4,9 +4,9 @@
 #include "../Game.h"
 
 
-Gui::Gui(StateBase& parent) : state(&parent)
+Gui::Gui()
 {
-	game = state->game;	
+
 }
 
 
