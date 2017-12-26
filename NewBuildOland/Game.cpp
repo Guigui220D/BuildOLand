@@ -68,7 +68,6 @@ void Game::updateView()
 		float xSize = ratio * 800;
 		worldView.setSize(sf::Vector2f(xSize, 800));
 	}
-	std::cout << "Test";
 }
 
 sf::RenderWindow& Game::getWindow() {
