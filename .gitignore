@@ -238,3 +238,4 @@ _Pvt_Extensions
 # Ignoring visual studio project files
 *.vcxproj
 *.vcxproj.filters
+*.sln

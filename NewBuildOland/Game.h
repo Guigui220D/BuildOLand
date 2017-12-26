@@ -20,3 +20,10 @@ private:
 	StateBase *currentState;
 };
 
+class Game
+{
+public:
+	Game();
+	~Game();
+};
+

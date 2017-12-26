@@ -49,3 +49,13 @@ Game::~Game()
 	//(because we allocated it with "new")
 	delete currentState;
 }
+
+
+Game::Game()
+{
+}
+
+
+Game::~Game()
+{
+}
