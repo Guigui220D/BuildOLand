@@ -73,6 +73,11 @@ void World::setBlockId(sf::Vector2u pos, unsigned short value)
 {
 }
 
+sf::Vector2u World::getSize()
+{
+	return worldSize;
+}
+
 World::~World()
 {
 }

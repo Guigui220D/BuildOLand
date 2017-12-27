@@ -7,6 +7,7 @@ FlatWorld::FlatWorld(Game& game)
 	: World(game)
 {
 	loadWorld();
+	worldSize = sf::Vector2u(24, 24);
 }
 
 

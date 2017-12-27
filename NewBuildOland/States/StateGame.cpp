@@ -22,8 +22,25 @@ void StateGame::update(float dt) {
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
+	//Set the right view for world drawing
 	window.setView(game->getWorldView());
+	//Get world size
+	sf::Vector2u size = currentWorld->getSize();
+	//Create a rectangle for drawing
+	sf::RectangleShape draw = sf::RectangleShape();
+	draw.setSize(sf::Vector2f(50, 50));
+	draw.setFillColor(sf::Color::Green);
+	//Iterate through the world to draw each tile
+	for (unsigned int x = 0; x < size.x; x++)
+	{
+		for (unsigned int y = 0; y < size.y; y++)
+		{
+			draw.setPosition(x * 55, y * 55);	//This should be *50 but for testing it's *55 to see each tile individually
+			window.draw(draw);
+		}
+	}
 	window.draw(circle);
+	
 }
 
 void StateGame::setWorld(World &world) {

@@ -19,6 +19,7 @@ public:
 	virtual unsigned short getBlockId(sf::Vector2u pos);
 	virtual void setGroundId(sf::Vector2u pos, unsigned short value);
 	virtual void setBlockId(sf::Vector2u pos, unsigned short value);
+	sf::Vector2u getSize();
 
 	~World();
 
