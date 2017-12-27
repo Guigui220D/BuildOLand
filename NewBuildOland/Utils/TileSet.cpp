@@ -6,7 +6,8 @@
 
 TileSet::TileSet()
 {
-
+	texture = sf::Texture();
+	texture.loadFromFile("testTile.png");
 }
 
 
@@ -16,12 +17,19 @@ TileSet::~TileSet()
 
 sf::IntRect TileSet::getGroundRect(unsigned int id)
 {
-	return sf::IntRect();
+	if (id == 0)
+	{
+		return sf::IntRect(0, 0, 8, 8);
+	}
+	else
+	{
+		return sf::IntRect(0, 8, 8, 8);
+	}
 }
 
 sf::IntRect TileSet::getBlockRect(unsigned int id)
 {
-	return sf::IntRect();
+	return sf::IntRect(0, 0, 8, 8);
 }
 
 sf::Texture* TileSet::getTexture()

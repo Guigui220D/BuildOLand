@@ -4,7 +4,7 @@
 #include "StateBase.h"
 #include "../Game.h"
 #include "../Worlds/World.h"
-#include "../Res/TestTileSet.h"
+#include "../Utils/TileSet.h"
 
 class StateGame : public StateBase
 {

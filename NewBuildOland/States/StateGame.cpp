@@ -2,6 +2,7 @@
 #include "StateGame.h"
 #include "../Worlds/FlatWorld.h"
 #include <iostream>
+#include "../Utils/TileSet.h"
 
 StateGame::StateGame(Game& game)
 	: StateBase(game),
@@ -9,7 +10,7 @@ StateGame::StateGame(Game& game)
 {
 	//Set the world
 	currentWorld = new FlatWorld(game);
-	tileset = TestTileSet();
+	tileset = TileSet();
 	circle.setFillColor(sf::Color::Red);
 }
 
@@ -34,10 +35,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 	for (unsigned int x = 0; x < size.x; x++)
 	{
 		for (unsigned int y = 0; y < size.y; y++)
-		{
-			//Not working : the tileset.getGroundRect method seems to return a (0, 0, 0, 0) rectangle
+		{			
 			draw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
-			draw.setPosition(x * 55, y * 55);	//This should be *50 but for testing it's *55 to see each tile individually
+			draw.setPosition(x * 50, y * 50);	//This should be *50 but for testing it's *55 to see each tile individually
 			window.draw(draw);
 		}
 	}
