@@ -1,16 +1,33 @@
 #pragma once
 #include <SFML\system.hpp>
 
+class Game;
+
 class World
 {
 public:
-	World();
+	World(Game& game);
+	
+	//Loads the world with the WorldManager class ?
+	//And returns true if success
+	bool loadWorld();
+	
+	//Method that generates the world procedurally
+	virtual void generateWorld() = 0;
+
+	virtual unsigned short getGroundId(sf::Vector2u pos);
+	virtual unsigned short getBlockId(sf::Vector2u pos);
+	virtual void setGroundId(sf::Vector2u pos, unsigned short value);
+	virtual void setBlockId(sf::Vector2u pos, unsigned short value);
+
 	~World();
-	virtual unsigned short getGround(sf::Vector2u pos);
-	virtual unsigned short getBlock(sf::Vector2u pos);
-	virtual void setGround(sf::Vector2u pos, unsigned short value);
-	virtual void setBlock(sf::Vector2u pos, unsigned short value);
-	sf::Vector2u size;
+
+protected:
+	Game* game = nullptr;
+
+	std::string worldName = "world1";
+	sf::Vector2u worldSize;
+	long worldSeed;
 
 };
 

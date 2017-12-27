@@ -239,4 +239,7 @@ _Pvt_Extensions
 *.vcxproj
 *.vcxproj.filters
 *.sln
+
+# Buildoland specific
 NewBuildOland.sln
+gamedata/

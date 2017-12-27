@@ -13,11 +13,9 @@ public:
 
 	sf::RenderWindow& getWindow();
 
-	/*These view are in the game, because guiView is constant,
-	and worldview is needed in almost all states
-	Other view can be added by states if needed*/
-	sf::View guiView;
-	sf::View worldView;
+	sf::View& getWorldView();
+	sf::View& getGuiView();
+
 	void updateView();
 	const unsigned int MIN_SIZE = 200;
 
@@ -26,4 +24,10 @@ public:
 private:
 	sf::RenderWindow window;
 	StateBase *currentState;
+
+	/*These view are in the game, because guiView is constant,
+	and worldview is needed in almost all states
+	Other views can be added by states if needed*/
+	sf::View guiView;
+	sf::View worldView;
 };

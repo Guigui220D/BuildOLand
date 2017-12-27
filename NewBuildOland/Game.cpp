@@ -74,9 +74,18 @@ sf::RenderWindow& Game::getWindow() {
 	return window;
 }
 
+sf::View& Game::getWorldView() {
+	return worldView;
+}
+
+sf::View& Game::getGuiView() {
+	return guiView;
+}
+
+
 Game::~Game()
 {
-	//We delete all the pointers to prevent memory leaks
+	//We delete pointers to prevent memory leaks
 	//(because we allocated it with "new")
 	delete currentState;
 }
