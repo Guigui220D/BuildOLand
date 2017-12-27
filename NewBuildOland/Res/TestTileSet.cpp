@@ -1,6 +1,18 @@
 #include "stdafx.h"
 #include "TestTileSet.h"
 #include "../Utils/TileSet.h"
+#include <iostream>
+
+TestTileSet::TestTileSet()
+{
+	texture = sf::Texture();
+	//If this crashes, use the debug libs on the linker, add the -d
+	texture.loadFromFile("testTile.png");
+}
+
+TestTileSet::~TestTileSet()
+{
+}
 
 sf::IntRect TestTileSet::getGroundRect(unsigned int id)
 {
@@ -10,7 +22,7 @@ sf::IntRect TestTileSet::getGroundRect(unsigned int id)
 	}
 	else
 	{
-		return sf::IntRect(8, 8, 8, 8);
+		return sf::IntRect(0, 8, 8, 8);
 	}
 }
 

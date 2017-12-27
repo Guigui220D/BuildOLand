@@ -23,7 +23,7 @@ unsigned short FlatWorld::getGroundId(sf::Vector2u pos)
 {
 	if (pos.x < 0 || pos.y < 0 || pos.x >= worldSize.x || pos.y >= worldSize.y)
 		return 0;
-	return (pos.x % 2 == 0);
+	return (pos.x % 2);
 }
 
 unsigned short FlatWorld::getBlockId(sf::Vector2u pos)

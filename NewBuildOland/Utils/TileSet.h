@@ -7,10 +7,11 @@
 class TileSet
 {
 public:
-	TileSet(sf::Texture text);
+	TileSet();
 	~TileSet();
 	virtual sf::IntRect getGroundRect(unsigned int id);
 	virtual sf::IntRect getBlockRect(unsigned int id);
+	sf::Texture* getTexture();
 protected:
 	sf::Texture texture;
 };

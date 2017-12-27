@@ -4,6 +4,7 @@
 #include "StateBase.h"
 #include "../Game.h"
 #include "../Worlds/World.h"
+#include "../Res/TestTileSet.h"
 
 class StateGame : public StateBase
 {
@@ -21,5 +22,6 @@ public:
 private:
 	sf::CircleShape circle; //Temporary, used for testing
 	World *currentWorld = nullptr;
+	TileSet tileset;
 };
 
