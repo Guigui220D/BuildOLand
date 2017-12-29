@@ -55,7 +55,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.setView(game->getGuiView());	
 	window.draw(mapFrame);
 	mapView.setSize(game->getWorldView().getSize());
-	mapView.zoom(2);
+	mapView.zoom(3);
+	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	sf::RectangleShape mapdraw = sf::RectangleShape();
 	mapdraw.setSize(sf::Vector2f(80, 80));

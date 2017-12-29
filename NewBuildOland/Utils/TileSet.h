@@ -31,8 +31,8 @@ protected:
 	sf::Color colors[3] =
 	{
 		Color(0, 127, 0),
-		Color(127, 127, 255),
-		Color(127, 255, 64)
+		Color(64, 64, 255),
+		Color(255, 127, 64)
 	};
 	sf::IntRect errorRect = IntRect(0, 0, 8, 8);
 	sf::Color errorColor = Color(255, 0, 255);
