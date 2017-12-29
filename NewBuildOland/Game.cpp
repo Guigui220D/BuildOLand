@@ -4,7 +4,7 @@
 
 
 Game::Game()
-	: window(sf::VideoMode(200, 200), "BuildOLand")
+	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
 {
 	window.setFramerateLimit(30);
