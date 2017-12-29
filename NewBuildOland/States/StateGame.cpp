@@ -10,7 +10,7 @@ StateGame::StateGame(Game& game)
 {
 	//Set the world
 	currentWorld = new FlatWorld(game);
-	tileset = TileSet();
+	tileset;
 	circle.setFillColor(sf::Color::Red);
 }
 

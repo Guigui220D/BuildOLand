@@ -26,6 +26,8 @@ public:
 protected:
 	Game* game = nullptr;
 
+
+
 	std::string worldName = "world1";
 	sf::Vector2u worldSize;
 	long worldSeed;

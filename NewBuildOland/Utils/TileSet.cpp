@@ -17,19 +17,16 @@ TileSet::~TileSet()
 
 sf::IntRect TileSet::getGroundRect(unsigned int id)
 {
-	if (id == 0)
-	{
-		return sf::IntRect(0, 0, 8, 8);
-	}
-	else
-	{
-		return sf::IntRect(0, 8, 8, 8);
-	}
+	if (id < groundRectsSize)
+		return groundRects[id];
+	return errorRect;
 }
 
 sf::IntRect TileSet::getBlockRect(unsigned int id)
 {
-	return sf::IntRect(0, 0, 8, 8);
+	if (id < blockRectsSize)
+		return blockRects[id];
+	return errorRect;
 }
 
 sf::Texture* TileSet::getTexture()
