@@ -26,5 +26,6 @@ private:
 	World *currentWorld = nullptr;
 	TileSet tileset;
 	sf::View mapView;
+	sf::RectangleShape mapFrame;
 };
 

@@ -12,8 +12,15 @@ StateGame::StateGame(Game& game)
 	currentWorld = new FlatWorld(game);
 	tileset;
 	circle.setFillColor(sf::Color::Red);
+
 	mapView = View();
-	mapView.setViewport(sf::FloatRect(0.70f, 0.05f, 0.25f, 0.25f));
+	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
+	mapFrame = sf::RectangleShape();
+	mapFrame.setFillColor(sf::Color::Black);
+	mapFrame.setOutlineColor(sf::Color(255, 255, 0));
+	mapFrame.setOutlineThickness(0.005f);
+	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
+	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
 }
 
 void StateGame::handleInput() {
@@ -45,17 +52,10 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 	window.draw(circle);
 	//Draw the map
-	window.setView(game->getGuiView());
-	//This is just for proof of concept, and will be optimized later
-	sf::RectangleShape map = sf::RectangleShape();
-	map.setFillColor(sf::Color::Black);
-	map.setOutlineColor(sf::Color(255, 255, 0));
-	map.setOutlineThickness(0.005f);
-	map.setPosition(0.70f, 0.05f);
-	map.setSize(sf::Vector2f(0.25f, 0.25f));
+	window.setView(game->getGuiView());	
+	window.draw(mapFrame);
 	mapView.setSize(game->getWorldView().getSize());
 	mapView.zoom(2);
-	window.draw(map);
 	window.setView(mapView);
 	sf::RectangleShape mapdraw = sf::RectangleShape();
 	mapdraw.setSize(sf::Vector2f(80, 80));
