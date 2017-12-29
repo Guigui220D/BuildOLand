@@ -24,12 +24,12 @@ Game::Game()
 
 void Game::run()
 {
+	sf::Clock clk = Clock();
 	//Start the game loop
 	while (window.isOpen())
 	{
 		//First step, get the input from the player
 		currentState->handleInput();
-
 		//The event handler
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -43,7 +43,7 @@ void Game::run()
 		//Then update everything in that state (positions etc..)
 		//The argument is the time between the last frame (delta time)
 		//todo: calculate the real delta time
-		currentState->update(0.0);
+		currentState->update(clk.restart().asSeconds());
 		
 		window.clear();
 		//Finally draw everything on the window after the changes have been made
