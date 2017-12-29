@@ -14,6 +14,9 @@ Game::Game()
 	//The worldView sizing is automated
 	worldView = sf::View();
 	worldView.setCenter(0, 0);
+	guiView = sf::View();
+	guiView.setSize(1, 1);
+	guiView.setCenter(0.5f, 0.5f);
 	updateView();
 
 	currentState = new StateGame(*this);

@@ -12,6 +12,8 @@ StateGame::StateGame(Game& game)
 	currentWorld = new FlatWorld(game);
 	tileset;
 	circle.setFillColor(sf::Color::Red);
+	mapView = View();
+	mapView.setViewport(sf::FloatRect(0.70f, 0.05f, 0.25f, 0.25f));
 }
 
 void StateGame::handleInput() {
@@ -37,12 +39,41 @@ void StateGame::draw(sf::RenderWindow &window) {
 		for (unsigned int y = 0; y < size.y; y++)
 		{			
 			draw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
-			draw.setPosition(x * 80, y * 80);	//This should be *50 but for testing it's *55 to see each tile individually
+			draw.setPosition(x * 80, y * 80);
 			window.draw(draw);
 		}
 	}
 	window.draw(circle);
-	
+	//Draw the map
+	window.setView(game->getGuiView());
+	//This is just for proof of concept, and will be optimized later
+	sf::RectangleShape map = sf::RectangleShape();
+	map.setFillColor(sf::Color::Black);
+	map.setOutlineColor(sf::Color(255, 255, 0));
+	map.setOutlineThickness(0.005f);
+	map.setPosition(0.70f, 0.05f);
+	map.setSize(sf::Vector2f(0.25f, 0.25f));
+	mapView.setSize(game->getWorldView().getSize());
+	mapView.zoom(2);
+	window.draw(map);
+	window.setView(mapView);
+	sf::RectangleShape mapdraw = sf::RectangleShape();
+	mapdraw.setSize(sf::Vector2f(80, 80));
+	//Same method
+	for (unsigned int x = 0; x < size.x; x++)
+	{
+		for (unsigned int y = 0; y < size.y; y++)
+		{
+			mapdraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y))));
+			mapdraw.setPosition(x * 80, y * 80);
+			window.draw(mapdraw);
+		}
+	}
+}
+
+sf::View& StateGame::getMapView()
+{
+	return mapView;
 }
 
 void StateGame::setWorld(World &world) {

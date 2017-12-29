@@ -15,6 +15,8 @@ public:
 	void update(float dt)				override;
 	void draw(sf::RenderWindow &window) override;
 
+	sf::View& getMapView();
+
 	void setWorld(World &world);
 
 	~StateGame();
@@ -23,5 +25,6 @@ private:
 	sf::CircleShape circle; //Temporary, used for testing
 	World *currentWorld = nullptr;
 	TileSet tileset;
+	sf::View mapView;
 };
 

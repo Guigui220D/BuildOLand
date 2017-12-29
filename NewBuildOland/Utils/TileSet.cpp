@@ -29,6 +29,13 @@ sf::IntRect TileSet::getBlockRect(unsigned int id)
 	return errorRect;
 }
 
+sf::Color TileSet::getMapPixel(unsigned int id)
+{
+	if (id < groundRectsSize)
+		return colors[id];
+	return errorColor;
+}
+
 sf::Texture* TileSet::getTexture()
 {
 	return &texture;
