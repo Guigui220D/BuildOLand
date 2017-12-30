@@ -7,6 +7,8 @@ Player::Player()
 	setFillColor(sf::Color(127, 0, 0));
 	setOutlineColor(sf::Color::White);
 	setOutlineThickness(8);
+	setOrigin(50, 50);
+	setOnMapColor(sf::Color(255, 64, 32));
 }
 
 
@@ -16,5 +18,6 @@ Player::~Player()
 
 void Player::update(double delta)
 {
-	setPosition(getPosition().x + delta * 100, getPosition().y);
+	if (!touchesBlock())
+		setPosition(getPosition().x + delta * 50, getPosition().y + delta * 20);
 }

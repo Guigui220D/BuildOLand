@@ -36,6 +36,7 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
+	game->getWorldView().setCenter(player.getPosition());
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
@@ -83,6 +84,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(mapDraw);
 		}
 	}
+	window.draw(*player.getOnMap());
 }
 
 sf::View& StateGame::getMapView()
