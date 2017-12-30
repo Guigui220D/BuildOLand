@@ -7,7 +7,7 @@ Game::Game()
 	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
 {
-	window.setFramerateLimit(30);
+	//window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
 	guiView = sf::View();
@@ -25,6 +25,8 @@ Game::Game()
 void Game::run()
 {
 	sf::Clock clk = Clock();
+	sf::Clock fpsClk = Clock();
+	int count = 0;
 	//Start the game loop
 	while (window.isOpen())
 	{
@@ -49,6 +51,15 @@ void Game::run()
 		//Finally draw everything on the window after the changes have been made
 		currentState->draw(window);
 		window.display();
+		count++;
+		if (count >= 200)
+		{
+			double time = fpsClk.restart().asSeconds();
+			time /= count;
+			double fps = 1 / time;
+			std::cout << "FPS : " << fps << std::endl;
+			count = 0;
+		}
 	}
 }
 
