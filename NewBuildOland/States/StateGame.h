@@ -20,6 +20,8 @@ public:
 
 	void setWorld(World &world);
 
+	Entities* cameraFollow;
+
 	~StateGame();
 
 private:

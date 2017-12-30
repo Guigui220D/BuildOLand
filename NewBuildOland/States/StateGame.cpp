@@ -28,6 +28,7 @@ StateGame::StateGame(Game& game)
 	mapDraw.setSize(sf::Vector2f(80, 80));
 
 	player = Player();
+	cameraFollow = &player;
 }
 
 void StateGame::handleInput() {
@@ -36,7 +37,7 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
-	game->getWorldView().setCenter(player.getPosition());
+	game->getWorldView().setCenter(cameraFollow->getPosition());
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
