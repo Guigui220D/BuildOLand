@@ -27,5 +27,7 @@ private:
 	TileSet tileset;
 	sf::View mapView;
 	sf::RectangleShape mapFrame;
+	sf::RectangleShape worldDraw;
+	sf::RectangleShape mapDraw;
 };
 

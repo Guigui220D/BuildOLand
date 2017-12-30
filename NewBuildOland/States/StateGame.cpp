@@ -21,6 +21,13 @@ StateGame::StateGame(Game& game)
 	mapFrame.setOutlineThickness(0.005f);
 	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
+
+	worldDraw = sf::RectangleShape();
+	worldDraw.setSize(sf::Vector2f(80, 80));
+	worldDraw.setTexture(tileset.getTexture());
+
+	mapDraw = sf::RectangleShape();
+	mapDraw.setSize(sf::Vector2f(80, 80));
 }
 
 void StateGame::handleInput() {
@@ -37,24 +44,25 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Get world size
 	sf::Vector2u size = currentWorld->getSize();
 	//Create a rectangle for drawing
-	sf::RectangleShape draw = sf::RectangleShape();
-	draw.setSize(sf::Vector2f(80, 80));
-	draw.setTexture(tileset.getTexture());
+	
 	//Iterate through the world to draw each tile
 	for (unsigned int x = 0; x < size.x; x++)
 	{
 		for (unsigned int y = 0; y < size.y; y++)
 		{			
-			draw.setPosition(x * 80, y * 80);
-			draw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
-			window.draw(draw);
-			draw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
-			draw.setFillColor(sf::Color::Black);
-			draw.setPosition(x * 80 - 5, y * 80 + 5);
-			window.draw(draw);
-			draw.setFillColor(sf::Color::White);
-			draw.setPosition(x * 80, y * 80);
-			window.draw(draw);
+			//Draw the ground
+			worldDraw.setPosition(x * 80, y * 80);
+			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
+			window.draw(worldDraw);
+			//Draw the block shadow
+			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
+			worldDraw.setFillColor(sf::Color::Black);
+			worldDraw.setPosition(x * 80 - 5, y * 80 + 5);
+			window.draw(worldDraw);
+			//Draw the block
+			worldDraw.setFillColor(sf::Color::White);
+			worldDraw.setPosition(x * 80, y * 80);
+			window.draw(worldDraw);
 		}
 	}
 	window.draw(circle);
@@ -65,16 +73,14 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.zoom(3);
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
-	sf::RectangleShape mapdraw = sf::RectangleShape();
-	mapdraw.setSize(sf::Vector2f(80, 80));
 	//Same method
 	for (unsigned int x = 0; x < size.x; x++)
 	{
 		for (unsigned int y = 0; y < size.y; y++)
 		{
-			mapdraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
-			mapdraw.setPosition(x * 80, y * 80);
-			window.draw(mapdraw);
+			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
+			mapDraw.setPosition(x * 80, y * 80);
+			window.draw(mapDraw);
 		}
 	}
 	window.draw(circle);
