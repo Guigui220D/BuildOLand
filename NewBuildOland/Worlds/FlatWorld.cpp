@@ -28,6 +28,8 @@ unsigned short FlatWorld::getGroundId(sf::Vector2u pos)
 
 unsigned short FlatWorld::getBlockId(sf::Vector2u pos)
 {
+	if (pos.x == 3)
+		return 1;
 	return 0;
 }
 

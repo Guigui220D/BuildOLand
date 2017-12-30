@@ -45,7 +45,14 @@ void StateGame::draw(sf::RenderWindow &window) {
 	{
 		for (unsigned int y = 0; y < size.y; y++)
 		{			
+			draw.setPosition(x * 80, y * 80);
 			draw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
+			window.draw(draw);
+			draw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
+			draw.setFillColor(sf::Color::Black);
+			draw.setPosition(x * 80 - 5, y * 80 + 5);
+			window.draw(draw);
+			draw.setFillColor(sf::Color::White);
 			draw.setPosition(x * 80, y * 80);
 			window.draw(draw);
 		}
@@ -65,11 +72,12 @@ void StateGame::draw(sf::RenderWindow &window) {
 	{
 		for (unsigned int y = 0; y < size.y; y++)
 		{
-			mapdraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y))));
+			mapdraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
 			mapdraw.setPosition(x * 80, y * 80);
 			window.draw(mapdraw);
 		}
 	}
+	window.draw(circle);
 }
 
 sf::View& StateGame::getMapView()

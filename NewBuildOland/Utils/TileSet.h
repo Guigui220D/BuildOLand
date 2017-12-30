@@ -13,7 +13,7 @@ public:
 	~TileSet();
 	sf::IntRect getGroundRect(unsigned int id);
 	sf::IntRect getBlockRect(unsigned int id);
-	sf::Color getMapPixel(unsigned int id);
+	sf::Color getMapPixel(unsigned int ground, unsigned int block);
 	sf::Texture* getTexture();
 
 protected:
@@ -21,12 +21,13 @@ protected:
 	sf::IntRect groundRects[3] = 
 	{
 		IntRect(0, 8, 8, 8),
-		IntRect(8, 0, 8, 8),
+		IntRect(0, 16, 8, 8),
 		IntRect(8, 8, 8, 8)
 	};
-	sf::IntRect blockRects[1] = 
+	sf::IntRect blockRects[2] = 
 	{
-		IntRect()
+		IntRect(8, 0, 8, 8),
+		IntRect(8, 16, 8, 8),
 	};
 	sf::Color colors[3] =
 	{
@@ -37,5 +38,5 @@ protected:
 	sf::IntRect errorRect = IntRect(0, 0, 8, 8);
 	sf::Color errorColor = Color(255, 0, 255);
 	const unsigned int groundRectsSize = 3;
-	const unsigned int blockRectsSize = 1;
+	const unsigned int blockRectsSize = 2;
 };
