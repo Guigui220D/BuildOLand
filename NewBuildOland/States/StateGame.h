@@ -5,6 +5,7 @@
 #include "../Game.h"
 #include "../Worlds/World.h"
 #include "../Utils/TileSet.h"
+#include "../Entities/Player.h"
 
 class StateGame : public StateBase
 {
@@ -22,12 +23,13 @@ public:
 	~StateGame();
 
 private:
-	sf::CircleShape circle; //Temporary, used for testing
 	World *currentWorld = nullptr;
 	TileSet tileset;
 	sf::View mapView;
 	sf::RectangleShape mapFrame;
 	sf::RectangleShape worldDraw;
 	sf::RectangleShape mapDraw;
+
+	Player player;
 };
 

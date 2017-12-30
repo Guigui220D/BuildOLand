@@ -5,13 +5,11 @@
 #include "../Utils/TileSet.h"
 
 StateGame::StateGame(Game& game)
-	: StateBase(game),
-	circle(100.0f)
+	: StateBase(game)
 {
 	//Set the world
 	currentWorld = new FlatWorld(game);
 	tileset;
-	circle.setFillColor(sf::Color::Red);
 
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
@@ -28,6 +26,8 @@ StateGame::StateGame(Game& game)
 
 	mapDraw = sf::RectangleShape();
 	mapDraw.setSize(sf::Vector2f(80, 80));
+
+	player = Player();
 }
 
 void StateGame::handleInput() {
@@ -35,7 +35,7 @@ void StateGame::handleInput() {
 }
 
 void StateGame::update(float dt) {
-
+	player.update(dt);
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
@@ -65,7 +65,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(worldDraw);
 		}
 	}
-	window.draw(circle);
+	window.draw(player);
 	//Draw the map
 	window.setView(game->getGuiView());	
 	window.draw(mapFrame);
@@ -83,7 +83,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(mapDraw);
 		}
 	}
-	window.draw(circle);
 }
 
 sf::View& StateGame::getMapView()
