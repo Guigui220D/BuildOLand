@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML\graphics.hpp>
-
+#include "../Placeables/Ground.h"
+#include "../Placeables/Block.h"
 //This is the tileset class that allows to get textures from a block id
 //All the tilsets should be in Res/
 
@@ -13,30 +14,24 @@ public:
 	~TileSet();
 	sf::IntRect getGroundRect(unsigned int id);
 	sf::IntRect getBlockRect(unsigned int id);
-	sf::Color getMapPixel(unsigned int ground, unsigned int block);
+	sf::Color getMapPixel(unsigned int groundId, unsigned int blockId);
 	sf::Texture* getTexture();
 
 protected:
+	const unsigned int TILES_IN_ROW = 2;
+	const unsigned int TILE_SIZE = 8;
 	sf::Texture texture;
-	sf::IntRect groundRects[3] = 
-	{
-		IntRect(0, 8, 8, 8),
-		IntRect(0, 16, 8, 8),
-		IntRect(8, 8, 8, 8)
-	};
-	sf::IntRect blockRects[2] = 
-	{
-		IntRect(8, 0, 8, 8),
-		IntRect(8, 16, 8, 8),
-	};
-	sf::Color colors[3] =
-	{
-		Color(0, 64, 0),
-		Color(32, 32, 128),
-		Color(128, 64, 32)
-	};
+	
 	sf::IntRect errorRect = IntRect(0, 0, 8, 8);
 	sf::Color errorColor = Color(255, 0, 255);
-	const unsigned int groundRectsSize = 3;
-	const unsigned int blockRectsSize = 2;
+
+private:
+	void generateBlocks();
+	void generateGrounds();
+	
+	sf::IntRect rectById(unsigned int tilesetId);
+
+	std::vector<Block*> blocks;
+	std::vector<Ground*> grounds;
+
 };

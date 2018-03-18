@@ -21,13 +21,13 @@ StateGame::StateGame(Game& game)
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
 
 	worldDraw = sf::RectangleShape();
-	worldDraw.setSize(sf::Vector2f(80, 80));
-	worldDraw.setOrigin(sf::Vector2f(40, 40));
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	worldDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	worldDraw.setTexture(tileset.getTexture());
 
 	mapDraw = sf::RectangleShape();
-	mapDraw.setSize(sf::Vector2f(80, 80));
-	mapDraw.setOrigin(sf::Vector2f(40, 40));
+	mapDraw.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	mapDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 
 	player = Player(currentWorld);
 	cameraFollow = &player;
@@ -47,8 +47,8 @@ void StateGame::handleInput() {
 			Vector2f diff = posInView - player.getPosition();
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 			{
-				int clickX = roundf(posInView.x / 80);
-				int clickY = roundf(posInView.y / 80);
+				int clickX = roundf(posInView.x / TILE_SIZE);
+				int clickY = roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
 					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
@@ -67,8 +67,8 @@ void StateGame::handleInput() {
 			Vector2f diff = posInView - player.getPosition();
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 			{
-				int clickX = roundf(posInView.x / 80);
-				int clickY = roundf(posInView.y / 80);
+				int clickX = roundf(posInView.x / TILE_SIZE);
+				int clickY = roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
 					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
@@ -96,17 +96,17 @@ void StateGame::draw(sf::RenderWindow &window) {
 		for (unsigned int y = 0; y < size.y; y++)
 		{			
 			//Draw the ground
-			worldDraw.setPosition(x * 80, y * 80);
+			worldDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
 			window.draw(worldDraw);
 			//Draw the block shadow
 			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
 			worldDraw.setFillColor(sf::Color::Black);
-			worldDraw.setPosition(x * 80 - 5, y * 80 + 5);
+			worldDraw.setPosition(x * TILE_SIZE - 5, y * TILE_SIZE + 5);
 			window.draw(worldDraw);
 			//Draw the block
 			worldDraw.setFillColor(sf::Color::White);
-			worldDraw.setPosition(x * 80, y * 80);
+			worldDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 			window.draw(worldDraw);
 		}
 	}
@@ -124,7 +124,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 		for (unsigned int y = 0; y < size.y; y++)
 		{
 			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
-			mapDraw.setPosition(x * 80, y * 80);
+			mapDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 			window.draw(mapDraw);
 		}
 	}
@@ -143,6 +143,11 @@ void StateGame::setWorld(World &world) {
 
 	//And load the new world
 	currentWorld = &world;
+}
+
+unsigned int StateGame::getTileSize()
+{
+	return TILE_SIZE;
 }
 
 StateGame::~StateGame()

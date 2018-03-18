@@ -15,22 +15,27 @@ public:
 	void handleInput()					override;
 	void update(float dt)				override;
 	void draw(sf::RenderWindow &window) override;
-
+	
 	sf::View& getMapView();
 
 	void setWorld(World &world);
 
 	Entities* cameraFollow;
 
+	static unsigned int getTileSize();
+
 	~StateGame();
 
 private:
 	World *currentWorld = nullptr;
+	
+	unsigned static const int TILE_SIZE = 80;
 	TileSet tileset;
 	sf::View mapView;
 	sf::RectangleShape mapFrame;
 	sf::RectangleShape worldDraw;
 	sf::RectangleShape mapDraw;
+	
 
 	Player player;
 };
