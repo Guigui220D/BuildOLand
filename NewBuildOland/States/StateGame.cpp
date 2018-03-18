@@ -44,11 +44,15 @@ void StateGame::handleInput() {
 		{
 			game->getWindow().setView(game->getWorldView());
 			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			int clickX = roundf(posInView.x / 80);
-			int clickY = roundf(posInView.y / 80);
-			if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
-				currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
-				currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+			Vector2f diff = posInView - player.getPosition();
+			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+			{
+				int clickX = roundf(posInView.x / 80);
+				int clickY = roundf(posInView.y / 80);
+				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
+					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
+					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+				}
 			}
 		}
 	}
@@ -60,26 +64,18 @@ void StateGame::handleInput() {
 		{
 			game->getWindow().setView(game->getWorldView());
 			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			int clickX = roundf(posInView.x / 80);
-			int clickY = roundf(posInView.y / 80);
-			if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
-				currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-				currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+			Vector2f diff = posInView - player.getPosition();
+			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+			{
+				int clickX = roundf(posInView.x / 80);
+				int clickY = roundf(posInView.y / 80);
+				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
+					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
+					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+				}
 			}
 		}
 	}
-
-	/*
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		int playerX = roundf(player.getPosition().x / 80);
-		int playerY = roundf(player.getPosition().y / 80);
-
-		if (currentWorld->getBlockId(sf::Vector2u(playerX, playerY)) != 1) {
-			currentWorld->setBlockId(sf::Vector2u(playerX, playerY), 1);
-			currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
-		}
-	}
-	*/
 }
 
 void StateGame::update(float dt) {

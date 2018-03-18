@@ -11,13 +11,31 @@ Player::Player()
 	setOnMapColor(sf::Color(0, 255, 0));
 }
 
-
 Player::~Player()
 {
 }
 
 void Player::update(double delta)
 {
-	if (!touchesBlock())
-		setPosition(getPosition().x + delta * 50, getPosition().y + delta * 20);
+	sf::Vector2f oldpos = getPosition();
+	sf::Vector2f newpos = getPosition();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		newpos += sf::Vector2f(-300 * delta, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		newpos += sf::Vector2f(300 * delta, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		newpos += sf::Vector2f(0, -300 * delta);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		newpos += sf::Vector2f(0, 300 * delta);
+	}
+	setPosition(newpos);
+	if (touchesBlock())
+		setPosition(oldpos);
 }
