@@ -29,7 +29,7 @@ StateGame::StateGame(Game& game)
 	mapDraw.setSize(sf::Vector2f(80, 80));
 	mapDraw.setOrigin(sf::Vector2f(40, 40));
 
-	player = Player();
+	player = Player(currentWorld);
 	cameraFollow = &player;
 }
 

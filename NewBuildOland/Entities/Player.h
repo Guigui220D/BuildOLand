@@ -5,7 +5,7 @@
 class Player : public PhysicEntity
 {
 public:
-	Player();
+	Player(World *world = nullptr);
 	~Player();
 	void update(double delta) override;
 };

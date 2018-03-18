@@ -2,7 +2,8 @@
 #include "PhysicEntity.h"
 
 
-PhysicEntity::PhysicEntity()
+PhysicEntity::PhysicEntity(World *world)
+	: Entities(world)
 {
 }
 

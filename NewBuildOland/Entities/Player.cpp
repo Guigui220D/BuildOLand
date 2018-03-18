@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player()
+Player::Player(World *world)
+	: PhysicEntity(world)
 {
 	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
