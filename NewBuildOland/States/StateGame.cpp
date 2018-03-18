@@ -33,6 +33,16 @@ StateGame::StateGame(Game& game)
 
 void StateGame::handleInput() {
 
+	//Temporary, for testing
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		int playerX = roundf(player.getPosition().x / 80);
+		int playerY = roundf(player.getPosition().y / 80);
+
+		if (currentWorld->getBlockId(sf::Vector2u(playerX, playerY)) != 1) {
+			currentWorld->setBlockId(sf::Vector2u(playerX, playerY), 1);
+			currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+		}
+	}
 }
 
 void StateGame::update(float dt) {
@@ -44,7 +54,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Set the right view for world drawing
 	window.setView(game->getWorldView());
 	//Get world size
-	sf::Vector2u size = currentWorld->getSize();
+	sf::Vector2u size = currentWorld->getWorldSize();
 	//Create a rectangle for drawing
 	
 	//Iterate through the world to draw each tile

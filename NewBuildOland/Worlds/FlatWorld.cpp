@@ -7,7 +7,6 @@ FlatWorld::FlatWorld(Game& game)
 	: World(game)
 {
 	loadWorld();
-	worldSize = sf::Vector2u(24, 24);
 }
 
 
@@ -16,27 +15,29 @@ FlatWorld::~FlatWorld()
 }
 
 void FlatWorld::generateWorld() {
+	//Set the world size
+	worldSize = sf::Vector2u(24, 24);
 
-}
+	//Populate the ground array
+	for (unsigned int x = 0; x < worldSize.x; x++) {
+		for (unsigned int y = 0; y < worldSize.y; y++) {
+			
+			groundIds.push_back((x % 2) + (y % 2));
+	
+		}
+	}
 
-unsigned short FlatWorld::getGroundId(sf::Vector2u pos)
-{
-	if (pos.x < 0 || pos.y < 0 || pos.x >= worldSize.x || pos.y >= worldSize.y)
-		return 0;
-	return (pos.x % 2) + (pos.y % 2);
-}
-
-unsigned short FlatWorld::getBlockId(sf::Vector2u pos)
-{
-	if (pos.x == 3)
-		return 1;
-	return 0;
-}
-
-void FlatWorld::setGroundId(sf::Vector2u pos, unsigned short value)
-{
-}
-
-void FlatWorld::setBlockId(sf::Vector2u pos, unsigned short value)
-{
+	//Populate the block array
+	for (unsigned int x = 0; x < worldSize.x; x++) {
+		for (unsigned int y = 0; y < worldSize.y; y++) {
+		
+			if (x == 3) {
+				blockIds.push_back(1);
+			} else {
+				blockIds.push_back(0);
+			}
+		
+		}
+	}
+	
 }

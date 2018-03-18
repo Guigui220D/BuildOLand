@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\system.hpp>
+#include <vector>
 
 class Game;
 
@@ -11,26 +12,31 @@ public:
 	//Loads the world with the WorldManager class ?
 	//And returns true if success
 	bool loadWorld();
+	bool saveWorld();
 	
 	//Method that generates the world procedurally
 	virtual void generateWorld() = 0;
 
-	virtual unsigned short getGroundId(sf::Vector2u pos);
-	virtual unsigned short getBlockId(sf::Vector2u pos);
-	virtual void setGroundId(sf::Vector2u pos, unsigned short value);
-	virtual void setBlockId(sf::Vector2u pos, unsigned short value);
-	sf::Vector2u getSize();
+	unsigned short getGroundId(sf::Vector2u pos);
+	unsigned short getBlockId(sf::Vector2u pos);
+	void setGroundId(sf::Vector2u pos, unsigned short value);
+	void setBlockId(sf::Vector2u pos, unsigned short value);
+	sf::Vector2u getWorldSize();
 
 	~World();
 
 protected:
 	Game* game = nullptr;
 
-
-
+	long worldSeed;
 	std::string worldName = "world1";
 	sf::Vector2u worldSize;
-	long worldSeed;
 
+	std::vector<unsigned short> groundIds;
+	std::vector<unsigned short> blockIds;
+
+private:
+	void saveWorldToFile(std::ofstream &worldFileFlux);
+	
 };
 
