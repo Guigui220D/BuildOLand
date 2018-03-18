@@ -3,12 +3,12 @@
 
 Player::Player()
 {
-	setSize(sf::Vector2f(100, 100));
+	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
 	setOutlineColor(sf::Color::White);
 	setOutlineThickness(8);
-	setOrigin(50, 50);
-	setOnMapColor(sf::Color(255, 64, 32));
+	setOrigin(30, 30);
+	setOnMapColor(sf::Color(0, 255, 0));
 }
 
 

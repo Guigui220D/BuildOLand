@@ -22,10 +22,12 @@ StateGame::StateGame(Game& game)
 
 	worldDraw = sf::RectangleShape();
 	worldDraw.setSize(sf::Vector2f(80, 80));
+	worldDraw.setOrigin(sf::Vector2f(40, 40));
 	worldDraw.setTexture(tileset.getTexture());
 
 	mapDraw = sf::RectangleShape();
 	mapDraw.setSize(sf::Vector2f(80, 80));
+	mapDraw.setOrigin(sf::Vector2f(40, 40));
 
 	player = Player();
 	cameraFollow = &player;
@@ -34,6 +36,40 @@ StateGame::StateGame(Game& game)
 void StateGame::handleInput() {
 
 	//Temporary, for testing
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		//Gets the mouse pos in the window
+		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+		if (pos.x >= 0 && pos.y >= 0 && pos.x < game->getWindow().getSize().x && pos.y < game->getWindow().getSize().y)
+		{
+			game->getWindow().setView(game->getWorldView());
+			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+			int clickX = roundf(posInView.x / 80);
+			int clickY = roundf(posInView.y / 80);
+			if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
+				currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
+				currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+			}
+		}
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		//Gets the mouse pos in the window
+		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+		if (pos.x >= 0 && pos.y >= 0 && pos.x < game->getWindow().getSize().x && pos.y < game->getWindow().getSize().y)
+		{
+			game->getWindow().setView(game->getWorldView());
+			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+			int clickX = roundf(posInView.x / 80);
+			int clickY = roundf(posInView.y / 80);
+			if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
+				currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
+				currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+			}
+		}
+	}
+
+	/*
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		int playerX = roundf(player.getPosition().x / 80);
 		int playerY = roundf(player.getPosition().y / 80);
@@ -43,6 +79,7 @@ void StateGame::handleInput() {
 			currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 		}
 	}
+	*/
 }
 
 void StateGame::update(float dt) {

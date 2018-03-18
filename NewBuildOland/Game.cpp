@@ -7,7 +7,7 @@ Game::Game()
 	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
 {
-	//window.setFramerateLimit(30);
+	window.setFramerateLimit(60);
 
 	//Setting the current state to a Game State
 	guiView = sf::View();
@@ -65,7 +65,7 @@ void Game::run()
 
 void Game::updateView()
 {
-	//Redimention sans déformation
+	//Resize without deformation
 	if (window.getSize().x < MIN_SIZE)
 		window.setSize(sf::Vector2u(MIN_SIZE, window.getSize().y));
 	if (window.getSize().y < MIN_SIZE)
