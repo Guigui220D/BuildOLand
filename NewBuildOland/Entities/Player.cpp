@@ -10,6 +10,7 @@ Player::Player(World *world)
 	//setOutlineThickness(8);
 	setOrigin(30, 30);
 	setOnMapColor(sf::Color(0, 255, 0));
+	setPosition(sf::Vector2f(world->getInitialPlayerPos().x * 80, world->getInitialPlayerPos().x * 80));
 }
 
 Player::~Player()

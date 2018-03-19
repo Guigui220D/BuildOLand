@@ -22,6 +22,7 @@ public:
 	void setGroundId(sf::Vector2u pos, unsigned short value);
 	void setBlockId(sf::Vector2u pos, unsigned short value);
 	sf::Vector2u getWorldSize();
+	sf::Vector2u getInitialPlayerPos();
 
 	~World();
 
@@ -31,6 +32,8 @@ protected:
 	long worldSeed;
 	std::string worldName = "world1";
 	sf::Vector2u worldSize;
+
+	sf::Vector2u playerPos;
 
 	std::vector<unsigned short> groundIds;
 	std::vector<unsigned short> blockIds;

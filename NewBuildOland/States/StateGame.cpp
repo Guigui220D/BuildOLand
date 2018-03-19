@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "StateGame.h"
 #include "../Worlds/FlatWorld.h"
+#include "../Worlds/MazeWorld.h"
 #include <iostream>
 #include "../Utils/TileSet.h"
 
@@ -8,7 +9,7 @@ StateGame::StateGame(Game& game)
 	: StateBase(game)
 {
 	//Set the world
-	currentWorld = new FlatWorld(game);
+	currentWorld = new MazeWorld(game);
 	tileset;
 
 	mapView = View();

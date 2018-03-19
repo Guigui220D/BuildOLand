@@ -153,6 +153,11 @@ sf::Vector2u World::getWorldSize()
 	return worldSize;
 }
 
+sf::Vector2u World::getInitialPlayerPos()
+{
+	return playerPos;
+}
+
 World::~World()
 {
 }
