@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "../States/StateGame.h"
 
 Player::Player(World &world)
 	: PhysicEntity()
@@ -11,7 +12,7 @@ Player::Player(World &world)
 	//setOutlineThickness(8);
 	setOrigin(30, 30);
 	setOnMapColor(sf::Color(0, 255, 0));
-	setPosition(sf::Vector2f(world.getInitialPlayerPos().x * 80, world.getInitialPlayerPos().x * 80));
+	setPosition(sf::Vector2f(world.getInitialPlayerPos().x * StateGame::getTileSize(), world.getInitialPlayerPos().y * StateGame::getTileSize()));
 }
 
 Player::Player() 

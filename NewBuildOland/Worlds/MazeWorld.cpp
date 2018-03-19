@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "MazeWorld.h"
-
+#include "../States/StateGame.h"
 
 MazeWorld::MazeWorld(Game& game)
 	: World(game)
 {
 	loadWorld();
+	playerPos = sf::Vector2u(1, 1);
 }
 
 
@@ -16,7 +17,6 @@ MazeWorld::~MazeWorld()
 void MazeWorld::generateWorld() {
 	//Set the world size
 	worldSize = sf::Vector2u(50, 50);
-	playerPos = sf::Vector2u(1, 1);
 
 	unsigned int mapBlocks[60][60];
 	unsigned int mapGrounds[60][60];
