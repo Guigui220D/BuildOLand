@@ -6,9 +6,10 @@
 #include <iostream>
 #include <Windows.h>
 
-World::World(Game& game)
+World::World(Game& game, std::string name)
 	: game(&game)
 {
+	worldName = name;
 }
 
 //Loads the world file and saves it in an array
@@ -126,26 +127,37 @@ unsigned short World::getBlockId(sf::Vector2u pos)
 	return blockIds[pos.y + pos.x * worldSize.x];
 }
 
-void World::setGroundId(sf::Vector2u pos, unsigned short value)
+void World::setGroundId(unsigned short x, unsigned short y, unsigned short value)
 {
 	//If pos is out of map
-	if (pos.x < 0 || pos.x >= worldSize.x ||
-		pos.y < 0 || pos.y >= worldSize.y) {
+	if (x < 0 || x >= worldSize.x ||
+		y < 0 || y >= worldSize.y) {
 		return;
 	}
 
-	groundIds[pos.y + pos.x * worldSize.x] = value;
+	groundIds[y + x * worldSize.x] = value;
+}
+
+
+void World::setGroundId(sf::Vector2u pos, unsigned short value)
+{
+	setGroundId(pos.x, pos.y, value);
+}
+
+void World::setBlockId(unsigned short x, unsigned short y, unsigned short value)
+{
+	//If pos is out of map
+	if (x < 0 || x >= worldSize.x ||
+		y < 0 || y >= worldSize.y) {
+		return;
+	}
+
+	blockIds[y + x * worldSize.x] = value;
 }
 
 void World::setBlockId(sf::Vector2u pos, unsigned short value)
 {
-	//If pos is out of map
-	if (pos.x < 0 || pos.x >= worldSize.x ||
-		pos.y < 0 || pos.y >= worldSize.y) {
-		return;
-	}
-
-	blockIds[pos.y + pos.x * worldSize.x] = value;
+	setBlockId(pos.x, pos.y, value);
 }
 
 sf::Vector2u World::getWorldSize()

@@ -7,7 +7,7 @@ class Game;
 class World
 {
 public:
-	World(Game& game);
+	World(Game& game, std::string name = "world1");
 	
 	//Loads the world with the WorldManager class ?
 	//And returns true if success
@@ -19,8 +19,11 @@ public:
 
 	unsigned short getGroundId(sf::Vector2u pos);
 	unsigned short getBlockId(sf::Vector2u pos);
+	void setGroundId(unsigned short x, unsigned short y, unsigned short value);
 	void setGroundId(sf::Vector2u pos, unsigned short value);
+	void setBlockId(unsigned short x, unsigned short y, unsigned short value);
 	void setBlockId(sf::Vector2u pos, unsigned short value);
+	
 	sf::Vector2u getWorldSize();
 	sf::Vector2u getInitialPlayerPos();
 
@@ -30,7 +33,7 @@ protected:
 	Game* game = nullptr;
 
 	long worldSeed;
-	std::string worldName = "world1";
+	std::string worldName;
 	sf::Vector2u worldSize;
 
 	sf::Vector2u playerPos;

@@ -4,7 +4,7 @@
 
 
 FlatWorld::FlatWorld(Game& game)
-	: World(game)
+	: World(game, "flatworld")
 {
 	loadWorld();
 }

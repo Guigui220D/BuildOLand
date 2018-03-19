@@ -3,7 +3,7 @@
 #include "../States/StateGame.h"
 
 MazeWorld::MazeWorld(Game& game)
-	: World(game)
+	: World(game, "mazeworld")
 {
 	loadWorld();
 	playerPos = sf::Vector2u(1, 1);
@@ -17,31 +17,19 @@ MazeWorld::~MazeWorld()
 void MazeWorld::generateWorld() {
 	//Set the world size
 	worldSize = sf::Vector2u(50, 50);
+	unsigned short const DEFAULT_GROUND = 3;
+	unsigned short const DEFAULT_BLOCK = 0;
+	
+	for(int i = 0; i < worldSize.x * worldSize.y; i++) {
+		groundIds.push_back(DEFAULT_GROUND);
+		blockIds.push_back(DEFAULT_BLOCK);
+	} 
 
-	unsigned int mapBlocks[60][60];
-	unsigned int mapGrounds[60][60];
-
-	for (unsigned int x = 0; x < worldSize.x; x++) {
-		for (unsigned int y = 0; y < worldSize.y; y++) {
-
-			mapGrounds[x][y] = 0;
-			mapBlocks[x][y] = 0;
-		}
-	}
-
-	for (unsigned int x = 0; x < worldSize.x; x += 2) {
-		for (unsigned int y = 0; y < worldSize.y; y += 2) {
-
-			mapGrounds[x][y] = 0;
-			mapBlocks[x][y] = 0;
-		}
-	}
-
-	for (unsigned int x = 0; x < worldSize.x; x++) {
-		for (unsigned int y = 0; y < worldSize.y; y++) {
-
-			groundIds.push_back(mapGrounds[x][y]);
-			blockIds.push_back(mapBlocks[x][y]);
+	for(int x = 0; x < worldSize.x; x++) {
+		for (int y = 0; y < worldSize.y; y++) {
+			if(x % 2 == 0 && y % 2 == 0) {
+				setBlockId(x, y, 2);
+			}
 		}
 	}
 }
