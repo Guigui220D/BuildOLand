@@ -3,8 +3,8 @@
 #include "iostream"
 #include "../States/StateGame.h"
 
-PhysicEntity::PhysicEntity(World *world)
-	: Entities(world)
+PhysicEntity::PhysicEntity()
+	: Entities()
 {
 }
 

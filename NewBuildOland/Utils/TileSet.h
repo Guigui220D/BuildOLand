@@ -18,8 +18,8 @@ public:
 	sf::Texture* getTexture();
 
 protected:
-	const unsigned int TILES_IN_ROW = 2;
-	const unsigned int TILE_SIZE = 8;
+	const unsigned int TILES_IN_ROW = 5;
+	const unsigned int TILE_SIZE = 32;
 	sf::Texture texture;
 	
 	sf::IntRect errorRect = IntRect(0, 0, 8, 8);

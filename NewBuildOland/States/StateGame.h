@@ -29,7 +29,7 @@ public:
 private:
 	World *currentWorld = nullptr;
 	
-	unsigned static const int TILE_SIZE = 80;
+	unsigned static const int TILE_SIZE = 120;
 	TileSet tileset;
 	sf::View mapView;
 	sf::RectangleShape mapFrame;

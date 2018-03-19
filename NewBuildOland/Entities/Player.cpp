@@ -1,8 +1,21 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player(World *world)
-	: PhysicEntity(world)
+Player::Player(World &world)
+	: PhysicEntity()
+{
+	currentWorld = &world;
+	setSize(sf::Vector2f(60, 60));
+	setFillColor(sf::Color(127, 0, 0));
+	//setOutlineColor(sf::Color::White);
+	//setOutlineThickness(8);
+	setOrigin(30, 30);
+	setOnMapColor(sf::Color(0, 255, 0));
+	setPosition(sf::Vector2f(world.getInitialPlayerPos().x * 80, world.getInitialPlayerPos().x * 80));
+}
+
+Player::Player() 
+	: PhysicEntity()
 {
 	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
@@ -10,7 +23,6 @@ Player::Player(World *world)
 	//setOutlineThickness(8);
 	setOrigin(30, 30);
 	setOnMapColor(sf::Color(0, 255, 0));
-	setPosition(sf::Vector2f(world->getInitialPlayerPos().x * 80, world->getInitialPlayerPos().x * 80));
 }
 
 Player::~Player()

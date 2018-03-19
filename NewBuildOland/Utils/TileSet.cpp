@@ -9,20 +9,20 @@ TileSet::TileSet()
 	texture = sf::Texture();
 	generateBlocks();
 	generateGrounds();
-	texture.loadFromFile("testTile.png");
+	texture.loadFromFile("Res/tileset.png");
 }
 
 void TileSet::generateBlocks()
 {
 	blocks.push_back(new Block(rectById(1), "AIR"));
-	blocks.push_back(new Block(rectById(5), "CHAIN", sf::Color(255, 255, 0)));
+	blocks.push_back(new Block(rectById(7), "BARRIER", sf::Color(90, 70, 50)));
 }
 
 void TileSet::generateGrounds()
 {
-	grounds.push_back(new Ground(rectById(2), "GRASS", sf::Color(0, 64, 0)));
-	grounds.push_back(new Ground(rectById(4), "WATER", sf::Color(32, 32, 128)));
-	grounds.push_back(new Ground(rectById(3), "SAND", sf::Color(128, 64, 32)));
+	grounds.push_back(new Ground(rectById(2), "GRASS", sf::Color(135, 170, 55)));
+	grounds.push_back(new Ground(rectById(3), "SAND", sf::Color(215, 215, 60)));
+	grounds.push_back(new Ground(rectById(4), "WATER", sf::Color(60, 90, 210)));
 }
 
 sf::IntRect TileSet::rectById(unsigned int tilesetId)

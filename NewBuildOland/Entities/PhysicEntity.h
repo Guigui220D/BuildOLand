@@ -4,7 +4,7 @@
 class PhysicEntity : public Entities
 {
 public:
-	PhysicEntity(World *world = nullptr);
+	PhysicEntity();
 	~PhysicEntity();
 	virtual void update(double delta) override;
 	int touchesBlock();

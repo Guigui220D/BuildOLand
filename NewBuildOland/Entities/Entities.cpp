@@ -2,8 +2,8 @@
 #include "Entities.h"
 
 
-Entities::Entities(World *world)
-	: currentWorld(world)
+Entities::Entities()
+	: currentWorld()
 {
 	onMap.setFillColor(sf::Color::Yellow);
 	onMap.setRadius(50);

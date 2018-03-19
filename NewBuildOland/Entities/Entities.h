@@ -6,7 +6,7 @@
 class Entities : public sf::RectangleShape
 {
 public:
-	Entities(World *world = nullptr);
+	Entities();
 	~Entities();
 	virtual void update(double delta);
 	sf::CircleShape* getOnMap();

@@ -29,8 +29,8 @@ StateGame::StateGame(Game& game)
 	mapDraw = sf::RectangleShape();
 	mapDraw.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
 	mapDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
-
-	player = Player(currentWorld);
+	
+	player = Player(*currentWorld);
 	cameraFollow = &player;
 }
 
