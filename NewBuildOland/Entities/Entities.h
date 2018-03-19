@@ -2,6 +2,7 @@
 #include "SFML\System.hpp"
 #include "SFML\Graphics.hpp"
 #include "../Worlds/World.h"
+
 class Entities : public sf::RectangleShape
 {
 public:
