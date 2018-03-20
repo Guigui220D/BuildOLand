@@ -92,10 +92,11 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Create a rectangle for drawing
 	
 	//Iterate through the world to draw each tile
-	for (unsigned int x = 0; x < size.x; x++)
+	for (int x = player.getPosition().x / TILE_SIZE - 14; x < player.getPosition().x / TILE_SIZE + 14; x++)
 	{
-		for (unsigned int y = 0; y < size.y; y++)
-		{			
+		for (int y = player.getPosition().y / TILE_SIZE - 14; y < player.getPosition().y / TILE_SIZE + 14; y++)
+		{		
+			//std::cout << "dsd" << std::endl;
 			//Draw the ground
 			worldDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));

@@ -16,7 +16,7 @@ MazeWorld::~MazeWorld()
 
 void MazeWorld::generateWorld() {
 	//Set the world size
-	worldSize = sf::Vector2u(50, 50);
+	worldSize = sf::Vector2u(24, 24);
 	unsigned short const DEFAULT_GROUND = 3;
 	unsigned short const DEFAULT_BLOCK = 0;
 	
