@@ -107,24 +107,34 @@ void World::saveWorldToFile(std::ofstream &worldFileFlux) {
 	}
 }
 
-unsigned short World::getGroundId(sf::Vector2u pos)
+unsigned short World::getGroundId(unsigned short x, unsigned short y)
 {
 	//If pos is out of map
-	if(pos.x < 0 || pos.x >= worldSize.x|| 
-	   pos.y < 0 || pos.y >= worldSize.y) {
+	if (x < 0 || x >= worldSize.x ||
+		y < 0 || y >= worldSize.y) {
 		return 0;
 	}
-	return groundIds[pos.y + pos.x * worldSize.x];
+	return groundIds[y + x * worldSize.x];
+}
+
+unsigned short World::getGroundId(sf::Vector2u pos)
+{
+	return getGroundId(pos.x, pos.y);
+}
+
+unsigned short World::getBlockId(unsigned short x, unsigned short y)
+{
+	//If pos is out of map
+	if (x < 0 || x >= worldSize.x ||
+		y < 0 || y >= worldSize.y) {
+		return 0;
+	}
+	return blockIds[y + x * worldSize.x];
 }
 
 unsigned short World::getBlockId(sf::Vector2u pos)
 {
-	//If pos is out of map
-	if (pos.x < 0 || pos.x >= worldSize.x ||
-		pos.y < 0 || pos.y >= worldSize.y) {
-		return 0;
-	}
-	return blockIds[pos.y + pos.x * worldSize.x];
+	return getBlockId(pos.x, pos.y);
 }
 
 void World::setGroundId(unsigned short x, unsigned short y, unsigned short value)

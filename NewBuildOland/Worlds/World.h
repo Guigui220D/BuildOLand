@@ -17,7 +17,9 @@ public:
 	//Method that generates the world procedurally
 	virtual void generateWorld() = 0;
 
+	unsigned short getGroundId(unsigned short x, unsigned short y);
 	unsigned short getGroundId(sf::Vector2u pos);
+	unsigned short getBlockId(unsigned short x, unsigned short y);
 	unsigned short getBlockId(sf::Vector2u pos);
 	void setGroundId(unsigned short x, unsigned short y, unsigned short value);
 	void setGroundId(sf::Vector2u pos, unsigned short value);
