@@ -1,3 +1,0 @@
-A FAIRE :
-
-Classe game, et states
