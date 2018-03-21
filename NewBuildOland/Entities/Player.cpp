@@ -12,7 +12,7 @@ Player::Player(World &world)
 	//setOutlineThickness(8);
 	setOrigin(30, 30);
 	setOnMapColor(sf::Color(0, 255, 0));
-	setPosition(sf::Vector2f(world.getInitialPlayerPos().x * StateGame::getTileSize(), world.getInitialPlayerPos().y * StateGame::getTileSize()));
+	setPosition(sf::Vector2f((float)world.getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world.getInitialPlayerPos().y * StateGame::TILE_SIZE));
 }
 
 Player::Player() 

@@ -31,7 +31,7 @@ void TileSet::generateGrounds()
 sf::IntRect TileSet::rectById(unsigned int tilesetId)
 {
 	//Creates an IntRect where the texture is according to the nth texture of the tileset
-	return sf::IntRect(tilesetId % TILES_IN_ROW * TILE_SIZE, floorf(tilesetId / TILES_IN_ROW) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	return sf::IntRect(tilesetId % TILES_IN_ROW * TILE_SIZE, (int)floorf(tilesetId / TILES_IN_ROW) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
 }
 

@@ -21,7 +21,7 @@ bool FileManager::createFolder(std::string folderName) {
 	std::vector<std::string> folders = split(folderName, '/');
 
 	//Create a new folder every step
-	for (int i = 0; i < folders.size(); i++) {
+	for (unsigned int i = 0; i < folders.size(); i++) {
 		
 		if(folders[i] == "." || folders[i] == "..") {
 			//It's not a valid folder, so don't create a new folder
@@ -30,7 +30,7 @@ bool FileManager::createFolder(std::string folderName) {
 
 		//Create the path to the folder
 		std::string folderToCreate = "";
-		for(int j = 0; j <= i; j++) {
+		for(unsigned int j = 0; j <= i; j++) {
 			folderToCreate += folders[j] + "/";
 		}
 

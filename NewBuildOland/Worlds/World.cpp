@@ -98,11 +98,11 @@ void World::saveWorldToFile(std::ofstream &worldFileFlux) {
 	worldFileFlux.write((char*)(&worldSize.y), sizeof(worldSize.y));
 
 	//Save the groundIds array that were generated
-	for (int i = 0; i < groundIds.size(); i++) {
+	for (unsigned int i = 0; i < groundIds.size(); i++) {
 		worldFileFlux.write((char*)(&groundIds[i]), sizeof(unsigned short));
 	}
 	//And save the blockIds array
-	for (int i = 0; i < blockIds.size(); i++) {
+	for (unsigned int i = 0; i < blockIds.size(); i++) {
 		worldFileFlux.write((char*)(&blockIds[i]), sizeof(unsigned short));
 	}
 }

@@ -146,11 +146,6 @@ void StateGame::setWorld(World &world) {
 	currentWorld = &world;
 }
 
-unsigned int StateGame::getTileSize()
-{
-	return TILE_SIZE;
-}
-
 StateGame::~StateGame()
 {
 	//We delete pointers to prevent memory leaks

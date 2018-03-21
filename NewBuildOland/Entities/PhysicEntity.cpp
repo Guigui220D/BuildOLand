@@ -20,8 +20,8 @@ void PhysicEntity::update(double delta)
 int PhysicEntity::touchesBlock()
 {
 	//Checks near blocks to entity
-	int x = getPosition().x / StateGame::getTileSize();
-	int y = getPosition().y / StateGame::getTileSize();
+	int x = (int)(getPosition().x / StateGame::TILE_SIZE);
+	int y = (int)(getPosition().y / StateGame::TILE_SIZE);
 	int nx;
 	int ny;
 	for (int xx = -1; xx <= 1; xx++)
@@ -34,7 +34,7 @@ int PhysicEntity::touchesBlock()
 			{
 				sf::Vector2f ppos = getPosition();
 				sf::Vector2f psize = getSize();
-				if (ppos.x + psize.x / 2 > nx * StateGame::getTileSize() - StateGame::getTileSize() / 2.0f && ppos.y + psize.y / 2 > ny * StateGame::getTileSize() - StateGame::getTileSize() / 2.0f && ppos.x - psize.x / 2 < nx * StateGame::getTileSize() + StateGame::getTileSize() / 2.0f && ppos.y - psize.y / 2 < ny * StateGame::getTileSize() + StateGame::getTileSize() / 2.0f)
+				if (ppos.x + psize.x / 2 > nx * StateGame::TILE_SIZE / 2.0f && ppos.y + psize.y / 2 > ny * StateGame::TILE_SIZE / 2.0f && ppos.x - psize.x / 2 < nx * StateGame::TILE_SIZE / 2.0f && ppos.y - psize.y / 2 < ny * StateGame::TILE_SIZE / 2.0f)
 					return 1;
 			}
 		}
