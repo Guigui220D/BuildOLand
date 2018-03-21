@@ -30,6 +30,7 @@ private:
 	World *currentWorld = nullptr;
 	
 	unsigned static const int TILE_SIZE = 100;
+	const float TILE_SIZE_FLOAT = 100.0f;
 	TileSet tileset;
 	sf::View mapView;
 	sf::RectangleShape mapFrame;

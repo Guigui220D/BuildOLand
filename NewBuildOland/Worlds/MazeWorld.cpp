@@ -20,13 +20,13 @@ void MazeWorld::generateWorld() {
 	unsigned short const DEFAULT_GROUND = 3;
 	unsigned short const DEFAULT_BLOCK = 0;
 	
-	for(int i = 0; i < worldSize.x * worldSize.y; i++) {
+	for(unsigned int i = 0; i < worldSize.x * worldSize.y; i++) {
 		groundIds.push_back(DEFAULT_GROUND);
 		blockIds.push_back(DEFAULT_BLOCK);
 	} 
 
-	for(int x = 2; x < worldSize.x; x++) {
-		for (int y = 2; y < worldSize.y; y++) {
+	for(unsigned int x = 2; x < worldSize.x; x++) {
+		for (unsigned int y = 2; y < worldSize.y; y++) {
 			if(x % 2 == 0 && y % 2 == 0) {
 				setBlockId(x, y, 1);
 			}

@@ -22,12 +22,12 @@ StateGame::StateGame(Game& game)
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
 
 	worldDraw = sf::RectangleShape();
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	worldDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	worldDraw.setTexture(tileset.getTexture());
 
 	mapDraw = sf::RectangleShape();
-	mapDraw.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	mapDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	mapDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	
 	player = Player(*currentWorld);
@@ -41,15 +41,15 @@ void StateGame::handleInput() {
 	{
 		//Gets the mouse pos in the window
 		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
-		if (pos.x >= 0 && pos.y >= 0 && pos.x < game->getWindow().getSize().x && pos.y < game->getWindow().getSize().y)
+		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
 			game->getWindow().setView(game->getWorldView());
 			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
 			Vector2f diff = posInView - player.getPosition();
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 			{
-				int clickX = roundf(posInView.x / TILE_SIZE);
-				int clickY = roundf(posInView.y / TILE_SIZE);
+				int clickX = (int)roundf(posInView.x / TILE_SIZE);
+				int clickY = (int)roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
 					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
@@ -61,15 +61,15 @@ void StateGame::handleInput() {
 	{
 		//Gets the mouse pos in the window
 		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
-		if (pos.x >= 0 && pos.y >= 0 && pos.x < game->getWindow().getSize().x && pos.y < game->getWindow().getSize().y)
+		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
 			game->getWindow().setView(game->getWorldView());
 			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
 			Vector2f diff = posInView - player.getPosition();
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 			{
-				int clickX = roundf(posInView.x / TILE_SIZE);
-				int clickY = roundf(posInView.y / TILE_SIZE);
+				int clickX = (int)roundf(posInView.x / TILE_SIZE);
+				int clickY = (int)roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
 					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
@@ -92,23 +92,22 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Create a rectangle for drawing
 	
 	//Iterate through the world to draw each tile
-	for (int x = player.getPosition().x / TILE_SIZE - 14; x < player.getPosition().x / TILE_SIZE + 14; x++)
+	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
-		for (int y = player.getPosition().y / TILE_SIZE - 14; y < player.getPosition().y / TILE_SIZE + 14; y++)
+		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
 		{		
-			//std::cout << "dsd" << std::endl;
 			//Draw the ground
-			worldDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
+			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
 			window.draw(worldDraw);
 			//Draw the block shadow
 			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
 			worldDraw.setFillColor(sf::Color::Black);
-			worldDraw.setPosition(x * TILE_SIZE - 5, y * TILE_SIZE + 5);
+			worldDraw.setPosition(TILE_SIZE_FLOAT * x - 5, TILE_SIZE_FLOAT * y + 5);
 			window.draw(worldDraw);
 			//Draw the block
 			worldDraw.setFillColor(sf::Color::White);
-			worldDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
+			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			window.draw(worldDraw);
 		}
 	}
@@ -126,7 +125,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 		for (unsigned int y = 0; y < size.y; y++)
 		{
 			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
-			mapDraw.setPosition(x * TILE_SIZE, y * TILE_SIZE);
+			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			window.draw(mapDraw);
 		}
 	}
