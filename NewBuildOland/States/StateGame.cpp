@@ -4,6 +4,7 @@
 #include "../Worlds/MazeWorld.h"
 #include <iostream>
 #include "../Utils/TileSet.h"
+#include "../Events/Events.h"
 
 StateGame::StateGame(Game& game)
 	: StateBase(game)
@@ -51,6 +52,7 @@ void StateGame::handleInput() {
 				int clickX = (int)roundf(posInView.x / TILE_SIZE);
 				int clickY = (int)roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
+					Events::OnBlockBuild(BlockBuildEvent(sf::Vector2i(clickX, clickY), currentWorld->getBlockId(sf::Vector2u(clickX, clickY)), player));
 					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 				}
@@ -71,7 +73,8 @@ void StateGame::handleInput() {
 				int clickX = (int)roundf(posInView.x / TILE_SIZE);
 				int clickY = (int)roundf(posInView.y / TILE_SIZE);
 				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
-					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
+					Events::OnBlockBreak(BlockBreakEvent(sf::Vector2i(clickX, clickY), currentWorld->getBlockId(sf::Vector2u(clickX, clickY)), player));
+					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);					
 					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 				}
 			}

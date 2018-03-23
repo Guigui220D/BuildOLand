@@ -96,7 +96,6 @@ sf::View& Game::getGuiView() {
 	return guiView;
 }
 
-
 Game::~Game()
 {
 	//We delete pointers to prevent memory leaks
