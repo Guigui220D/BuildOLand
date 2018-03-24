@@ -3,7 +3,6 @@
 ### Main functionalities :
 
 - [ ] Path finding for AI entities
-- [ ] Animations
 - [ ] Interactive blocks
 - [ ] User interface and pause
 - [ ] Mangement system for changing between states
@@ -18,3 +17,4 @@
 ### Completed :
 - [x] Create proper todo list
 - [x] Events system
+- [x] Animations
