@@ -30,7 +30,7 @@ void MazeWorld::generateWorld() {
 			if(x % 2 == 0 && y % 2 == 0) {
 				setBlockId(x, y, 1);
 			}
-			if (x % 2 == (y - 1) % 2 && (rand() % 2 == 1) || (x == 2 || x == 24 || y == 2 || y == 24)) {
+			if (x % 2 == (y - 1) % 2 && (rand() % 2 == 1) || (x == 2 || x == worldSize.x - 1 || y == 2 || y == worldSize.y - 1)) {
 				setBlockId(x, y, 1);
 			}
 		}
