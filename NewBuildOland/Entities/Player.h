@@ -9,5 +9,7 @@ public:
 	Player();
 	~Player();
 	void update(double delta) override;
+private:
+	static const int SPEED = 300;
 };
 

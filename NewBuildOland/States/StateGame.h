@@ -35,6 +35,7 @@ private:
 	sf::RectangleShape mapFrame;
 	sf::RectangleShape worldDraw;
 	sf::RectangleShape mapDraw;
+	sf::RectangleShape pointer;
 	
 
 	Player player;

@@ -52,7 +52,7 @@ void Game::run()
 		currentState->draw(window);
 		window.display();
 		count++;
-		if (count >= 200)
+		if (count >= 1000)
 		{
 			double time = fpsClk.restart().asSeconds();
 			time /= count;

@@ -30,6 +30,12 @@ StateGame::StateGame(Game& game)
 	mapDraw = sf::RectangleShape();
 	mapDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	mapDraw.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
+
+	pointer = sf::RectangleShape();
+	pointer.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
+	pointer.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
+	pointer.setTexture(tileset.getTexture());
+	pointer.setTextureRect(sf::IntRect(128, 32, 32, 32));
 	
 	player = Player(*currentWorld);
 	cameraFollow = &player;
@@ -111,9 +117,30 @@ void StateGame::draw(sf::RenderWindow &window) {
 			//Draw the block
 			worldDraw.setFillColor(sf::Color::White);
 			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			window.draw(worldDraw);
+			window.draw(worldDraw);					
 		}
 	}
+
+	//Draw block highlighter
+	Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+	if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
+	{		
+		Vector2f posInView = game->getWindow().mapPixelToCoords(pos);		
+		Vector2f diff = posInView - player.getPosition();
+		int clickX = (int)roundf(posInView.x / TILE_SIZE);
+		int clickY = (int)roundf(posInView.y / TILE_SIZE);
+		if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+		{			
+			pointer.setFillColor(sf::Color::White);
+		}
+		else
+		{
+			pointer.setFillColor(sf::Color::Red);
+		}
+		pointer.setPosition(sf::Vector2f(clickX * TILE_SIZE, clickY * TILE_SIZE));
+		window.draw(pointer);
+	}	
+
 	window.draw(player);
 	//Draw the map
 	window.setView(game->getGuiView());	

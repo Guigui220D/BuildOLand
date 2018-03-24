@@ -33,24 +33,31 @@ Player::~Player()
 void Player::update(double delta)
 {
 	sf::Vector2f oldpos = getPosition();
-	sf::Vector2f newpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		newpos += sf::Vector2f(-300 * delta, 0);
+		setPosition(sf::Vector2f(oldpos.x - SPEED * delta, oldpos.y));
 	}
+	if (touchesBlock())
+		setPosition(oldpos);
+	oldpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		newpos += sf::Vector2f(300 * delta, 0);
+		setPosition(sf::Vector2f(oldpos.x + SPEED * delta, oldpos.y));
 	}
+	if (touchesBlock())
+		setPosition(oldpos);
+	oldpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		newpos += sf::Vector2f(0, -300 * delta);
+		setPosition(sf::Vector2f(oldpos.x, oldpos.y - SPEED * delta));
 	}
+	if (touchesBlock())
+		setPosition(oldpos);
+	oldpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		newpos += sf::Vector2f(0, 300 * delta);
+		setPosition(sf::Vector2f(oldpos.x, oldpos.y + SPEED * delta));
 	}
-	setPosition(newpos);
 	if (touchesBlock())
 		setPosition(oldpos);
 }
