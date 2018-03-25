@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
+#include "../Utils/TileSet.h"
 
 class Game;
 
@@ -13,8 +14,11 @@ public:
 	virtual void update(float dt) = 0;
 	virtual void draw(sf::RenderWindow &window) = 0;
 
+	TileSet* getTileset();
+
 protected:
 	Game *game = nullptr;
+	TileSet tileset;
 	
 };
 

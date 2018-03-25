@@ -3,7 +3,6 @@
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
 #include <iostream>
-#include "../Utils/TileSet.h"
 #include "../Events/Events.h"
 
 StateGame::StateGame(Game& game)

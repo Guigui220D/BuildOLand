@@ -14,10 +14,10 @@ TileSet::TileSet()
 
 void TileSet::generateBlocks()
 {
-	blocks.push_back(new Block(rectById(1), "AIR"));
-	blocks.push_back(new Block(rectById(7), "BARRIER", sf::Color(90, 70, 50)));
-	blocks.push_back(new Block(rectById(6), "BRICK", sf::Color(90, 90, 90)));
-	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",	sf::Color(135, 30, 30)));
+	blocks.push_back(new Block(rectById(1), "AIR",				false							));
+	blocks.push_back(new Block(rectById(7), "BARRIER",			true,	sf::Color(90, 70, 50)	));
+	blocks.push_back(new Block(rectById(6), "BRICK",			true,	sf::Color(90, 90, 90)	));
+	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",	false,	sf::Color(135, 30, 30)	));
 }
 
 void TileSet::generateGrounds()
@@ -57,6 +57,14 @@ sf::IntRect TileSet::getBlockRect(unsigned int id)
 	}
 
 	return errorRect;
+}
+
+Ground* TileSet::getGroundById(unsigned int id) {
+	return grounds[id];
+}
+
+Block* TileSet::getBlockById(unsigned int id) {
+	return blocks[id];
 }
 
 

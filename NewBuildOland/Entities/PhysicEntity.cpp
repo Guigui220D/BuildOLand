@@ -30,7 +30,7 @@ int PhysicEntity::touchesBlock()
 		for (int yy = -1; yy <= 1; yy++)
 		{
 			ny = (y + yy);		
-			if (currentWorld->getBlockId(sf::Vector2u(nx, ny)) != 0)
+			if (currentWorld->getBlockAt(nx, ny)->hasHitbox() == true)
 			{
 				sf::Vector2f ppos = getPosition();
 				sf::Vector2f psize = getSize();

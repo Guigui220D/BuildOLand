@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "World.h"
 #include "../Utils/FileManager.h"
+#include "../Game.h"
+#include "../States/StateBase.h"
 
 #include <fstream>
 #include <iostream>
@@ -135,6 +137,15 @@ unsigned short World::getBlockId(unsigned short x, unsigned short y)
 unsigned short World::getBlockId(sf::Vector2u pos)
 {
 	return getBlockId(pos.x, pos.y);
+}
+
+Block* World::getBlockAt(sf::Vector2u pos) {
+	getBlockAt(pos.x, pos.y);
+}
+
+Block* World::getBlockAt(unsigned short x, unsigned short y) {
+	unsigned short blockId = getBlockId(x, y);
+	return game->getCurrentState()->getTileset()->getBlockById(blockId);
 }
 
 void World::setGroundId(unsigned short x, unsigned short y, unsigned short value)

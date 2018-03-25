@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML\system.hpp>
 #include <vector>
+#include "../Utils/TileSet.h"
+#include "../Placeables/Block.h"
 
 class Game;
 
@@ -21,6 +23,8 @@ public:
 	unsigned short getGroundId(sf::Vector2u pos);
 	unsigned short getBlockId(unsigned short x, unsigned short y);
 	unsigned short getBlockId(sf::Vector2u pos);
+	Block* getBlockAt(sf::Vector2u pos);
+	Block* getBlockAt(unsigned short x, unsigned short y);
 	void setGroundId(unsigned short x, unsigned short y, unsigned short value);
 	void setGroundId(sf::Vector2u pos, unsigned short value);
 	void setBlockId(unsigned short x, unsigned short y, unsigned short value);

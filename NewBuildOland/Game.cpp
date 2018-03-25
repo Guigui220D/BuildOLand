@@ -88,6 +88,10 @@ sf::RenderWindow& Game::getWindow() {
 	return window;
 }
 
+StateBase* Game::getCurrentState() {
+	return currentState;
+}
+
 sf::View& Game::getWorldView() {
 	return worldView;
 }
