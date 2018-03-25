@@ -15,17 +15,38 @@ Player::Player(World &world)
 	setOnMapColor(sf::Color(0, 255, 0));
 	setPosition(sf::Vector2f((float)world.getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world.getInitialPlayerPos().y * StateGame::TILE_SIZE));
 	Texture* t = new Texture();
-	(*t).loadFromFile("Res/player_sheet.png");
+	(*t).loadFromFile("Res/characters.png");
 	setTexture(t);
 
 	anima = Animation();
+
 	std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
-	idleAnim.push_back(sf::IntRect(0, 0, 2, 2));
-	idleAnim.push_back(sf::IntRect(2, 0, 2, 2));
-	std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
-	walkingAnim.push_back(sf::IntRect(0, 2, 2, 2));
-	walkingAnim.push_back(sf::IntRect(2, 2, 2, 2));
+	idleAnim.push_back(sf::IntRect(37, 9, 32, 32));
 	anima.addAnimation(idleAnim);
+
+	std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
+	//Walking to north
+	walkingAnim.push_back(sf::IntRect(5, 105, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 105, 32, 32));
+	walkingAnim.push_back(sf::IntRect(69, 105, 32, 32));
+	anima.addAnimation(walkingAnim);
+	//Walking to south
+	walkingAnim = std::vector<sf::IntRect>();
+	walkingAnim.push_back(sf::IntRect(5, 9, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 9, 32, 32));
+	walkingAnim.push_back(sf::IntRect(69, 9, 32, 32));
+	anima.addAnimation(walkingAnim);
+	//Walking to east
+	walkingAnim = std::vector<sf::IntRect>();
+	walkingAnim.push_back(sf::IntRect(5, 73, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 73, 32, 32));
+	walkingAnim.push_back(sf::IntRect(69, 73, 32, 32));
+	anima.addAnimation(walkingAnim);
+	//Walking to west
+	walkingAnim = std::vector<sf::IntRect>();
+	walkingAnim.push_back(sf::IntRect(5, 41, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 41, 32, 32));
+	walkingAnim.push_back(sf::IntRect(69, 41, 32, 32));
 	anima.addAnimation(walkingAnim);
 
 	setTextureRect(anima.getRect());
@@ -48,12 +69,14 @@ Player::~Player()
 
 void Player::update(double delta)
 {
-	bool moving = false;
+	//The movement byte is used as a flag to choose the right animation
+	char movement = 0;
+	//Movement code
 	sf::Vector2f oldpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		setPosition(sf::Vector2f(oldpos.x - SPEED * delta, oldpos.y));
-		moving = true;
+		movement += 8;
 	}
 	if (touchesBlock())
 		setPosition(oldpos);
@@ -61,7 +84,7 @@ void Player::update(double delta)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		setPosition(sf::Vector2f(oldpos.x + SPEED * delta, oldpos.y));
-		moving = true;
+		movement += 4;
 	}
 	if (touchesBlock())
 		setPosition(oldpos);
@@ -69,25 +92,51 @@ void Player::update(double delta)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		setPosition(sf::Vector2f(oldpos.x, oldpos.y - SPEED * delta));
-		moving = true;
+		movement += 1;
 	}
 	if (touchesBlock())
 		setPosition(oldpos);
 	oldpos = getPosition();
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		moving = true;
 		setPosition(sf::Vector2f(oldpos.x, oldpos.y + SPEED * delta));
+		movement += 2;
 	}
 	if (touchesBlock())
 		setPosition(oldpos);
-	if (moving)
+	//Choice of animation
+	switch (movement)
 	{
-		anima.selectAnimation(1);
-	}
-	else
-	{
+	case 0:
 		anima.selectAnimation(0);
+		break;
+	case 1:
+		anima.selectAnimation(1);
+		break;
+	case 2:
+		anima.selectAnimation(2);
+		break;
+	case 4:
+		anima.selectAnimation(3);
+		break;
+	case 8:
+		anima.selectAnimation(4);
+		break;
+	case 9:
+		anima.selectAnimation(4);
+		break;
+	case 10:
+		anima.selectAnimation(4);
+		break;
+	case 5:
+		anima.selectAnimation(3);
+		break;
+	case 6:
+		anima.selectAnimation(3);
+		break;
+	default:
+		anima.selectAnimation(0);
+		break;
 	}
 	setTextureRect(anima.getRect());
 }
