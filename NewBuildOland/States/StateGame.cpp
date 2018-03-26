@@ -38,52 +38,72 @@ StateGame::StateGame(Game& game)
 	
 	player = Player(*currentWorld);
 	cameraFollow = &player;
+
+	//Temporary, for save button
+	currentWorld->setBlockId(sf::Vector2u(0, 0), 3);
 }
 
 void StateGame::handleInput() {
-
 	//Temporary, for testing
+	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		//Gets the mouse pos in the window
-		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
-		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
+		if (!leftClicking)
 		{
-			game->getWindow().setView(game->getWorldView());
-			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			Vector2f diff = posInView - player.getPosition();
-			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+			//Gets the mouse pos in the window
+			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
-				int clickX = (int)roundf(posInView.x / TILE_SIZE);
-				int clickY = (int)roundf(posInView.y / TILE_SIZE);
-				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 1) {
-					Events::OnBlockBuild(BlockBuildEvent(sf::Vector2i(clickX, clickY), 1, player));
-					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
-					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+				game->getWindow().setView(game->getWorldView());
+				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				Vector2f diff = posInView - player.getPosition();
+				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+				{
+					int clickX = (int)roundf(posInView.x / TILE_SIZE);
+					int clickY = (int)roundf(posInView.y / TILE_SIZE);
+					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
+						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 1, player, this));
+						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
+						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+					}
 				}
 			}
 		}
+		leftClicking = true;
+	}
+	else
+	{
+		leftClicking = false;
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		//Gets the mouse pos in the window
-		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
-		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
+		if (!rightClicking)
 		{
-			game->getWindow().setView(game->getWorldView());
-			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			Vector2f diff = posInView - player.getPosition();
-			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+			//Gets the mouse pos in the window
+			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
-				int clickX = (int)roundf(posInView.x / TILE_SIZE);
-				int clickY = (int)roundf(posInView.y / TILE_SIZE);
-				if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
-					Events::OnBlockBreak(BlockBreakEvent(sf::Vector2i(clickX, clickY), currentWorld->getBlockId(sf::Vector2u(clickX, clickY)), player));
-					currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);					
-					currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+				game->getWindow().setView(game->getWorldView());
+				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				Vector2f diff = posInView - player.getPosition();
+				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+				{
+					int clickX = (int)roundf(posInView.x / TILE_SIZE);
+					int clickY = (int)roundf(posInView.y / TILE_SIZE);
+					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
+						unsigned short oldBlock = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
+						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
+						Events::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), oldBlock, player, this));
+						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+					}
 				}
 			}
 		}
+		rightClicking = true;
+	}
+	else
+	{
+		rightClicking = false;
 	}
 }
 
@@ -173,6 +193,11 @@ void StateGame::setWorld(World &world) {
 
 	//And load the new world
 	currentWorld = &world;
+}
+
+World * StateGame::getWorld()
+{
+	return currentWorld;
 }
 
 StateGame::~StateGame()

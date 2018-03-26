@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "BlockBuildEvent.h"
+#include "../States/StateGame.h"
 
 
-BlockBuildEvent::BlockBuildEvent(sf::Vector2i pos, unsigned int newblock, Entities entity)
+BlockBuildEvent::BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities entity, StateGame* state) : GameEvent(state)
 {
 	newBlock = newblock;
 	position = pos;
@@ -14,7 +15,7 @@ BlockBuildEvent::~BlockBuildEvent()
 {
 }
 
-sf::Vector2i BlockBuildEvent::getPosition()
+sf::Vector2u BlockBuildEvent::getPosition()
 {
 	return position;
 }

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "BlockBreakEvent.h"
+#include "../States/StateGame.h"
 
-
-BlockBreakEvent::BlockBreakEvent(sf::Vector2i pos, unsigned int oldblock, Entities entity)
+BlockBreakEvent::BlockBreakEvent(sf::Vector2u pos, unsigned int oldblock, Entities entity, StateGame* state) : GameEvent(state)
 {
 	oldBlock = oldblock;
 	position = pos;
@@ -13,7 +13,7 @@ BlockBreakEvent::~BlockBreakEvent()
 {
 }
 
-sf::Vector2i BlockBreakEvent::getPosition()
+sf::Vector2u BlockBreakEvent::getPosition()
 {
 	return position;
 }

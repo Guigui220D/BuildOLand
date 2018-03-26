@@ -25,6 +25,8 @@ public:
 	unsigned static const int TILE_SIZE = 100;
 	const float TILE_SIZE_FLOAT = 100.0f;
 
+	World* getWorld();
+
 	~StateGame();
 
 private:
@@ -35,7 +37,9 @@ private:
 	sf::RectangleShape worldDraw;
 	sf::RectangleShape mapDraw;
 	sf::RectangleShape pointer;
-	
+
+	bool leftClicking = false;
+	bool rightClicking = false;
 
 	Player player;
 };

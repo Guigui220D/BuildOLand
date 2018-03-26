@@ -7,18 +7,22 @@ Player::Player(World &world)
 	: PhysicEntity()
 {
 	currentWorld = &world;
-	setSize(sf::Vector2f(60, 60));
+	setSize(sf::Vector2f(80, 80));
 	setFillColor(sf::Color::White);
 	//setOutlineColor(sf::Color::White);
 	//setOutlineThickness(8);
-	setOrigin(30, 30);
+	setOrigin(getSize().x / 2, getSize().y / 2);
 	setOnMapColor(sf::Color(0, 255, 0));
 	setPosition(sf::Vector2f((float)world.getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world.getInitialPlayerPos().y * StateGame::TILE_SIZE));
 	Texture* t = new Texture();
 	(*t).loadFromFile("Res/characters.png");
 	setTexture(t);
 
+	hitboxHeight = 0.0f;
+	hitboxWidth = 0.75f;
+
 	anima = Animation();
+	anima.setInterval(0.12);
 
 	std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
 	idleAnim.push_back(sf::IntRect(37, 9, 32, 32));
@@ -29,24 +33,28 @@ Player::Player(World &world)
 	walkingAnim.push_back(sf::IntRect(5, 105, 32, 32));
 	walkingAnim.push_back(sf::IntRect(37, 105, 32, 32));
 	walkingAnim.push_back(sf::IntRect(69, 105, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 105, 32, 32));
 	anima.addAnimation(walkingAnim);
 	//Walking to south
 	walkingAnim = std::vector<sf::IntRect>();
 	walkingAnim.push_back(sf::IntRect(5, 9, 32, 32));
 	walkingAnim.push_back(sf::IntRect(37, 9, 32, 32));
 	walkingAnim.push_back(sf::IntRect(69, 9, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 9, 32, 32));
 	anima.addAnimation(walkingAnim);
 	//Walking to east
 	walkingAnim = std::vector<sf::IntRect>();
 	walkingAnim.push_back(sf::IntRect(5, 73, 32, 32));
 	walkingAnim.push_back(sf::IntRect(37, 73, 32, 32));
 	walkingAnim.push_back(sf::IntRect(69, 73, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 73, 32, 32));
 	anima.addAnimation(walkingAnim);
 	//Walking to west
 	walkingAnim = std::vector<sf::IntRect>();
 	walkingAnim.push_back(sf::IntRect(5, 41, 32, 32));
 	walkingAnim.push_back(sf::IntRect(37, 41, 32, 32));
 	walkingAnim.push_back(sf::IntRect(69, 41, 32, 32));
+	walkingAnim.push_back(sf::IntRect(37, 41, 32, 32));
 	anima.addAnimation(walkingAnim);
 
 	setTextureRect(anima.getRect());
