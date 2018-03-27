@@ -34,13 +34,13 @@ StateGame::StateGame(Game& game)
 	pointer.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	pointer.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	pointer.setTexture(tileset.getTexture());
-	pointer.setTextureRect(sf::IntRect(128, 32, 32, 32));
+	pointer.setTextureRect(sf::IntRect(136, 34, 32, 32));
 	
 	player = Player(*currentWorld);
 	cameraFollow = &player;
 
 	//Temporary, for save button
-	currentWorld->setBlockId(sf::Vector2u(0, 0), 3);
+	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
 }
 
 void StateGame::handleInput() {

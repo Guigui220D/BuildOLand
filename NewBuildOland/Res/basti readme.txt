@@ -1,0 +1,1 @@
+le fichier newTilset.png contient les mêmes textures que tileset, mais elles ont un contour de 1 pxl en plus autour pour éviter les débordements des intrect

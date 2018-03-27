@@ -9,7 +9,7 @@ TileSet::TileSet()
 	texture = sf::Texture();
 	generateBlocks();
 	generateGrounds();
-	texture.loadFromFile("Res/tileset.png");
+	texture.loadFromFile("Res/newTileset.png");
 }
 
 void TileSet::generateBlocks()
@@ -18,6 +18,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(7), "BARRIER",			true,	sf::Color(90, 70, 50)	));
 	blocks.push_back(new Block(rectById(6), "BRICK",			true,	sf::Color(90, 90, 90)	));
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",	false,	sf::Color(135, 30, 30)	));
+	blocks.push_back(new Block(rectById(10), "PROTO_SAVER",		false,	sf::Color(255, 0, 0)));
 }
 
 void TileSet::generateGrounds()
@@ -31,7 +32,7 @@ void TileSet::generateGrounds()
 sf::IntRect TileSet::rectById(unsigned int tilesetId)
 {
 	//Creates an IntRect where the texture is according to the nth texture of the tileset
-	return sf::IntRect(tilesetId % TILES_IN_ROW * TILE_SIZE, (int)floorf(tilesetId / TILES_IN_ROW) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	return sf::IntRect(tilesetId % TILES_IN_ROW * (TILE_SIZE + 2) + 1, (int)floorf(tilesetId / TILES_IN_ROW) * (TILE_SIZE + 2) + 1, TILE_SIZE, TILE_SIZE);
 
 }
 
