@@ -31,7 +31,8 @@ void Game::run()
 	while (window.isOpen())
 	{
 		//First step, get the input from the player
-		currentState->handleInput();
+		if (window.hasFocus())
+			currentState->handleInput();
 		//The event handler
 		sf::Event event;
 		while (window.pollEvent(event))
