@@ -35,9 +35,9 @@ int PhysicEntity::touchesBlock()
 				sf::Vector2f ppos = getPosition();
 				sf::Vector2f psize = getSize();
 				if (   ppos.x + (psize.x * 0.5f) * hitboxWidth > nx * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f 
-                    && ppos.y + psize.y * 0.5f > ny * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f 
+                    && ppos.y + (psize.y * 0.5f) * hitboxHeightBottom > ny * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f 
                     && ppos.x - (psize.x * 0.5f) * hitboxWidth < nx * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f 
-                    && ppos.y - (psize.y * 0.5f) * hitboxHeight < ny * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f)
+                    && ppos.y - (psize.y * 0.5f) * hitboxHeightTop < ny * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f)
                     return 1;
 			}
 		}

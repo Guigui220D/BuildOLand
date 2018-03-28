@@ -4,11 +4,15 @@
 class Block : public Placeable
 {
 public:
-	Block(sf::IntRect textureRect = sf::IntRect(), std::string name = "", bool hasHitbox = true, sf::Color mapColor = sf::Color(255, 255, 255));
+	Block(sf::IntRect textureRect, std::string name = "", sf::Color mapColor = sf::Color(255, 255, 255), bool hasHitbox = true, bool hasVolume = true, sf::IntRect side = sf::IntRect());
 	~Block();
 	bool hasHitbox();
-
+	bool hasVolume();
+	sf::IntRect getSideRect();
+	sf::Color getSideTint();
 private:
 	bool mHasHitbox;
+	bool mHasVolume;
+	sf::IntRect sideRect;
 };
 

@@ -14,9 +14,11 @@ public:
 	~TileSet();
 	sf::IntRect getGroundRect(unsigned int id);
 	sf::IntRect getBlockRect(unsigned int id);
+	sf::IntRect getBlockSideRect(unsigned int id);
 	Block* getBlockById(unsigned int id);
 	Ground* getGroundById(unsigned int id);
 	sf::Color getMapPixel(unsigned int groundId, unsigned int blockId);
+	sf::Color getSideTint(unsigned int id);
 	sf::Texture* getTexture();
 
 protected:

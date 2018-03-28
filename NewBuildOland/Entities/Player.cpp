@@ -9,8 +9,6 @@ Player::Player(World &world)
 	currentWorld = &world;
 	setSize(sf::Vector2f(80, 80));
 	setFillColor(sf::Color::White);
-	//setOutlineColor(sf::Color::White);
-	//setOutlineThickness(8);
 	setOrigin(getSize().x / 2, getSize().y / 2);
 	setOnMapColor(sf::Color(0, 255, 0));
 	setPosition(sf::Vector2f((float)world.getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world.getInitialPlayerPos().y * StateGame::TILE_SIZE));
@@ -18,8 +16,9 @@ Player::Player(World &world)
 	(*t).loadFromFile("Res/characters.png");
 	setTexture(t);
 
-	hitboxHeight = 0.0f;
 	hitboxWidth = 0.75f;
+	hitboxHeightBottom = -0.8;
+	hitboxHeightTop = 1.1;
 
 	anima = Animation();
 	anima.setInterval(0.12);
