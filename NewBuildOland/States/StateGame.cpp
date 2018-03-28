@@ -71,8 +71,8 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 2, player, this));
-						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 2);
+						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 5, player, this));
+						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 5);
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
 				}
@@ -243,12 +243,18 @@ TileSet* StateGame::getTileset() {
 }
 
 void StateGame::setWorld(World &world) {
+	//Save the old world
+	currentWorld->saveWorld();
 	//We delete the old world
 	//as we will be changing the pointer's adress
+	currentWorld->setDeleted();
 	delete currentWorld;
 
 	//And load the new world
 	currentWorld = &world;
+
+	//Set the current world for the player
+	player.setCurrentWorld(currentWorld);
 }
 
 void StateGame::setClicks()

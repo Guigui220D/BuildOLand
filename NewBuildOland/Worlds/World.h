@@ -33,8 +33,9 @@ public:
 	sf::Vector2u getWorldSize();
 	sf::Vector2u getInitialPlayerPos();
 
+	//Call for telling the other methods that the world is deleted
+	void setDeleted();
 	~World();
-
 protected:
 	StateGame* stateGame = nullptr;
 
@@ -46,9 +47,9 @@ protected:
 
 	std::vector<unsigned short> groundIds;
 	std::vector<unsigned short> blockIds;
-
 private:
 	void saveWorldToFile(std::ofstream &worldFileFlux);
+	bool isBeingDeleted = false;
 	
 };
 

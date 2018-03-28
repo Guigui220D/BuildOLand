@@ -1,6 +1,9 @@
 #pragma once
 #include "Placeable.h"
 
+class BlockBuildEvent;
+class BlockBreakEvent;
+
 class Block : public Placeable
 {
 public:
@@ -10,6 +13,10 @@ public:
 	bool hasVolume();
 	sf::IntRect getSideRect();
 	sf::Color getSideTint();
+
+	//Event methods
+	virtual void OnBlockBuild(BlockBuildEvent e);
+	virtual void OnBlockBreak(BlockBreakEvent e);
 private:
 	bool mHasHitbox;
 	bool mHasVolume;

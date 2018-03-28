@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+
 class Placeable
 {
 public:
@@ -8,6 +9,8 @@ public:
 	sf::Color getColor();
 	sf::IntRect getTextureRect();
 	std::string getName();
+
+
 protected:
 	//Used to get the right texture from the tileset
 	sf::IntRect textureRect;

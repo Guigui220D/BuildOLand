@@ -1,8 +1,8 @@
 #pragma once
 #include "SFML\System.hpp"
-#include "../Entities/Entities.h"
+//#include "../Entities/Entities.h"
 #include "GameEvent.h"
-#include "../States/StateGame.h"
+//#include "../States/StateGame.h"
 
 class BlockBuildEvent : public GameEvent
 {

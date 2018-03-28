@@ -128,10 +128,10 @@ unsigned short World::getBlockId(unsigned short x, unsigned short y)
 {
 	//If pos is out of map
 	if (x < 0 || x >= worldSize.x ||
-		y < 0 || y >= worldSize.y) {
+		y < 0 || y >= worldSize.y || isBeingDeleted) {
 		return 0;
 	}
-	return blockIds[y + x * worldSize.x];
+	return blockIds[y + x * worldSize.x];	
 }
 
 unsigned short World::getBlockId(sf::Vector2u pos)
@@ -189,6 +189,10 @@ sf::Vector2u World::getWorldSize()
 sf::Vector2u World::getInitialPlayerPos()
 {
 	return playerPos;
+}
+
+void World::setDeleted() {
+	isBeingDeleted = true;
 }
 
 World::~World()

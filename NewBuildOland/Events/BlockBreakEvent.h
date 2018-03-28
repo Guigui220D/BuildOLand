@@ -2,7 +2,6 @@
 #include "SFML\System.hpp"
 #include "../Entities/Entities.h"
 #include "GameEvent.h"
-#include "../States/StateGame.h"
 
 class BlockBreakEvent : public GameEvent
 {

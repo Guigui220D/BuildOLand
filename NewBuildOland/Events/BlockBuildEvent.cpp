@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BlockBuildEvent.h"
 #include "../States/StateGame.h"
-
+#include "../Entities/Entities.h"
 
 BlockBuildEvent::BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities entity, StateGame* state) : GameEvent(state)
 {

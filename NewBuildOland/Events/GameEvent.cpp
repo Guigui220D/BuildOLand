@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameEvent.h"
-#include "../States/StateBase.h"
+#include "../States/StateGame.h"
 
 GameEvent::GameEvent(StateGame* state)
 {

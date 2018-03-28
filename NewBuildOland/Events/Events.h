@@ -2,7 +2,8 @@
 #include <iostream>
 #include "BlockBreakEvent.h"
 #include "BlockBuildEvent.h"
-#include "../Utils/TileSet.h"
+
+class TileSet;
 
 class Events
 {
