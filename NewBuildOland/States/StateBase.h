@@ -16,7 +16,6 @@ public:
 
 protected:
 	Game *game = nullptr;
-	TileSet tileset;
 	
 };
 

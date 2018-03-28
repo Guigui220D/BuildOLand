@@ -12,6 +12,9 @@ StateGame::StateGame(Game& game)
 	currentWorld = new MazeWorld(*this);
 	tileset;
 
+	//Init the tileset to the event manager
+	Events::tileset = &tileset;
+
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
 	mapFrame = sf::RectangleShape();

@@ -46,6 +46,8 @@ private:
 	bool leftClicking = false;
 	bool rightClicking = false;
 
+	TileSet tileset;
+
 	Player player;
 };
 
