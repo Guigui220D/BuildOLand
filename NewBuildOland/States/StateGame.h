@@ -25,6 +25,8 @@ public:
 	unsigned static const int TILE_SIZE = 100;
 	const float TILE_SIZE_FLOAT = 100.0f;
 
+	void setClicks();
+
 	World* getWorld();
 
 	~StateGame();
@@ -37,6 +39,7 @@ private:
 	sf::RectangleShape worldDraw;
 	sf::RectangleShape mapDraw;
 	sf::RectangleShape pointer;
+	sf::RectangleShape mouse;
 
 	bool leftClicking = false;
 	bool rightClicking = false;

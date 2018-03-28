@@ -35,6 +35,12 @@ StateGame::StateGame(Game& game)
 	pointer.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	pointer.setTexture(tileset.getTexture());
 	pointer.setTextureRect(sf::IntRect(136, 34, 32, 32));
+
+	mouse = sf::RectangleShape();
+	mouse.setSize(sf::Vector2f(TILE_SIZE_FLOAT / 3, TILE_SIZE_FLOAT / 3));
+	Texture* t = new Texture();
+	(*t).loadFromFile("Res/hand.png");
+	mouse.setTexture(t);
 	
 	player = Player(*currentWorld);
 	cameraFollow = &player;
@@ -141,28 +147,32 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 
 	//Draw block highlighter
-	Vector2i pos = sf::Mouse::getPosition(game->getWindow());
-	if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
-	{		
-		Vector2f posInView = game->getWindow().mapPixelToCoords(pos);		
-		Vector2f diff = posInView - player.getPosition();
-		int clickX = (int)roundf(posInView.x / TILE_SIZE);
-		int clickY = (int)roundf(posInView.y / TILE_SIZE);
-		if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
-		{			
-			pointer.setFillColor(sf::Color::White);
-		}
-		else
+	if (game->getWindow().hasFocus())
+	{
+		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
-			pointer.setFillColor(sf::Color::Red);
+			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+			Vector2f diff = posInView - player.getPosition();
+			int clickX = (int)roundf(posInView.x / TILE_SIZE);
+			int clickY = (int)roundf(posInView.y / TILE_SIZE);
+			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
+			{
+				pointer.setFillColor(sf::Color::White);
+			}
+			else
+			{
+				pointer.setFillColor(sf::Color::Red);
+			}
+			pointer.setPosition(sf::Vector2f(clickX * TILE_SIZE, clickY * TILE_SIZE));
+			window.draw(pointer);
 		}
-		pointer.setPosition(sf::Vector2f(clickX * TILE_SIZE, clickY * TILE_SIZE));
-		window.draw(pointer);
-	}	
+	}
 
 	window.draw(player);
 	//Draw the map
-	window.setView(game->getGuiView());	
+	window.setView(game->getGuiView());
+
 	window.draw(mapFrame);
 	mapView.setSize(game->getWorldView().getSize());
 	mapView.zoom(3);
@@ -179,6 +189,15 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	window.draw(*player.getOnMap());
+
+	if (game->getWindow().hasFocus())
+	{
+		window.setView(game->getWorldView());
+		Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
+		Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
+		mouse.setPosition(sf::Vector2f(onGui.x, onGui.y));
+		window.draw(mouse);
+	}
 }
 
 sf::View& StateGame::getMapView()
@@ -193,6 +212,12 @@ void StateGame::setWorld(World &world) {
 
 	//And load the new world
 	currentWorld = &world;
+}
+
+void StateGame::setClicks()
+{
+	rightClicking = true;
+	leftClicking = true;
 }
 
 World * StateGame::getWorld()

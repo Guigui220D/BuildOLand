@@ -18,6 +18,7 @@ Game::Game()
 	guiView.setSize(1, 1);
 	guiView.setCenter(0.5f, 0.5f);
 	updateView();
+	window.setMouseCursorVisible(false);
 
 	currentState = new StateGame(*this);
 }
@@ -40,12 +41,13 @@ void Game::run()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (event.type == sf::Event::Resized)
-				updateView();
+				updateView();			
 		}
 
 		//Then update everything in that state (positions etc..)
 		//The argument is the time between the last frame (delta time)
 		//todo: calculate the real delta time
+		if (window.hasFocus())
 		currentState->update(clk.restart().asSeconds());
 		
 		window.clear();
