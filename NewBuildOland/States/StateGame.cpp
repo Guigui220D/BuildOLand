@@ -133,16 +133,29 @@ void StateGame::draw(sf::RenderWindow &window) {
 			//Draw the ground
 			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
-			window.draw(worldDraw);
+			window.draw(worldDraw);				
+		}
+	}
+	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
+	{
+		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
+		{
 			//Draw the block shadow
 			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
 			worldDraw.setFillColor(sf::Color::Black);
-			worldDraw.setPosition(TILE_SIZE_FLOAT * x - 5, TILE_SIZE_FLOAT * y + 5);
+			worldDraw.setPosition(TILE_SIZE_FLOAT * x - 8, TILE_SIZE_FLOAT * y + 5);
 			window.draw(worldDraw);
+		}
+	}
+	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
+	{
+		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
+		{
 			//Draw the block
+			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
 			worldDraw.setFillColor(sf::Color::White);
 			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			window.draw(worldDraw);					
+			window.draw(worldDraw);
 		}
 	}
 
@@ -190,14 +203,11 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 	window.draw(*player.getOnMap());
 
-	if (game->getWindow().hasFocus())
-	{
-		window.setView(game->getWorldView());
-		Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
-		Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
-		mouse.setPosition(sf::Vector2f(onGui.x, onGui.y));
-		window.draw(mouse);
-	}
+	window.setView(game->getWorldView());
+	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
+	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
+	mouse.setPosition(sf::Vector2f(onGui.x, onGui.y));
+	window.draw(mouse);
 }
 
 sf::View& StateGame::getMapView()
