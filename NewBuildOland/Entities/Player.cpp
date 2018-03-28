@@ -114,9 +114,6 @@ void Player::update(double delta)
 	//Choice of animation
 	switch (movement)
 	{
-	case 0:
-		anima.selectAnimation(0);
-		break;
 	case 1:
 		anima.selectAnimation(1);
 		break;

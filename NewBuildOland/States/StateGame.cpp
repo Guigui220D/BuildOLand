@@ -149,7 +149,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw the block's front sides
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT * 0.6));
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT /2));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
@@ -160,7 +160,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 			{
 				worldDraw.setTextureRect(tileset.getBlockSideRect(blockId));
 				worldDraw.setFillColor(tileset.getSideTint(blockId));
-				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y + TILE_SIZE_FLOAT);
+				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y + TILE_SIZE_FLOAT / 2);
 				window.draw(worldDraw);
 			}
 		}
@@ -178,7 +178,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 			{
 				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
 				worldDraw.setFillColor(sf::Color::White);
-				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
+				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y - TILE_SIZE_FLOAT / 2);
 				window.draw(worldDraw);
 			}
 		}

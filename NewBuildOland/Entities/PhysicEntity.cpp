@@ -30,15 +30,29 @@ int PhysicEntity::touchesBlock()
 		for (int yy = -1; yy <= 1; yy++)
 		{
 			ny = (y + yy);		
-			if (currentWorld->getBlockAt(nx, ny)->hasHitbox() == true)
+			if (currentWorld->getBlockAt(nx, ny)->hasHitbox())
 			{
-				sf::Vector2f ppos = getPosition();
-				sf::Vector2f psize = getSize();
-				if (   ppos.x + (psize.x * 0.5f) * hitboxWidth > nx * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f 
-                    && ppos.y + (psize.y * 0.5f) * hitboxHeightBottom > ny * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f 
-                    && ppos.x - (psize.x * 0.5f) * hitboxWidth < nx * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f 
-                    && ppos.y - (psize.y * 0.5f) * hitboxHeightTop < ny * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f)
-                    return 1;
+				if (currentWorld->getBlockAt(nx, ny)->hasVolume())
+				{
+
+					sf::Vector2f ppos = getPosition();
+					sf::Vector2f psize = getSize();
+					if (ppos.x + (psize.x * 0.5f) * hitboxWidth > nx * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f
+						&& ppos.y + (psize.y * 0.5f) * hitboxHeightBottom > ny * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f - 0.5f * StateGame::TILE_SIZE
+						&& ppos.x - (psize.x * 0.5f) * hitboxWidth < nx * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f
+						&& ppos.y - (psize.y * 0.5f) * hitboxHeightTop < ny * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f - 0.5f * StateGame::TILE_SIZE)
+						return 1;
+				}
+				else
+				{
+					sf::Vector2f ppos = getPosition();
+					sf::Vector2f psize = getSize();
+					if (ppos.x + (psize.x * 0.5f) * hitboxWidth > nx * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f
+						&& ppos.y + (psize.y * 0.5f) * hitboxHeightBottom > ny * StateGame::TILE_SIZE - StateGame::TILE_SIZE * 0.5f
+						&& ppos.x - (psize.x * 0.5f) * hitboxWidth < nx * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f
+						&& ppos.y - (psize.y * 0.5f) * hitboxHeightTop < ny * StateGame::TILE_SIZE + StateGame::TILE_SIZE * 0.5f)
+						return 1;
+				}
 			}
 		}
 	}
