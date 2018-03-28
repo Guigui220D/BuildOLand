@@ -68,8 +68,8 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 1, player, this));
-						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 1);
+						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 2, player, this));
+						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 2);
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
 				}
@@ -126,36 +126,58 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Create a rectangle for drawing
 	
 	//Iterate through the world to draw each tile
+	//Draw the gound
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
 		{		
 			//Draw the ground
+			unsigned short groundId = currentWorld->getGroundId(sf::Vector2u(x, y));
+			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
 			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			worldDraw.setTextureRect(tileset.getGroundRect(currentWorld->getGroundId(sf::Vector2u(x, y))));
-			window.draw(worldDraw);				
+			worldDraw.setTextureRect(tileset.getGroundRect(groundId));
+			window.draw(worldDraw);	
+			if (!tileset.getBlockById(blockId)->hasVolume())
+			{
+				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
+				window.draw(worldDraw);
+			}
 		}
 	}
+	//Draw the block's front sides
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT * 0.6));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
 		{
-			//Draw the block shadow
-			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
-			worldDraw.setFillColor(sf::Color::Black);
-			worldDraw.setPosition(TILE_SIZE_FLOAT * x - 8, TILE_SIZE_FLOAT * y + 5);
-			window.draw(worldDraw);
+			//Draw the block front
+			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
+			if (tileset.getBlockById(blockId)->hasVolume())
+			{
+				worldDraw.setTextureRect(tileset.getBlockSideRect(blockId));
+				worldDraw.setFillColor(tileset.getSideTint(blockId));
+				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y + TILE_SIZE_FLOAT);
+				window.draw(worldDraw);
+			}
 		}
 	}
+	window.draw(player);
+	//Draw the actual blocks
+	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			//Draw the block
-			worldDraw.setTextureRect(tileset.getBlockRect(currentWorld->getBlockId(sf::Vector2u(x, y))));
-			worldDraw.setFillColor(sf::Color::White);
-			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			window.draw(worldDraw);
+			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
+			if (tileset.getBlockById(blockId)->hasVolume())
+			{
+				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
+				worldDraw.setFillColor(sf::Color::White);
+				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
+				window.draw(worldDraw);
+			}
 		}
 	}
 
@@ -181,8 +203,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(pointer);
 		}
 	}
-
-	window.draw(player);
 	//Draw the map
 	window.setView(game->getGuiView());
 
