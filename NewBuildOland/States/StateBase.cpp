@@ -7,7 +7,3 @@ StateBase::StateBase(Game& game)
 {
 	
 }
-
-TileSet* StateBase::getTileset() {
-	return &tileset;
-}

@@ -4,7 +4,7 @@
 class FlatWorld : public World
 {
 public:
-	FlatWorld(Game& game);
+	FlatWorld(StateGame& stateGame);
 	~FlatWorld();
 	
 	void generateWorld() override;

@@ -9,7 +9,7 @@ StateGame::StateGame(Game& game)
 	: StateBase(game)
 {
 	//Set the world
-	currentWorld = new MazeWorld(game);
+	currentWorld = new MazeWorld(*this);
 	tileset;
 
 	mapView = View();
@@ -213,6 +213,10 @@ void StateGame::draw(sf::RenderWindow &window) {
 sf::View& StateGame::getMapView()
 {
 	return mapView;
+}
+
+TileSet* StateGame::getTileset() {
+	return &tileset;
 }
 
 void StateGame::setWorld(World &world) {

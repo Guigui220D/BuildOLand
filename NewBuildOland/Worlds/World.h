@@ -4,12 +4,12 @@
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
 
-class Game;
+class StateGame;
 
 class World
 {
 public:
-	World(Game& game, std::string name = "world1");
+	World(StateGame& stateGame, std::string name = "world1");
 	
 	//Loads the world with the WorldManager class ?
 	//And returns true if success
@@ -36,7 +36,7 @@ public:
 	~World();
 
 protected:
-	Game* game = nullptr;
+	StateGame* stateGame = nullptr;
 
 	long worldSeed;
 	std::string worldName;

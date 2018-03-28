@@ -3,8 +3,8 @@
 #include <iostream>
 
 
-FlatWorld::FlatWorld(Game& game)
-	: World(game, "flatworld")
+FlatWorld::FlatWorld(StateGame& stateGame)
+	: World(stateGame, "flatworld")
 {
 	loadWorld();
 }

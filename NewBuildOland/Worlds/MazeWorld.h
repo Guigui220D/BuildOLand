@@ -4,7 +4,7 @@
 class MazeWorld : public World
 {
 public:
-	MazeWorld(Game& game);
+	MazeWorld(StateGame& stateGame);
 	~MazeWorld();
 
 	void generateWorld() override;

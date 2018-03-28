@@ -20,6 +20,8 @@ public:
 
 	void setWorld(World &world);
 
+	TileSet* getTileset();
+
 	Entities* cameraFollow;
 
 	unsigned static const int TILE_SIZE = 100;

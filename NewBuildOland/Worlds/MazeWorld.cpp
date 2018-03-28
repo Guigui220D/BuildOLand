@@ -2,8 +2,8 @@
 #include "MazeWorld.h"
 #include "../States/StateGame.h"
 
-MazeWorld::MazeWorld(Game& game)
-	: World(game, "mazeworld")
+MazeWorld::MazeWorld(StateGame& stateGame)
+	: World(stateGame, "mazeworld")
 {
 	loadWorld();
 	playerPos = sf::Vector2u(1, 1);

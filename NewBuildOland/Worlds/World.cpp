@@ -8,8 +8,8 @@
 #include <iostream>
 #include <Windows.h>
 
-World::World(Game& game, std::string name)
-	: game(&game)
+World::World(StateGame& stateGame, std::string name)
+	: stateGame(&stateGame)
 {
 	worldName = name;
 }
@@ -145,7 +145,7 @@ Block* World::getBlockAt(sf::Vector2u pos) {
 
 Block* World::getBlockAt(unsigned short x, unsigned short y) {
 	unsigned short blockId = getBlockId(x, y);
-	return game->getCurrentState()->getTileset()->getBlockById(blockId);
+	return stateGame->getTileset()->getBlockById(blockId);
 }
 
 void World::setGroundId(unsigned short x, unsigned short y, unsigned short value)

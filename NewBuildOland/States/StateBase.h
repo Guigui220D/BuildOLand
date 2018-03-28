@@ -14,8 +14,6 @@ public:
 	virtual void update(float dt) = 0;
 	virtual void draw(sf::RenderWindow &window) = 0;
 
-	TileSet* getTileset();
-
 protected:
 	Game *game = nullptr;
 	TileSet tileset;
