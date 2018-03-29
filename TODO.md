@@ -12,7 +12,7 @@
 - [ ] Maze generator
 
 ### Things to correct :
-
+- [ ] Give entites a pointer to their StateGame
 
 ### Completed :
 - [x] Create proper todo list

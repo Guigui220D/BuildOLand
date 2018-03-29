@@ -3,7 +3,7 @@
 #include "../States/StateGame.h"
 #include "../Entities/Entities.h"
 
-BlockBuildEvent::BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities entity, StateGame* state) : GameEvent(state)
+BlockBuildEvent::BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities* entity, StateGame* state) : GameEvent(state)
 {
 	newBlock = newblock;
 	position = pos;
@@ -25,7 +25,7 @@ unsigned int BlockBuildEvent::getBlock()
 	return newBlock;
 }
 
-Entities BlockBuildEvent::getEntity()
+Entities* BlockBuildEvent::getEntity()
 {
 	return entit;
 }

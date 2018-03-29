@@ -20,14 +20,7 @@ void Events::OnBlockBreak(BlockBreakEvent e)
 	std::cout << "Event : Block " << tileset->getBlockById(e.getOldBlock())->getName() << " broken at " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
 
 	//Send event to the block
-	tileset->getBlockById(e.getOldBlock())->OnBlockBreak(e);
-
-	if (e.getOldBlock() == 4 && e.getPosition() == sf::Vector2u())
-	{
-		e.getState()->getWorld()->setBlockId(e.getPosition(), 4);
-		e.getState()->getWorld()->saveWorld();
-		std::cout << "Saved the world!" << std::endl;
-	}
+	tileset->getBlockById(e.getOldBlock())->OnBlockBreak(e);	
 }
 
 void Events::OnBlockBuild(BlockBuildEvent e)
@@ -36,4 +29,19 @@ void Events::OnBlockBuild(BlockBuildEvent e)
 	
 	//Send event to the block
 	tileset->getBlockById(e.getBlock())->OnBlockBuild(e);
+}
+
+void Events::OnWalkOnBlock(WalkOnEvent e)
+{
+	if (e.getBlockId() == 4)
+	{
+		//e.getState()->getWorld()->saveWorld();
+		std::cout << "Saved the world!" << std::endl;
+		std::cout << "TODO : Le monde n'a pas ete save, ceci necessiterait que la classe entity ait acces a sa state" << std::endl;
+	}
+}
+
+void Events::OnLeaveBlock(BlockLeaveEvent e)
+{
+
 }

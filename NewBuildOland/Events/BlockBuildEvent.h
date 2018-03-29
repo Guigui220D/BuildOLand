@@ -7,14 +7,14 @@
 class BlockBuildEvent : public GameEvent
 {
 public:
-	BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities entity, StateGame* state);
+	BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities* entity, StateGame* state);
 	~BlockBuildEvent();
 	sf::Vector2u getPosition();
 	unsigned int getBlock();
-	Entities getEntity();
+	Entities* getEntity();
 protected:
 	sf::Vector2u position;
 	unsigned int newBlock;
-	Entities entit;
+	Entities* entit;
 };
 

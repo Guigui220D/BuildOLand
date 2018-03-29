@@ -2,6 +2,8 @@
 #include <iostream>
 #include "BlockBreakEvent.h"
 #include "BlockBuildEvent.h"
+#include "WalkOnEvent.h"
+#include "BlockLeaveEvent.h"
 
 class TileSet;
 
@@ -12,6 +14,8 @@ public:
 	~Events();
 	static void OnBlockBreak(BlockBreakEvent e);
 	static void OnBlockBuild(BlockBuildEvent e);
+	static void OnWalkOnBlock(WalkOnEvent e);
+	static void OnLeaveBlock(BlockLeaveEvent e);
 
 	static TileSet* tileset;
 

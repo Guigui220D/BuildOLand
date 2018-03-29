@@ -13,5 +13,6 @@ public:
 private:
 	Animation anima;
 	static const int SPEED = 300;
+	sf::Vector2u lastPos;
 };
 

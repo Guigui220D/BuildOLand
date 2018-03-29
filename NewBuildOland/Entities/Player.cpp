@@ -2,6 +2,9 @@
 #include "Player.h"
 #include "../States/StateGame.h"
 #include "../Utils/Animation.h"
+#include "../Events/Events.h"
+#include "../Events/WalkOnEvent.h"
+#include "../Events/BlockLeaveEvent.h"
 
 Player::Player(World &world)
 	: PhysicEntity()
@@ -143,4 +146,16 @@ void Player::update(double delta)
 		break;
 	}
 	setTextureRect(anima.getRect());
+
+	//Block enter and leave event
+	sf::Vector2i blockOn = sf::Vector2i(roundf(getPosition().x / StateGame::TILE_SIZE), roundf(getPosition().y / StateGame::TILE_SIZE));
+	sf::Vector2u uBlockOn = sf::Vector2u(blockOn.x, blockOn.y);
+	if (lastPos != uBlockOn)
+	{	
+		unsigned short id = currentWorld->getBlockId(blockOn.x, blockOn.y);
+		Events::OnLeaveBlock(BlockLeaveEvent(lastPos, this, id, nullptr));
+		if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
+			Events::OnWalkOnBlock(WalkOnEvent(lastPos, this, id, nullptr));
+		lastPos = uBlockOn;
+	}
 }

@@ -20,7 +20,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(6), "BRICK",			sf::Color(90, 90, 90),	true));
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",	sf::Color(135, 30, 30), false, false));
 	blocks.push_back(new Block(rectById(10),"PROTO_SAVER",		sf::Color(255, 0, 0),	false, false));
-	blocks.push_back(new BlockTeleporter(rectById(8)));
+	blocks.push_back(new BlockTeleporter(rectById(11)));
 }
 
 void TileSet::generateGrounds()
