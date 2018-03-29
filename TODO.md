@@ -3,10 +3,10 @@
 ### Main functionalities :
 
 - [ ] Path finding for AI entities
-- [ ] Interactive blocks
 - [ ] User interface and pause
 - [ ] Mangement system for changing between states
 - [ ] Move player control input to player class
+- [ ] Sound manager
 
 ### Less important things to implement :
 - [ ] Maze generator
@@ -18,3 +18,4 @@
 - [x] Create proper todo list
 - [x] Events system
 - [x] Animations
+- [x] Interactive blocks
