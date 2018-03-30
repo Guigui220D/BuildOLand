@@ -1,11 +1,11 @@
 #pragma once
 #include "Block.h"
 
-class BlockTeleporter : public Block
+class BlockSaver : public Block
 {
 public:
-	BlockTeleporter(sf::IntRect textureRect);
-	~BlockTeleporter();
+	BlockSaver(sf::IntRect textureRect);
+	~BlockSaver();
 
 	//Event methods
 	void OnPlaceableEnter(PlaceableEnterEvent e) override;

@@ -32,6 +32,8 @@ public:
 	
 	sf::Vector2u getWorldSize();
 	sf::Vector2u getInitialPlayerPos();
+	std::string getName();
+	StateGame* getStateGame();
 
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();

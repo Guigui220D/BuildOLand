@@ -3,11 +3,11 @@
 #include "../Entities/Player.h"
 #include "GameEvent.h"
 
-class WalkOnEvent : public GameEvent
+class PlaceableEnterEvent : public GameEvent
 {
 public:
-	WalkOnEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame* state);
-	~WalkOnEvent();
+	PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame* state);
+	~PlaceableEnterEvent();
 	sf::Vector2u getTilePos();
 	Player* getPlayer();
 	unsigned short getBlockId();

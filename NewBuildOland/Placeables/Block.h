@@ -3,6 +3,8 @@
 
 class BlockBuildEvent;
 class BlockBreakEvent;
+class PlaceableEnterEvent;
+class PlaceableLeaveEvent;
 
 class Block : public Placeable
 {

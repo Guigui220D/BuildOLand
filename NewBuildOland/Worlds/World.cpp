@@ -191,6 +191,16 @@ sf::Vector2u World::getInitialPlayerPos()
 	return playerPos;
 }
 
+std::string World::getName()
+{
+	return worldName;
+}
+
+StateGame* World::getStateGame() 
+{
+	return stateGame;
+}
+
 void World::setDeleted() {
 	isBeingDeleted = true;
 }

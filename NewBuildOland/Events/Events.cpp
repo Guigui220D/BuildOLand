@@ -31,17 +31,15 @@ void Events::OnBlockBuild(BlockBuildEvent e)
 	tileset->getBlockById(e.getBlock())->OnBlockBuild(e);
 }
 
-void Events::OnWalkOnBlock(WalkOnEvent e)
+void Events::OnPlaceableEnter(PlaceableEnterEvent e)
 {
-	if (e.getBlockId() == 4)
-	{
-		//e.getState()->getWorld()->saveWorld();
-		std::cout << "Saved the world!" << std::endl;
-		std::cout << "TODO : Le monde n'a pas ete save, ceci necessiterait que la classe entity ait acces a sa state" << std::endl;
-	}
+	//Send event to the block
+	tileset->getBlockById(e.getBlockId())->OnPlaceableEnter(e);
+
+	//TODO: Send event to the ground
 }
 
-void Events::OnLeaveBlock(BlockLeaveEvent e)
+void Events::OnPlaceableLeave(PlaceableLeaveEvent e)
 {
 
 }

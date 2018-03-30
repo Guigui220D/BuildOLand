@@ -3,8 +3,8 @@
 #include "../States/StateGame.h"
 #include "../Utils/Animation.h"
 #include "../Events/Events.h"
-#include "../Events/WalkOnEvent.h"
-#include "../Events/BlockLeaveEvent.h"
+#include "../Events/PlaceableEnterEvent.h"
+#include "../Events/PlaceableLeaveEvent.h"
 
 Player::Player(World &world)
 	: PhysicEntity()
@@ -153,9 +153,9 @@ void Player::update(double delta)
 	if (lastPos != uBlockOn)
 	{	
 		unsigned short id = currentWorld->getBlockId(blockOn.x, blockOn.y);
-		Events::OnLeaveBlock(BlockLeaveEvent(lastPos, this, id, nullptr));
+		Events::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, id, currentWorld->getStateGame()));
 		if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
-			Events::OnWalkOnBlock(WalkOnEvent(lastPos, this, id, nullptr));
+			Events::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, id, currentWorld->getStateGame()));
 		lastPos = uBlockOn;
 	}
 }

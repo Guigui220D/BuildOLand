@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Placeable.h"
-
+#include "../Events/Events.h"
 
 Placeable::Placeable(sf::IntRect textureRect, std::string name, sf::Color mapColor)
 	:	textureRect(textureRect)
@@ -27,4 +27,11 @@ sf::IntRect Placeable::getTextureRect()
 std::string Placeable::getName()
 {
 	return name;
+}
+
+void Placeable::OnPlaceableEnter(PlaceableEnterEvent e)
+{
+}
+void Placeable::OnPlaceableLeave(PlaceableLeaveEvent e)
+{
 }
