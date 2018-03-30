@@ -21,6 +21,9 @@ public:
 	sf::Color getSideTint(unsigned int id);
 	sf::Texture* getTexture();
 
+	unsigned int getTotalBlockNb();
+	unsigned int getTotalGroundNb();
+
 protected:
 	const unsigned int TILES_IN_ROW = 5;
 	const unsigned int TILE_SIZE = 32;

@@ -71,8 +71,8 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 5, (&player), this));
-						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 5);
+						EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), blockPlaceId, (&player), this));
+						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), blockPlaceId);
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
 				}
@@ -113,6 +113,23 @@ void StateGame::handleInput() {
 	else
 	{
 		rightClicking = false;
+	}
+
+	//To change the block being placed (Temporary)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)) {
+		if (blockPlaceId < tileset.getTotalBlockNb() - 1 && !isPlaceKeyPressed) {
+			blockPlaceId++;
+			std::cout << "BLOCK " << tileset.getBlockById(blockPlaceId)->getName() << " SELECTED " << std::endl;
+		}
+		isPlaceKeyPressed = true;
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+		if(blockPlaceId > 1 && !isPlaceKeyPressed) {
+			blockPlaceId--;
+			std::cout << "BLOCK " << tileset.getBlockById(blockPlaceId)->getName() << " SELECTED " << std::endl;
+		}
+		isPlaceKeyPressed = true;
+	} else {
+		isPlaceKeyPressed = false;
 	}
 }
 

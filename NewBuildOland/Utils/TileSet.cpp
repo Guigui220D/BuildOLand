@@ -103,3 +103,12 @@ sf::Texture* TileSet::getTexture()
 	return &texture;
 }
 
+unsigned int TileSet::getTotalBlockNb()
+{
+	return blocks.size();
+}
+unsigned int TileSet::getTotalGroundNb()
+{
+	return blocks.size();
+}
+

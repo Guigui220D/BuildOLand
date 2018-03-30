@@ -45,9 +45,13 @@ private:
 
 	bool leftClicking = false;
 	bool rightClicking = false;
+	
+	unsigned short blockPlaceId = 1;
+	bool isPlaceKeyPressed = false;
 
 	TileSet tileset;
 
 	Player player;
+
 };
 
