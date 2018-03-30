@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BlockTeleporter.h"
-#include "../Events/Events.h"
+#include "../Events/EventManager.h"
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Placeable.h"
-#include "../Events/Events.h"
+#include "../Events/EventManager.h"
 
 Placeable::Placeable(sf::IntRect textureRect, std::string name, sf::Color mapColor)
 	:	textureRect(textureRect)

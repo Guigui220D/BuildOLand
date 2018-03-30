@@ -7,11 +7,11 @@
 
 class TileSet;
 
-class Events
+class EventManager
 {
 public:
-	Events();
-	~Events();
+	EventManager();
+	~EventManager();
 	static void OnBlockBreak(BlockBreakEvent e);
 	static void OnBlockBuild(BlockBuildEvent e);
 	static void OnPlaceableEnter(PlaceableEnterEvent e);

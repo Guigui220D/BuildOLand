@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "../States/StateGame.h"
 #include "../Utils/Animation.h"
-#include "../Events/Events.h"
+#include "../Events/EventManager.h"
 #include "../Events/PlaceableEnterEvent.h"
 #include "../Events/PlaceableLeaveEvent.h"
 
@@ -153,9 +153,9 @@ void Player::update(double delta)
 	if (lastPos != uBlockOn)
 	{	
 		unsigned short id = currentWorld->getBlockId(blockOn.x, blockOn.y);
-		Events::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, id, currentWorld->getStateGame()));
+		EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, id, currentWorld->getStateGame()));
 		if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
-			Events::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, id, currentWorld->getStateGame()));
+			EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, id, currentWorld->getStateGame()));
 		lastPos = uBlockOn;
 	}
 }

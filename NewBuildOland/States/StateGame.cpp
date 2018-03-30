@@ -3,7 +3,7 @@
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
 #include <iostream>
-#include "../Events/Events.h"
+#include "../Events/EventManager.h"
 
 StateGame::StateGame(Game& game)
 	: StateBase(game)
@@ -13,7 +13,7 @@ StateGame::StateGame(Game& game)
 	tileset;
 
 	//Init the tileset to the event manager
-	Events::tileset = &tileset;
+	EventManager::tileset = &tileset;
 
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
@@ -71,7 +71,7 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						Events::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 5, (&player), this));
+						EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), 5, (&player), this));
 						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 5);
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
@@ -102,7 +102,7 @@ void StateGame::handleInput() {
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
 						unsigned short oldBlock = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
 						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-						Events::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), oldBlock, (&player), this));
+						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), oldBlock, (&player), this));
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
 				}
