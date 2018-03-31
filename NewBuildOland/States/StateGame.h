@@ -6,6 +6,7 @@
 #include "../Worlds/World.h"
 #include "../Utils/TileSet.h"
 #include "../Entities/Player.h"
+#include "../Utils/SoundManager.h"
 
 class StateGame : public StateBase
 {
@@ -50,6 +51,7 @@ private:
 	bool isPlaceKeyPressed = false;
 
 	TileSet tileset;
+	SoundManager soundManager;
 
 	Player player;
 

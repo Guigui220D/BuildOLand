@@ -4,6 +4,7 @@
 #include "../Worlds/MazeWorld.h"
 #include <iostream>
 #include "../Events/EventManager.h"
+#include "SFML/Audio/SoundBuffer.hpp"
 
 StateGame::StateGame(Game& game)
 	: StateBase(game)
@@ -14,6 +15,9 @@ StateGame::StateGame(Game& game)
 
 	//Init the tileset to the event manager
 	EventManager::tileset = &tileset;
+
+	//Init the sound manager
+	soundManager;
 
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
