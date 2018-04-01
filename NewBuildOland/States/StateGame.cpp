@@ -20,6 +20,7 @@ StateGame::StateGame(Game& game)
 	//Init the sound manager
 	soundManager;
 
+	//Init all the drawers
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
 	mapFrame = sf::RectangleShape();
@@ -53,7 +54,11 @@ StateGame::StateGame(Game& game)
 	player = Player(*currentWorld);
 	cameraFollow = &player;
 
+	//Setup the entity lists
 	entities = std::vector<Entities>();
+	blockEntities = std::vector<BlockEntity>();
+
+	//Temporary for entity testing
 	entities.push_back(TestObject());
 
 	//Temporary, for save button
@@ -143,6 +148,8 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
+	for (int i = 0; i < blockEntities.size(); i++)
+		blockEntities[i].update(dt);
 	for (int i = 0; i < entities.size(); i++)
 		entities[i].update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
@@ -192,6 +199,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 			}
 		}
 	}
+	//Draw all entities
+	for (int i = 0; i < blockEntities.size(); i++)
+		window.draw(blockEntities[i]);
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(entities[i]);
 	window.draw(player);
@@ -253,6 +263,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(mapDraw);
 		}
 	}
+	//Draw entities on map
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(*entities[i].getOnMap());
 	window.draw(*player.getOnMap());

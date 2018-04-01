@@ -6,8 +6,9 @@
 #include "../Worlds/World.h"
 #include "../Utils/TileSet.h"
 #include "../Entities/Player.h"
-#include "../Entities/Entities.h"
+#include "../Entities/BlockEntity.h"
 #include "../Utils/SoundManager.h"
+#include "../Entities/Entities.h"
 #include <vector>
 
 class StateGame : public StateBase
@@ -37,6 +38,7 @@ public:
 	~StateGame();
 
 	std::vector<Entities> entities;
+	std::vector<BlockEntity> blockEntities;
 
 private:
 	World *currentWorld = nullptr;
