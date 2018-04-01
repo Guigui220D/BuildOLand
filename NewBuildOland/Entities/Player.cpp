@@ -20,8 +20,8 @@ Player::Player(World &world)
 	setTexture(t);
 
 	hitboxWidth = 0.75f;
-	hitboxHeightBottom = -0.8;
-	hitboxHeightTop = 1.1;
+	hitboxHeightBottom = -0.8f;
+	hitboxHeightTop = 1.1f;
 
 	anima = Animation();
 	anima.setInterval(0.12);
