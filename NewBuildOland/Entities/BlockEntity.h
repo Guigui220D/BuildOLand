@@ -1,6 +1,7 @@
 #pragma once
 #include "Entities.h"
-#include "../States/StateGame.h"
+//#include "../States/StateGame.h"
+class StateGame;
 
 class BlockEntity : public Entities
 {

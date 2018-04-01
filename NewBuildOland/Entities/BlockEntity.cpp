@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BlockEntity.h"
+#include "../States/StateGame.h"
 
 
 BlockEntity::BlockEntity(World* world, sf::Vector2u tile, unsigned short blockId)
