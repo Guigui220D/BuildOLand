@@ -35,7 +35,10 @@ sf::Color Block::getSideTint()
 
 //Event methods
 void Block::OnBlockBuild(BlockBuildEvent e) {
-
+	Sound* blockPlaceSound = e.getState()->getSoundManager()->getSound("blockPlace.ogg");
+	blockPlaceSound->setVolume(30);
+	blockPlaceSound->play();
+	
 }
 void Block::OnBlockBreak(BlockBreakEvent e) {
 

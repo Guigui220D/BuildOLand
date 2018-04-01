@@ -26,4 +26,9 @@ void BlockTeleporter::OnPlaceableEnter(PlaceableEnterEvent e) {
 
 	//Send it to the stateGame to change the world
 	e.getState()->setWorld(*newWorld);
+
+	//Play a teleportation sound
+	sf::Sound* teleportSound = e.getState()->getSoundManager()->getSound("teleport.ogg");
+	teleportSound->setVolume(20);
+	teleportSound->play();
 }

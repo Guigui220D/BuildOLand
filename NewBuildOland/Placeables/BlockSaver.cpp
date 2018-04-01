@@ -17,4 +17,9 @@ BlockSaver::~BlockSaver()
 void BlockSaver::OnPlaceableEnter(PlaceableEnterEvent e) {
 	std::cout << "Saved the world!" << std::endl;
 	e.getState()->getWorld()->saveWorld();
+
+	//Play a sound
+	sf::Sound* saveSound = e.getState()->getSoundManager()->getSound("save.ogg");
+	saveSound->setVolume(20);
+	saveSound->play();
 }

@@ -34,6 +34,8 @@ public:
 
 	World* getWorld();
 
+	SoundManager* getSoundManager();
+
 	~StateGame();
 
 	std::vector<Entities> entities;

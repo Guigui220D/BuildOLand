@@ -19,6 +19,13 @@ StateGame::StateGame(Game& game)
 
 	//Init the sound manager
 	soundManager;
+	sf::Music* backgroundMusic = soundManager.getMusic("fantasymusic.ogg");
+	backgroundMusic->setVolume(20);
+	backgroundMusic->play();
+	sf::Music* backgroundAmbiance = soundManager.getMusic("forest-ambiance.ogg");
+	backgroundAmbiance->setVolume(30);
+	backgroundAmbiance->setLoop(true);
+	backgroundAmbiance->play();
 
 	mapView = View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
@@ -297,6 +304,11 @@ void StateGame::setClicks()
 World * StateGame::getWorld()
 {
 	return currentWorld;
+}
+
+SoundManager* StateGame::getSoundManager()
+{
+	return &soundManager;
 }
 
 StateGame::~StateGame()
