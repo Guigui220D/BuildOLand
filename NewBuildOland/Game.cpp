@@ -7,7 +7,7 @@ Game::Game()
 	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
 {
-	window.setFramerateLimit(30);
+	//window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
 	guiView = sf::View();

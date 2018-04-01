@@ -5,6 +5,7 @@
 #include <iostream>
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
+#include "../Entities/StaticObjects/TestObject.h"
 
 StateGame::StateGame(Game& game)
 	: StateBase(game)
@@ -51,6 +52,9 @@ StateGame::StateGame(Game& game)
 	
 	player = Player(*currentWorld);
 	cameraFollow = &player;
+
+	entities = std::vector<Entities>();
+	entities.push_back(TestObject());
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
@@ -139,6 +143,8 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
+	for (int i = 0; i < entities.size(); i++)
+		entities[i].update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 }
 
@@ -186,6 +192,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 			}
 		}
 	}
+	for (int i = 0; i < entities.size(); i++)
+		window.draw(entities[i]);
 	window.draw(player);
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
@@ -245,6 +253,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 			window.draw(mapDraw);
 		}
 	}
+	for (int i = 0; i < entities.size(); i++)
+		window.draw(*entities[i].getOnMap());
 	window.draw(*player.getOnMap());
 
 	window.setView(game->getWorldView());
