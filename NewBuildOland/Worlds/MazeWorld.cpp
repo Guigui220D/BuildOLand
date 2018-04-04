@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "MazeWorld.h"
 #include "../States/StateGame.h"
 
@@ -19,11 +18,11 @@ void MazeWorld::generateWorld() {
 	worldSize = sf::Vector2u(25, 25);
 	unsigned short const DEFAULT_GROUND = 3;
 	unsigned short const DEFAULT_BLOCK = 0;
-	
+
 	for(unsigned int i = 0; i < worldSize.x * worldSize.y; i++) {
 		groundIds.push_back(DEFAULT_GROUND);
 		blockIds.push_back(DEFAULT_BLOCK);
-	} 
+	}
 
 	for(unsigned int x = 2; x < worldSize.x; x++) {
 		for (unsigned int y = 2; y < worldSize.y; y++) {

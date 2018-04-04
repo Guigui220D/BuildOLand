@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "World.h"
 #include "../Utils/FileManager.h"
 #include "../Game.h"
@@ -20,7 +19,7 @@ bool World::loadWorld()
 {
 	//Check if file exists
 	std::string const worldFileName("./../gamedata/worlds/" + worldName + ".bol");
-	
+
 	std::ifstream worldFile(worldFileName.c_str(), std::ios::binary | std::ios::in);
 	if(worldFile.is_open()) {
 		//The file exists, we can read it now
@@ -31,7 +30,7 @@ bool World::loadWorld()
 		worldFile.read((char*)(&worldSizeX), sizeof(worldSize.x));
 		worldFile.read((char*)(&worldSizeY), sizeof(worldSize.y));
 		worldSize = sf::Vector2u(worldSizeX, worldSizeY);
-		
+
 		unsigned short idBuffer;
 		//Read the groundId array from the file
 		for (unsigned int i = 0; i < worldSize.x * worldSize.y; i++) {
@@ -43,13 +42,13 @@ bool World::loadWorld()
 			worldFile.read((char*)(&idBuffer), sizeof(idBuffer));
 			blockIds.push_back(idBuffer);
 		}
-		
+
 		//We can close the file, all the data has been loaded
 		worldFile.close();
 		return true;
 	} else {
 		//The file doesn't exist, create one
-		
+
 		//Create the folder (for windows only)
 		std::string const worldFolderName("./../gamedata/worlds/");
 		FileManager::createFolder(worldFolderName);
@@ -94,7 +93,7 @@ bool World::saveWorld()
 }
 
 void World::saveWorldToFile(std::ofstream &worldFileFlux) {
-	
+
 	//First save the size of the world
 	worldFileFlux.write((char*)(&worldSize.x), sizeof(worldSize.x));
 	worldFileFlux.write((char*)(&worldSize.y), sizeof(worldSize.y));
@@ -131,7 +130,7 @@ unsigned short World::getBlockId(unsigned short x, unsigned short y)
 		y < 0 || y >= worldSize.y || isBeingDeleted) {
 		return 0;
 	}
-	return blockIds[y + x * worldSize.x];	
+	return blockIds[y + x * worldSize.x];
 }
 
 unsigned short World::getBlockId(sf::Vector2u pos)
@@ -196,7 +195,7 @@ std::string World::getName()
 	return worldName;
 }
 
-StateGame* World::getStateGame() 
+StateGame* World::getStateGame()
 {
 	return stateGame;
 }

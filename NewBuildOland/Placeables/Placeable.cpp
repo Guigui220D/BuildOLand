@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Placeable.h"
 #include "../Events/EventManager.h"
 

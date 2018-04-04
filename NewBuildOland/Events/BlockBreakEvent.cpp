@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "BlockBreakEvent.h"
 #include "../States/StateGame.h"
 

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "StateGame.h"
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
@@ -6,6 +5,7 @@
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "../Entities/StaticObjects/TestObject.h"
+#include <math.h>
 
 StateGame::StateGame(Game& game)
 	: StateBase(game)
@@ -57,7 +57,7 @@ StateGame::StateGame(Game& game)
 	Texture* t = new Texture();
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
-	
+
 	player = Player(*currentWorld);
 	cameraFollow = &player;
 
@@ -168,20 +168,20 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Get world size
 	sf::Vector2u size = currentWorld->getWorldSize();
 	//Create a rectangle for drawing
-	
+
 	//Iterate through the world to draw each tile
 	//Draw the gound
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
-		{		
+		{
 			//Draw the ground
 			unsigned short groundId = currentWorld->getGroundId(sf::Vector2u(x, y));
 			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
 			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			worldDraw.setTextureRect(tileset.getGroundRect(groundId));
-			window.draw(worldDraw);	
+			window.draw(worldDraw);
 			if (!tileset.getBlockById(blockId)->hasVolume())
 			{
 				worldDraw.setTextureRect(tileset.getBlockRect(blockId));

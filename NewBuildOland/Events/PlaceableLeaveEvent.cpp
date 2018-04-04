@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PlaceableLeaveEvent.h"
 
 PlaceableLeaveEvent::PlaceableLeaveEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame * state) : GameEvent(state)

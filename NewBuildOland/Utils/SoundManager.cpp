@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "SoundManager.h"
 #include <iostream>
 
@@ -67,6 +66,6 @@ SoundManager::~SoundManager()
 {
 	//Delete each Sound
 	for (unsigned i = 0; i < soundNames.size(); i++) {
-		delete sounds[i];	
+		delete sounds[i];
 	}
 }

@@ -1,8 +1,8 @@
-#include "stdafx.h"
 #include "TileSet.h"
 #include "../Placeables/BlockTeleporter.h"
 #include "../Placeables/BlockSaver.h"
 #include <iostream>
+#include <math.h>
 //This is the tileset class that allows to get textures from a block id
 //All the tilsets should be in Res/
 
@@ -21,7 +21,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(6), "BRICK",			sf::Color(90, 90, 90),	true));
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE", sf::Color(135, 30, 30), false, false));
 	blocks.push_back(new BlockSaver(rectById(10)));
-	blocks.push_back(new BlockTeleporter(rectById(11)));	
+	blocks.push_back(new BlockTeleporter(rectById(11)));
 }
 
 void TileSet::generateGrounds()
@@ -48,7 +48,7 @@ sf::IntRect TileSet::getGroundRect(unsigned int id)
 
 	if (id < grounds.size()) {
 		return grounds[id]->getTextureRect();
-	}	
+	}
 	return errorRect;
 }
 

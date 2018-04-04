@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "GameEvent.h"
 #include "../States/StateGame.h"
 

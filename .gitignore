@@ -235,10 +235,13 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-# Ignoring visual studio project files
-*.vcxproj
-*.vcxproj.filters
-*.sln
+# Ignoring code::blocks project files
+*.cbp
+*.depend
+*.layout
+
+# Removing dlls
+*.dll
 
 # Buildoland specific
 NewBuildOland.sln

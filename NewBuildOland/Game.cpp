@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Game.h"
 #include <iostream>
 
@@ -41,7 +40,7 @@ void Game::run()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (event.type == sf::Event::Resized)
-				updateView();			
+				updateView();
 		}
 
 		//Then update everything in that state (positions etc..)
@@ -49,7 +48,7 @@ void Game::run()
 		//todo: calculate the real delta time
 		if (window.hasFocus())
 		currentState->update(clk.restart().asSeconds());
-		
+
 		window.clear();
 		//Finally draw everything on the window after the changes have been made
 		currentState->draw(window);

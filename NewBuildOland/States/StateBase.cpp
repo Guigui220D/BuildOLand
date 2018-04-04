@@ -1,9 +1,8 @@
-#include "stdafx.h"
 #include "StateBase.h"
 
 
-StateBase::StateBase(Game& game) 
+StateBase::StateBase(Game& game)
 	: game(&game)
 {
-	
+
 }

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PlaceableEnterEvent.h"
 
 PlaceableEnterEvent::PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame * state) : GameEvent(state)

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "BlockBuildEvent.h"
 #include "../States/StateGame.h"
 #include "../Entities/Entities.h"

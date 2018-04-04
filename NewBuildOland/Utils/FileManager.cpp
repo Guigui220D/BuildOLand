@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "FileManager.h"
 #include <Windows.h>
 #include <sstream>
@@ -22,7 +20,7 @@ bool FileManager::createFolder(std::string folderName) {
 
 	//Create a new folder every step
 	for (unsigned int i = 0; i < folders.size(); i++) {
-		
+
 		if(folders[i] == "." || folders[i] == "..") {
 			//It's not a valid folder, so don't create a new folder
 			continue;
@@ -46,9 +44,9 @@ bool FileManager::createFolder(std::string folderName) {
 			//Could not create the folder
 			return false;
 		}
-		
+
 	}
-	
+
 	//Sucess, all the folder have been created
 	return true;
 }

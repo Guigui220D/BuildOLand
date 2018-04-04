@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PhysicEntity.h"
 #include "iostream"
 #include "../States/StateGame.h"
@@ -29,7 +28,7 @@ int PhysicEntity::touchesBlock()
 		nx = (x + xx);
 		for (int yy = -1; yy <= 1; yy++)
 		{
-			ny = (y + yy);		
+			ny = (y + yy);
 			if (currentWorld->getBlockAt(nx, ny)->hasHitbox())
 			{
 				if (currentWorld->getBlockAt(nx, ny)->hasVolume())

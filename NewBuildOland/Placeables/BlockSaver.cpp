@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "BlockSaver.h"
 #include "../Events/EventManager.h"
 #include "../Worlds/FlatWorld.h"

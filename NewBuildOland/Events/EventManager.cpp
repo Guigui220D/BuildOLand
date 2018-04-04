@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <iostream>
 #include "EventManager.h"
 #include "../States/StateGame.h"
@@ -20,13 +19,13 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
 	std::cout << "Event : Block " << tileset->getBlockById(e.getOldBlock())->getName() << " broken at " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
 
 	//Send event to the block
-	tileset->getBlockById(e.getOldBlock())->OnBlockBreak(e);	
+	tileset->getBlockById(e.getOldBlock())->OnBlockBreak(e);
 }
 
 void EventManager::OnBlockBuild(BlockBuildEvent e)
 {
 	std::cout << "Event : Block " << e.getBlock() << " built at " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
-	
+
 	//Send event to the block
 	tileset->getBlockById(e.getBlock())->OnBlockBuild(e);
 }
