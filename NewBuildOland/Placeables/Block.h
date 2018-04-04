@@ -19,8 +19,6 @@ public:
 	//Event methods
 	virtual void OnBlockBuild(BlockBuildEvent e);
 	virtual void OnBlockBreak(BlockBreakEvent e);
-protected:
-	bool hasEntity = false;
 private:
 	bool mHasHitbox;
 	bool mHasVolume;

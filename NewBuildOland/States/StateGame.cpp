@@ -63,7 +63,6 @@ StateGame::StateGame(Game& game)
 
 	//Setup the entity lists
 	entities = std::vector<Entities>();
-	blockEntities = std::vector<BlockEntity>();
 
 	//Temporary for entity testing
 	entities.push_back(TestObject());
@@ -155,8 +154,6 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
-	for (int i = 0; i < blockEntities.size(); i++)
-		blockEntities[i].update(dt);
 	for (int i = 0; i < entities.size(); i++)
 		entities[i].update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
@@ -207,8 +204,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw all entities
-	for (int i = 0; i < blockEntities.size(); i++)
-		window.draw(blockEntities[i]);
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(entities[i]);
 	window.draw(player);
