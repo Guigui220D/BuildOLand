@@ -61,6 +61,7 @@ void Game::run()
 			double fps = 1 / time;
 			std::cout << "FPS : " << fps << std::endl;
 			count = 0;
+			lastFps = fps;
 		}
 	}
 }
@@ -100,6 +101,11 @@ sf::View& Game::getWorldView() {
 
 sf::View& Game::getGuiView() {
 	return guiView;
+}
+
+double Game::getFPS()
+{
+    return lastFps;
 }
 
 Game::~Game()

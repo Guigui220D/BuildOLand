@@ -22,6 +22,8 @@ public:
 
 	~Game();
 
+	double getFPS();
+
 private:
 	sf::RenderWindow window;
 	StateBase *currentState;
@@ -31,4 +33,6 @@ private:
 	Other views can be added by states if needed*/
 	sf::View guiView;
 	sf::View worldView;
+
+	double lastFps;
 };

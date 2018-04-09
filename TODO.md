@@ -6,7 +6,6 @@
 - [ ] User interface and pause
 - [ ] Mangement system for changing between states
 - [ ] Move player control input to player class
-- [ ] Sound manager
 
 ### Less important things to implement :
 - [ ] Maze generator
@@ -20,3 +19,4 @@
 - [x] Animations
 - [x] Interactive blocks
 - [x] Give entites a pointer to their StateGame (through world)
+- [x] Sound manager

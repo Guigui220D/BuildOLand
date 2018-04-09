@@ -6,3 +6,8 @@ StateBase::StateBase(Game& game)
 {
 
 }
+
+Game* StateBase::getGame()
+{
+    return game;
+}

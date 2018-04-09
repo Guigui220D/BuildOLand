@@ -8,6 +8,7 @@
 #include "../Entities/Player.h"
 #include "../Utils/SoundManager.h"
 #include "../Entities/Entities.h"
+#include "../Gui/Gui.h"
 #include <vector>
 
 class StateGame : public StateBase
@@ -39,6 +40,7 @@ public:
 	~StateGame();
 
 	std::vector<Entities> entities;
+	std::vector<Gui> gui;
 
 private:
 	World *currentWorld = nullptr;

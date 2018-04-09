@@ -5,11 +5,11 @@
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "../Entities/StaticObjects/TestObject.h"
+#include "../Gui/FpsCounter.h"
 #include <math.h>
 
 StateGame::StateGame(Game& game)
-	: StateBase(game)
-{
+	: StateBase(game) {
 	//Set the world
 	currentWorld = new MazeWorld(*this);
 	tileset;
@@ -63,9 +63,11 @@ StateGame::StateGame(Game& game)
 
 	//Setup the entity lists
 	entities = std::vector<Entities>();
-
-	//Temporary for entity testing
 	entities.push_back(TestObject());
+
+	//Setup the gui
+	gui = std::vector<Gui>();
+	gui.push_back(FpsCounter(this));
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
@@ -270,6 +272,14 @@ void StateGame::draw(sf::RenderWindow &window) {
 		window.draw(*entities[i].getOnMap());
 	window.draw(*player.getOnMap());
 
+	window.setView(game->getGuiView());
+	for (int i = 0; i < gui.size(); i++)
+    {
+        gui[i].act();
+        window.draw(gui[i]);
+        gui[i].drawMore(window);
+    }
+
 	window.setView(game->getWorldView());
 	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
 	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
@@ -277,8 +287,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(mouse);
 }
 
-sf::View& StateGame::getMapView()
-{
+sf::View& StateGame::getMapView() {
 	return mapView;
 }
 
@@ -301,24 +310,20 @@ void StateGame::setWorld(World &world) {
 	player.setCurrentWorld(currentWorld);
 }
 
-void StateGame::setClicks()
-{
+void StateGame::setClicks() {
 	rightClicking = true;
 	leftClicking = true;
 }
 
-World * StateGame::getWorld()
-{
+World * StateGame::getWorld() {
 	return currentWorld;
 }
 
-SoundManager* StateGame::getSoundManager()
-{
+SoundManager* StateGame::getSoundManager() {
 	return &soundManager;
 }
 
-StateGame::~StateGame()
-{
+StateGame::~StateGame() {
 	//We delete pointers to prevent memory leaks
 	delete currentWorld;
 }
