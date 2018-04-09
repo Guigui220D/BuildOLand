@@ -243,6 +243,12 @@ _Pvt_Extensions
 # Removing dlls
 *.dll
 
+#Clion specific
+cmake_modules/
+.idea/
+cmake-build-debug/
+CMakeLists.txt 
+
 # Buildoland specific
 NewBuildOland.sln
 gamedata/
