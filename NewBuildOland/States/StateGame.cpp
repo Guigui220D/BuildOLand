@@ -8,6 +8,7 @@
 #include "../Gui/FpsCounter.h"
 #include <math.h>
 
+
 StateGame::StateGame(Game& game)
 	: StateBase(game) {
 	//Set the world
@@ -66,8 +67,8 @@ StateGame::StateGame(Game& game)
 	entities.push_back(TestObject());
 
 	//Setup the gui
-	gui = std::vector<Gui>();
-	gui.push_back(FpsCounter(this));
+	gui = std::vector<std::unique_ptr<Gui>>();
+	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
@@ -273,11 +274,12 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(*player.getOnMap());
 
 	window.setView(game->getGuiView());
+
 	for (int i = 0; i < gui.size(); i++)
     {
-        gui[i].act();
-        window.draw(gui[i]);
-        gui[i].drawMore(window);
+        gui[i]->act();
+        window.draw(*gui[i]);
+        gui[i]->drawMore(window);
     }
 
 	window.setView(game->getWorldView());

@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include <iostream>
 
 Gui::Gui(StateGame* game)
 {
@@ -18,4 +19,9 @@ void Gui::drawMore(sf::RenderWindow &window)
 void Gui::act()
 {
 
+}
+
+void Gui::tellIExist()
+{
+    std::cout << "I exist" << std::endl;
 }

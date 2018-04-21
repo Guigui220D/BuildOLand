@@ -10,6 +10,7 @@
 #include "../Entities/Entities.h"
 #include "../Gui/Gui.h"
 #include <vector>
+#include <memory>
 
 class StateGame : public StateBase
 {
@@ -40,7 +41,7 @@ public:
 	~StateGame();
 
 	std::vector<Entities> entities;
-	std::vector<Gui> gui;
+	std::vector<std::unique_ptr<Gui>> gui;
 
 private:
 	World *currentWorld = nullptr;

@@ -11,6 +11,7 @@ class Gui : public sf::RectangleShape
         bool visible;
         virtual void drawMore(sf::RenderWindow &window);
         virtual void act();
+        void tellIExist();
     protected:
         StateGame* stateGame = nullptr;
     private:

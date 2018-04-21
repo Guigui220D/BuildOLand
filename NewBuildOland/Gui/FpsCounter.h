@@ -6,11 +6,14 @@ class FpsCounter : public Gui
     public:
         FpsCounter(StateGame* game);
         virtual ~FpsCounter();
-        virtual void drawMore(sf::RenderWindow &window);
+        void drawMore(sf::RenderWindow &window) override;
         void act() override;
+
     protected:
 
     private:
         double getFPS();
+        sf::Font f;
+        sf::Text t;
 };
 
