@@ -1,10 +1,11 @@
 #include "PlaceableLeaveEvent.h"
 
-PlaceableLeaveEvent::PlaceableLeaveEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame * state) : GameEvent(state)
+PlaceableLeaveEvent::PlaceableLeaveEvent(sf::Vector2u pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame * state) : GameEvent(state)
 {
 	tilePos = pos;
 	entit = player;
-	blockId = id;
+	PlaceableLeaveEvent::blockId = blockId;
+	PlaceableLeaveEvent::groundId = groundId;
 }
 
 PlaceableLeaveEvent::~PlaceableLeaveEvent()
@@ -24,4 +25,9 @@ Player* PlaceableLeaveEvent::getPlayer()
 unsigned short PlaceableLeaveEvent::getBlockId()
 {
 	return blockId;
+}
+
+unsigned short PlaceableLeaveEvent::getGroundId()
+{
+	return groundId;
 }

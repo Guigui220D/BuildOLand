@@ -1,6 +1,7 @@
 #include <iostream>
 #include "EventManager.h"
 #include "../States/StateGame.h"
+#include "GroundPlaceEvent.h"
 
 
 TileSet* EventManager::tileset;
@@ -30,12 +31,23 @@ void EventManager::OnBlockBuild(BlockBuildEvent e)
 	tileset->getBlockById(e.getBlock())->OnBlockBuild(e);
 }
 
+void EventManager::OnGroundPlace(GroundPlaceEvent e)
+{
+	std::cout << "Event : Ground " << e.getNewGround() << " placed at " << e.getPosition().x << ", " << e.getPosition().y << std::endl;
+
+	//Send event to the block
+//    tileset->getGroundById(e.getNewGround())->OnGroundPlaced(e);
+//    tileset->getGroundById(e.getNewGround())->OnGroundRePlaced(e);
+}
+
 void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)
 {
 	//Send event to the block
 	tileset->getBlockById(e.getBlockId())->OnPlaceableEnter(e);
 
-	//TODO: Send event to the ground
+	//Send event to the ground
+	tileset->getGroundById(e.getGroundId())->OnPlaceableEnter(e);
+
 }
 
 void EventManager::OnPlaceableLeave(PlaceableLeaveEvent e)

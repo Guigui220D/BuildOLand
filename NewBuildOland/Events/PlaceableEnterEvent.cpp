@@ -1,10 +1,11 @@
 #include "PlaceableEnterEvent.h"
 
-PlaceableEnterEvent::PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsigned short id, StateGame * state) : GameEvent(state)
+PlaceableEnterEvent::PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame * state) : GameEvent(state)
 {
 	tilePos = pos;
 	entit = player;
-	blockId = id;
+	PlaceableEnterEvent::blockId = blockId;
+	PlaceableEnterEvent::groundId = groundId;
 }
 
 PlaceableEnterEvent::~PlaceableEnterEvent()
@@ -24,4 +25,9 @@ Player* PlaceableEnterEvent::getPlayer()
 unsigned short PlaceableEnterEvent::getBlockId()
 {
 	return blockId;
+}
+
+unsigned short PlaceableEnterEvent::getGroundId()
+{
+	return groundId;
 }

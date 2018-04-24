@@ -7,6 +7,7 @@
 #include "../Entities/StaticObjects/TestObject.h"
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
+#include "../Events/GroundPlaceEvent.h"
 #include <math.h>
 
 
@@ -100,17 +101,31 @@ void StateGame::handleInput() {
 						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
 						Item *selectedItem = selectedItemStack->getItem();
 
-                        //If it isn'text empty, and is a block
-                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable() && !selectedItem->isGround()) {
+                        //If it isn't empty, and is a block
+                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable()) {
+							bool isGround = selectedItem->isGround();
                             //We remove an item (that was placed)
 							selectedItemStack->remove();
 							//Get the id from the tileset
-							unsigned short blockId = tileset.getBlockIdByName(selectedItem->getName());
-
-							//Send an event that the block was placed
-							EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), blockId, (&player), this));
-							//Place the block
-							currentWorld->setBlockId(sf::Vector2u(clickX, clickY), blockId);
+							unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
+																  : tileset.getBlockIdByName(selectedItem->getName());
+							if(isGround) {
+                                //Get the old ground
+                                unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
+								//Send an event that the ground was placed
+								EventManager::OnGroundPlace(
+										GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, (&player), this));
+								//Place the ground
+								currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
+                                //Add the old ground to the inventory
+                                player.getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)));
+							} else {
+								//Send an event that the block was placed
+								EventManager::OnBlockBuild(
+										BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, (&player), this));
+								//Place the block
+								currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
+							}
 
 						}
 
@@ -194,7 +209,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Create a rectangle for drawing
 
 	//Iterate through the world to draw each tile
-	//Draw the gound
+	//Draw the ground
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
 	{

@@ -21,7 +21,7 @@ bool Inventory::addItem(ItemStack itemStack) {
 
     //First search if there is anything you can stack
     for(unsigned short i = 0; i < inventory.size(); i++) {
-        if(inventory[i].getItem()->getName() == itemName) {
+        if(inventory[i].getItem() == itemStack.getItem()) {
             inventory[i].add(itemStack.getQuantity());
             return true;
         }

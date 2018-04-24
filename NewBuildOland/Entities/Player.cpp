@@ -155,10 +155,11 @@ void Player::update(double delta)
 	sf::Vector2u uBlockOn = sf::Vector2u(blockOn.x, blockOn.y);
 	if (lastPos != uBlockOn)
 	{
-		unsigned short id = currentWorld->getBlockId(blockOn.x, blockOn.y);
-		EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, id, currentWorld->getStateGame()));
+        unsigned short blockId = currentWorld->getBlockId(blockOn.x, blockOn.y);
+        unsigned short groundId = currentWorld->getGroundId(blockOn.x, blockOn.y);
+		EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
 		if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
-			EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, id, currentWorld->getStateGame()));
+			EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
 		lastPos = uBlockOn;
 	}
 }
@@ -166,11 +167,12 @@ void Player::update(double delta)
 void Player::initInventory(World* currentWorld) {
 	TileSet* tileset = currentWorld->getStateGame()->getTileset();
 
-	inventory.setItem(0, ItemStack(tileset->getBlockById(1), 100));
-	inventory.setItem(1, ItemStack(tileset->getBlockById(2), 100));
-	inventory.setItem(2, ItemStack(tileset->getBlockById(3), 10));
-	inventory.setItem(3, ItemStack(tileset->getBlockById(4), 10));
-	inventory.setItem(4, ItemStack(tileset->getBlockById(5), 5));
+	inventory.addItem(ItemStack(tileset->getBlockById(1), 100));
+	inventory.addItem(ItemStack(tileset->getBlockById(2), 100));
+	inventory.addItem(ItemStack(tileset->getBlockById(3), 10));
+	inventory.addItem(ItemStack(tileset->getBlockById(4), 10));
+    inventory.addItem(ItemStack(tileset->getBlockById(5), 5));
+    inventory.addItem(ItemStack(tileset->getGroundById(0), 123));
 
 }
 
