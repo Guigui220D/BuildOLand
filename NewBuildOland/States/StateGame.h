@@ -56,7 +56,7 @@ private:
 	bool leftClicking = false;
 	bool rightClicking = false;
 
-	unsigned short blockPlaceId = 1;
+	unsigned short inventoryCursorId = 0;
 	bool isPlaceKeyPressed = false;
 
 	TileSet tileset;

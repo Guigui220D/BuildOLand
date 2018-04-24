@@ -19,6 +19,10 @@ public:
 	//Event methods
 	virtual void OnBlockBuild(BlockBuildEvent e);
 	virtual void OnBlockBreak(BlockBreakEvent e);
+
+	//Item methods
+	bool isGround() override;
+
 private:
 	bool mHasHitbox;
 	bool mHasVolume;

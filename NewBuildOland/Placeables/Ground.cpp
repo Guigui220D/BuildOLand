@@ -7,3 +7,7 @@ Ground::Ground(sf::IntRect textureRect, std::string name, sf::Color mapColor) : 
 Ground::~Ground()
 {
 }
+
+bool Ground::isGround() {
+    return true;
+}

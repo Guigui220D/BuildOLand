@@ -42,3 +42,7 @@ void Block::OnBlockBuild(BlockBuildEvent e) {
 void Block::OnBlockBreak(BlockBreakEvent e) {
 
 }
+
+bool Block::isGround() {
+    return false;
+}

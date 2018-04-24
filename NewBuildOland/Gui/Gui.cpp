@@ -20,8 +20,3 @@ void Gui::act()
 {
 
 }
-
-void Gui::tellIExist()
-{
-    std::cout << "I exist" << std::endl;
-}

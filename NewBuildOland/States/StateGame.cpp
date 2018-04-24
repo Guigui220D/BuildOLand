@@ -59,7 +59,7 @@ StateGame::StateGame(Game& game)
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
 
-	player = Player(*currentWorld);
+	player = Player(currentWorld);
 	cameraFollow = &player;
 
 	//Setup the entity lists
@@ -93,8 +93,25 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), blockPlaceId, (&player), this));
-						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), blockPlaceId);
+						//Remove block from player Inventory
+						Inventory *inventory = player.getInventory();
+						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
+						Item *selectedItem = selectedItemStack->getItem();
+
+                        //If it isn't empty, and is a block
+                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable() && !selectedItem->isGround()) {
+                            //We remove an item (that was placed)
+							selectedItemStack->remove();
+							//Get the id from the tileset
+							unsigned short blockId = tileset.getBlockIdByName(selectedItem->getName());
+
+							//Send an event that the block was placed
+							EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), blockId, (&player), this));
+							//Place the block
+							currentWorld->setBlockId(sf::Vector2u(clickX, clickY), blockId);
+
+						}
+
 						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
 					}
 				}
@@ -139,15 +156,15 @@ void StateGame::handleInput() {
 
 	//To change the block being placed (Temporary)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)) {
-		if (blockPlaceId < tileset.getTotalBlockNb() - 1 && !isPlaceKeyPressed) {
-			blockPlaceId++;
-			std::cout << "BLOCK " << tileset.getBlockById(blockPlaceId)->getName() << " SELECTED " << std::endl;
+		if (!isPlaceKeyPressed) {
+			inventoryCursorId = inventoryCursorId >= 8 ? 0 : inventoryCursorId + 1;
+			std::cout << "ITEM " << player.getInventory()->getItem(inventoryCursorId)->getItem()->getName() << " SELECTED " << std::endl;
 		}
 		isPlaceKeyPressed = true;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
-		if(blockPlaceId > 1 && !isPlaceKeyPressed) {
-			blockPlaceId--;
-			std::cout << "BLOCK " << tileset.getBlockById(blockPlaceId)->getName() << " SELECTED " << std::endl;
+		if(!isPlaceKeyPressed) {
+            inventoryCursorId = inventoryCursorId <= 0 ? 8 : inventoryCursorId - 1;
+			std::cout << "ITEM " << player.getInventory()->getItem(inventoryCursorId)->getItem()->getName() << " SELECTED " << std::endl;
 		}
 		isPlaceKeyPressed = true;
 	} else {

@@ -17,6 +17,8 @@ public:
 	sf::IntRect getBlockSideRect(unsigned int id);
 	Block* getBlockById(unsigned int id);
 	Ground* getGroundById(unsigned int id);
+	unsigned short getBlockIdByName(std::string name);
+	unsigned short getGroundIdByName(std::string name);
 	sf::Color getMapPixel(unsigned int groundId, unsigned int blockId);
 	sf::Color getSideTint(unsigned int id);
 	sf::Texture* getTexture();
@@ -35,10 +37,10 @@ protected:
 private:
 	void generateBlocks();
 	void generateGrounds();
-	
+
+
 	sf::IntRect rectById(unsigned int tilesetId);
 
 	std::vector<Block*> blocks;
 	std::vector<Ground*> grounds;
-
 };

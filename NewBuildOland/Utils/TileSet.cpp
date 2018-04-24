@@ -11,6 +11,7 @@ TileSet::TileSet()
 	texture = sf::Texture();
 	generateBlocks();
 	generateGrounds();
+
 	texture.loadFromFile("Res/newTileset.png");
 }
 
@@ -22,6 +23,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE", sf::Color(135, 30, 30), false, false));
 	blocks.push_back(new BlockSaver(rectById(10)));
 	blocks.push_back(new BlockTeleporter(rectById(11)));
+
 }
 
 void TileSet::generateGrounds()
@@ -112,3 +114,22 @@ unsigned int TileSet::getTotalGroundNb()
 	return blocks.size();
 }
 
+unsigned short TileSet::getBlockIdByName(std::string name) {
+	for(unsigned short i = 0; i < blocks.size(); i++) {
+		if(blocks[i]->getName() == name) {
+			return i;
+		}
+	}
+
+	return 0;
+}
+
+unsigned short TileSet::getGroundIdByName(std::string name) {
+	for(unsigned short i = 0; i < grounds.size(); i++) {
+		if(grounds[i]->getName() == name) {
+			return i;
+		}
+	}
+
+	return 0;
+}

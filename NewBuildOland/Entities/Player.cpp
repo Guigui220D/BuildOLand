@@ -6,15 +6,15 @@
 #include "../Events/PlaceableLeaveEvent.h"
 #include <math.h>
 
-Player::Player(World &world)
-	: PhysicEntity()
+Player::Player(World *world)
+	: PhysicEntity(world)
+	, inventory(9)
 {
-	currentWorld = &world;
 	setSize(sf::Vector2f(80, 80));
 	setFillColor(sf::Color::White);
 	setOrigin(getSize().x / 2, getSize().y / 2);
 	setOnMapColor(sf::Color(0, 255, 0));
-	setPosition(sf::Vector2f((float)world.getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world.getInitialPlayerPos().y * StateGame::TILE_SIZE));
+	setPosition(sf::Vector2f((float)world->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)world->getInitialPlayerPos().y * StateGame::TILE_SIZE));
 	Texture* t = new Texture();
 	(*t).loadFromFile("Res/characters.png");
 	setTexture(t);
@@ -60,10 +60,13 @@ Player::Player(World &world)
 	anima.addAnimation(walkingAnim);
 
 	setTextureRect(anima.getRect());
+
+	initInventory(currentWorld);
 }
 
 Player::Player()
-	: PhysicEntity()
+	: PhysicEntity(nullptr)
+	, inventory(9)
 {
 	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
@@ -158,4 +161,18 @@ void Player::update(double delta)
 			EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, id, currentWorld->getStateGame()));
 		lastPos = uBlockOn;
 	}
+}
+
+void Player::initInventory(World* currentWorld) {
+	TileSet* tileset = currentWorld->getStateGame()->getTileset();
+
+	inventory.setItem(0, ItemStack(tileset->getBlockById(1), 100));
+	inventory.setItem(1, ItemStack(tileset->getBlockById(2), 100));
+	inventory.setItem(2, ItemStack(tileset->getBlockById(3), 10));
+	inventory.setItem(3, ItemStack(tileset->getBlockById(4), 10));
+
+}
+
+Inventory* Player::getInventory() {
+	return &inventory;
 }

@@ -4,7 +4,7 @@
 class StaticObject : public Entities
 {
 public:
-	StaticObject();
+	StaticObject(World *world = nullptr);
 	~StaticObject();
 };
 
