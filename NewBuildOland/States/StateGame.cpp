@@ -6,6 +6,7 @@
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "../Entities/StaticObjects/TestObject.h"
 #include "../Gui/FpsCounter.h"
+#include "../Gui/InventoryGui.h"
 #include <math.h>
 
 
@@ -68,7 +69,8 @@ StateGame::StateGame(Game& game)
 
 	//Setup the gui
 	gui = std::vector<std::unique_ptr<Gui>>();
-	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
+    gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
+    gui.push_back(std::unique_ptr<Gui>(new InventoryGui(this, player.getInventory(), &inventoryCursorId)));
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);

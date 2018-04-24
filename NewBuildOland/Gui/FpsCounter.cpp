@@ -2,6 +2,7 @@
 #include "../States/StateGame.h"
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 FpsCounter::FpsCounter(StateGame* game) : Gui(game)
 {
@@ -29,7 +30,7 @@ void FpsCounter::drawMore(sf::RenderWindow &window)
 
 double FpsCounter::getFPS()
 {
-    return stateGame->getGame()->getFPS();
+    return round(stateGame->getGame()->getFPS());
 }
 
 void FpsCounter::act()
