@@ -7,7 +7,7 @@ FpsCounter::FpsCounter(StateGame* game) : Gui(game)
 {
     setSize(sf::Vector2f(0.27f, 0.05f));
     setPosition(sf::Vector2f(0.01f, 0.01f));
-    setFillColor(sf::Color::White);
+    setFillColor(sf::Color::Transparent);
     f.loadFromFile("Res/Font/lucon.ttf");
     t.setFont(f);
     t.setFillColor(sf::Color::Black);
