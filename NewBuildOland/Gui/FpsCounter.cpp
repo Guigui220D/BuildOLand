@@ -9,13 +9,12 @@ FpsCounter::FpsCounter(StateGame* game) : Gui(game)
     setSize(sf::Vector2f(0.27f, 0.05f));
     setPosition(sf::Vector2f(0.01f, 0.01f));
     setFillColor(sf::Color::Transparent);
-    f.loadFromFile("Res/Font/lucon.ttf");
-    t.setFont(f);
-    t.setFillColor(sf::Color::Black);
-    t.setCharacterSize(16);
-    t.setString("HEEEY");
-    t.setScale(sf::Vector2f(0.002f, 0.002f));
-    t.setPosition(sf::Vector2f(0.02, 0.02));
+    font.loadFromFile("Res/Font/lucon.ttf");
+    text.setFont(font);
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(16);
+    text.setScale(sf::Vector2f(0.002f, 0.002f));
+    text.setPosition(sf::Vector2f(0.02, 0.02));
 }
 
 FpsCounter::~FpsCounter()
@@ -25,7 +24,7 @@ FpsCounter::~FpsCounter()
 
 void FpsCounter::drawMore(sf::RenderWindow &window)
 {
-    window.draw(t);
+    window.draw(text);
 }
 
 double FpsCounter::getFPS()
@@ -37,5 +36,5 @@ void FpsCounter::act()
 {
     std::stringstream s;
     s << "FPS : " << getFPS();
-    t.setString(s.str());
+    text.setString(s.str());
 }

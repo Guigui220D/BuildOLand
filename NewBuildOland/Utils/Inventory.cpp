@@ -16,10 +16,26 @@ void Inventory::setItem(unsigned short pos, ItemStack itemStack) {
  * @param itemStack
  * @return false if inventory was full
  */
-//TODO : FINISH ADD ITEM
 bool Inventory::addItem(ItemStack itemStack) {
-    inventory[0] = itemStack;
-    return true;
+    std::string itemName = itemStack.getItem()->getName();
+
+    //First search if there is anything you can stack
+    for(unsigned short i = 0; i < inventory.size(); i++) {
+        if(inventory[i].getItem()->getName() == itemName) {
+            inventory[i].add(itemStack.getQuantity());
+            return true;
+        }
+    }
+
+    //Otherwise search for air
+    for(unsigned short i = 0; i < inventory.size(); i++) {
+        if(inventory[i].getItem()->getName() == "AIR") {
+            inventory[i] = itemStack;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

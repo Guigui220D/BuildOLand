@@ -100,7 +100,7 @@ void StateGame::handleInput() {
 						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
 						Item *selectedItem = selectedItemStack->getItem();
 
-                        //If it isn't empty, and is a block
+                        //If it isn'text empty, and is a block
                         if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable() && !selectedItem->isGround()) {
                             //We remove an item (that was placed)
 							selectedItemStack->remove();
@@ -114,7 +114,7 @@ void StateGame::handleInput() {
 
 						}
 
-						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+						//currentWorld->saveWorld();
 					}
 				}
 			}
@@ -140,11 +140,18 @@ void StateGame::handleInput() {
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
-					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) != 0) {
-						unsigned short oldBlock = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
+                    //Get the block that was clicked on
+                    unsigned short selectedBlockId = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
+
+                    if (clickX >= 0 && clickY >= 0 && selectedBlockId  != 0) {
+
 						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), oldBlock, (&player), this));
-						//currentWorld->saveWorld(); //Only temporary, later saveWorld after x sec or when closing
+						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, (&player), this));
+
+                        //Add the block to the inventory
+                        player.getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)));
+
+						//currentWorld->saveWorld();
 					}
 				}
 			}
@@ -159,14 +166,12 @@ void StateGame::handleInput() {
 	//To change the block being placed (Temporary)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)) {
 		if (!isPlaceKeyPressed) {
-			inventoryCursorId = inventoryCursorId >= 8 ? 0 : inventoryCursorId + 1;
-			std::cout << "ITEM " << player.getInventory()->getItem(inventoryCursorId)->getItem()->getName() << " SELECTED " << std::endl;
+			inventoryCursorId = inventoryCursorId >= 9 ? 0 : inventoryCursorId + 1;
 		}
 		isPlaceKeyPressed = true;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 		if(!isPlaceKeyPressed) {
-            inventoryCursorId = inventoryCursorId <= 0 ? 8 : inventoryCursorId - 1;
-			std::cout << "ITEM " << player.getInventory()->getItem(inventoryCursorId)->getItem()->getName() << " SELECTED " << std::endl;
+            inventoryCursorId = inventoryCursorId <= 0 ? 9 : inventoryCursorId - 1;
 		}
 		isPlaceKeyPressed = true;
 	} else {

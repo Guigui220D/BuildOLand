@@ -15,7 +15,6 @@ InventoryGui::InventoryGui(StateGame *game, Inventory *inventory, unsigned short
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(16);
-    text.setString("Inventory");
     text.setScale(sf::Vector2f(0.002f, 0.002f));
     text.setPosition(sf::Vector2f(0.3, 0.02));
 }
@@ -26,6 +25,6 @@ void InventoryGui::drawMore(sf::RenderWindow &window) {
 
 void InventoryGui::act() {
     std::stringstream s;
-    s << inventory->getItem(*cursorId)->getItem()->getName() << " | " << inventory->getItem(*cursorId)->getQuantity();
+    s << *cursorId << " | " << inventory->getItem(*cursorId)->getItem()->getName() << " | " << inventory->getItem(*cursorId)->getQuantity();
     text.setString(s.str());
 }

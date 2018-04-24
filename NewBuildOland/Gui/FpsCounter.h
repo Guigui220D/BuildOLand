@@ -8,12 +8,11 @@ class FpsCounter : public Gui
         virtual ~FpsCounter();
         void drawMore(sf::RenderWindow &window) override;
         void act() override;
-
     protected:
 
     private:
         double getFPS();
-        sf::Font f;
-        sf::Text t;
+        sf::Font font;
+        sf::Text text;
 };
 

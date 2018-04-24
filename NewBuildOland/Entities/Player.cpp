@@ -66,7 +66,7 @@ Player::Player(World *world)
 
 Player::Player()
 	: PhysicEntity(nullptr)
-	, inventory(9)
+	, inventory(10)
 {
 	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
@@ -170,6 +170,7 @@ void Player::initInventory(World* currentWorld) {
 	inventory.setItem(1, ItemStack(tileset->getBlockById(2), 100));
 	inventory.setItem(2, ItemStack(tileset->getBlockById(3), 10));
 	inventory.setItem(3, ItemStack(tileset->getBlockById(4), 10));
+	inventory.setItem(4, ItemStack(tileset->getBlockById(5), 5));
 
 }
 

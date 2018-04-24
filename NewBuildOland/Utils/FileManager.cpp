@@ -22,7 +22,7 @@ bool FileManager::createFolder(std::string folderName) {
 	for (unsigned int i = 0; i < folders.size(); i++) {
 
 		if(folders[i] == "." || folders[i] == "..") {
-			//It's not a valid folder, so don't create a new folder
+			//It's not a valid folder, so don'text create a new folder
 			continue;
 		}
 
@@ -57,7 +57,7 @@ const std::vector<std::string> FileManager::split(const std::string& s, const ch
 	std::vector<std::string> v;
 
 	//For each character in the string
-	//If it isn't equal to the character c, add it to the buff
+	//If it isn'text equal to the character c, add it to the buff
 	//Else : add the buff to the array and reset the buff
 	for(auto n:s) {
 		if (n != c) {

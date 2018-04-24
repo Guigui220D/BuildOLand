@@ -28,7 +28,7 @@ sf::Sound* SoundManager::getSound(std::string soundName)
 			return sounds[i];
 		}
 	}
-	//Sound doesn't exist : init the sound
+	//Sound doesn'text exist : init the sound
 	return addSound(soundName);
 }
 
@@ -55,7 +55,7 @@ sf::Music* SoundManager::getMusic(std::string musicName)
 			return musics[i];
 		}
 	}
-	//Music doesn't exist : init the sound
+	//Music doesn'text exist : init the sound
 	return addMusic(musicName);
 }
 
