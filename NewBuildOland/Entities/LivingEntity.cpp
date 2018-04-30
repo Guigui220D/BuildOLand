@@ -67,22 +67,14 @@ void LivingEntity::selectAnimation() {
             animations.selectAnimation(2);
             break;
         case 4:
+        case 5:
+        case 6:
             animations.selectAnimation(3);
             break;
         case 8:
-            animations.selectAnimation(4);
-            break;
         case 9:
-            animations.selectAnimation(4);
-            break;
         case 10:
             animations.selectAnimation(4);
-            break;
-        case 5:
-            animations.selectAnimation(3);
-            break;
-        case 6:
-            animations.selectAnimation(3);
             break;
         default:
             animations.selectAnimation(0);
