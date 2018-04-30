@@ -8,6 +8,7 @@
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
 #include "../Events/GroundPlaceEvent.h"
+#include "../Entities/BlackWarrior.h"
 #include <math.h>
 
 
@@ -63,6 +64,9 @@ StateGame::StateGame(Game& game)
 
 	player = Player(currentWorld);
 	cameraFollow = &player;
+
+	blackWarrior = new BlackWarrior(currentWorld);
+	blackWarrior->init(4.0f, 0.0f);
 
 	//Setup the entity lists
 	entities = std::vector<Entities>();
@@ -196,6 +200,9 @@ void StateGame::handleInput() {
 
 void StateGame::update(float dt) {
 	player.update(dt);
+
+	blackWarrior->update(dt);
+
 	for (int i = 0; i < entities.size(); i++)
 		entities[i].update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
@@ -249,6 +256,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(entities[i]);
 	window.draw(player);
+	window.draw(*blackWarrior);
+
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)

@@ -9,6 +9,7 @@
 #include "../Utils/SoundManager.h"
 #include "../Entities/Entities.h"
 #include "../Gui/Gui.h"
+#include "../Entities/BlackWarrior.h"
 #include <vector>
 #include <memory>
 
@@ -63,6 +64,7 @@ private:
 	SoundManager soundManager;
 
 	Player player;
+	BlackWarrior* blackWarrior;
 
 };
 

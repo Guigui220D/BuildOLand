@@ -66,7 +66,7 @@ Player::Player(World *world)
 
 Player::Player()
 	: PhysicEntity(nullptr)
-	, inventory(10)
+	, inventory(9)
 {
 	setSize(sf::Vector2f(60, 60));
 	setFillColor(sf::Color(127, 0, 0));
@@ -165,6 +165,7 @@ void Player::update(double delta)
 }
 
 void Player::initInventory(World* currentWorld) {
+	//Later : save / load inventory from file
 	TileSet* tileset = currentWorld->getStateGame()->getTileset();
 
 	inventory.addItem(ItemStack(tileset->getBlockById(1), 100));

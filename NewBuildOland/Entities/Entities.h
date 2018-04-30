@@ -14,6 +14,7 @@ public:
 	void setOnMapRadius(float radius);
 	void setCurrentWorld(World *world);
 
+	sf::Vector2f getWorldPos();
 protected:
 	World *currentWorld = nullptr;
 

@@ -1,4 +1,5 @@
 #include "Entities.h"
+#include "../States/StateGame.h"
 
 
 Entities::Entities(World *world)
@@ -37,4 +38,11 @@ void Entities::setOnMapRadius(float radius)
 void Entities::setCurrentWorld(World *world)
 {
 	currentWorld = world;
+}
+
+sf::Vector2f Entities::getWorldPos() {
+	sf::Vector2f position = getPosition();
+
+	return sf::Vector2f(position.x / StateGame::TILE_SIZE, position.y / StateGame::TILE_SIZE);
+
 }
