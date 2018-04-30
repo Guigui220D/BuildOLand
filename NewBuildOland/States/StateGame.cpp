@@ -62,8 +62,9 @@ StateGame::StateGame(Game& game)
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
 
-	player = Player(currentWorld);
-	cameraFollow = &player;
+	player = new Player(currentWorld);
+	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
+	cameraFollow = player;
 
 	blackWarrior = new BlackWarrior(currentWorld);
 	blackWarrior->init(4.0f, 0.0f);
@@ -75,7 +76,7 @@ StateGame::StateGame(Game& game)
 	//Setup the gui
 	gui = std::vector<std::unique_ptr<Gui>>();
     gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
-    gui.push_back(std::unique_ptr<Gui>(new InventoryGui(this, player.getInventory(), &inventoryCursorId)));
+    gui.push_back(std::unique_ptr<Gui>(new InventoryGui(this, player->getInventory(), &inventoryCursorId)));
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
@@ -94,14 +95,14 @@ void StateGame::handleInput() {
 			{
 				game->getWindow().setView(game->getWorldView());
 				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player.getPosition();
+				Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
 					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
 						//Remove block from player Inventory
-						Inventory *inventory = player.getInventory();
+						Inventory *inventory = player->getInventory();
 						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
 						Item *selectedItem = selectedItemStack->getItem();
 
@@ -118,15 +119,15 @@ void StateGame::handleInput() {
                                 unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
 								//Send an event that the ground was placed
 								EventManager::OnGroundPlace(
-										GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, (&player), this));
+										GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, player, this));
 								//Place the ground
 								currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
                                 //Add the old ground to the inventory
-                                player.getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)));
+                                player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)));
 							} else {
 								//Send an event that the block was placed
 								EventManager::OnBlockBuild(
-										BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, (&player), this));
+										BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, player, this));
 								//Place the block
 								currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
 							}
@@ -154,7 +155,7 @@ void StateGame::handleInput() {
 			{
 				game->getWindow().setView(game->getWorldView());
 				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player.getPosition();
+				Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
@@ -165,10 +166,10 @@ void StateGame::handleInput() {
                     if (clickX >= 0 && clickY >= 0 && selectedBlockId  != 0) {
 
 						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, (&player), this));
+						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, player, this));
 
                         //Add the block to the inventory
-                        player.getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)));
+                        player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)));
 
 						//currentWorld->saveWorld();
 					}
@@ -199,7 +200,7 @@ void StateGame::handleInput() {
 }
 
 void StateGame::update(float dt) {
-	player.update(dt);
+	player->update(dt);
 
 	blackWarrior->update(dt);
 
@@ -218,9 +219,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Iterate through the world to draw each tile
 	//Draw the ground
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
-	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
 	{
-		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
+		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			//Draw the ground
 			unsigned short groundId = currentWorld->getGroundId(sf::Vector2u(x, y));
@@ -237,9 +238,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 	//Draw the block's front sides
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT /2));
-	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
 	{
-		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
+		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			//Draw the block front
 			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
@@ -255,14 +256,14 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Draw all entities
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(entities[i]);
-	window.draw(player);
+	window.draw(*player);
 	window.draw(*blackWarrior);
 
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
-	for (int x = (int)(player.getPosition().x / TILE_SIZE) - 14; x < (int)(player.getPosition().x / TILE_SIZE) + 14; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
 	{
-		for (int y = (int)(player.getPosition().y / TILE_SIZE) - 14; y < (int)(player.getPosition().y / TILE_SIZE) + 14; y++)
+		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			//Draw the block
 			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
@@ -283,7 +284,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
 			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			Vector2f diff = posInView - player.getPosition();
+			Vector2f diff = posInView - player->getPosition();
 			int clickX = (int)roundf(posInView.x / TILE_SIZE);
 			int clickY = (int)roundf(posInView.y / TILE_SIZE);
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
@@ -319,7 +320,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Draw entities on map
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(*entities[i].getOnMap());
-	window.draw(*player.getOnMap());
+	window.draw(*player->getOnMap());
 
 	window.setView(game->getGuiView());
 
@@ -357,7 +358,7 @@ void StateGame::setWorld(World &world) {
 	currentWorld = &world;
 
 	//Set the current world for the player
-	player.setCurrentWorld(currentWorld);
+	player->setCurrentWorld(currentWorld);
 }
 
 void StateGame::setClicks() {

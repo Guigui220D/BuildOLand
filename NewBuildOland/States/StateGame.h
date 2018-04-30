@@ -63,7 +63,7 @@ private:
 	TileSet tileset;
 	SoundManager soundManager;
 
-	Player player;
+	Player *player;
 	BlackWarrior* blackWarrior;
 
 };

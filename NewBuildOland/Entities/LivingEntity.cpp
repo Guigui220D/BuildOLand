@@ -92,7 +92,7 @@ void LivingEntity::selectAnimation() {
 
 void LivingEntity::moveNorth(double dt) {
     sf::Vector2f oldpos = getPosition();
-    setPosition(sf::Vector2f(oldpos.x, oldpos.y - SPEED * dt));
+    setPosition(sf::Vector2f(oldpos.x, oldpos.y - EntitySpeed * dt));
 
     movement += 1;
 
@@ -102,7 +102,7 @@ void LivingEntity::moveNorth(double dt) {
 }
 void LivingEntity::moveSouth(double dt) {
     sf::Vector2f oldpos = getPosition();
-    setPosition(sf::Vector2f(oldpos.x, oldpos.y + SPEED * dt));
+    setPosition(sf::Vector2f(oldpos.x, oldpos.y + EntitySpeed * dt));
 
     movement += 2;
 
@@ -112,7 +112,7 @@ void LivingEntity::moveSouth(double dt) {
 }
 void LivingEntity::moveEast(double dt) {
     sf::Vector2f oldpos = getPosition();
-    setPosition(sf::Vector2f(oldpos.x + SPEED * dt, oldpos.y));
+    setPosition(sf::Vector2f(oldpos.x + EntitySpeed * dt, oldpos.y));
 
     movement += 4;
 
@@ -122,7 +122,7 @@ void LivingEntity::moveEast(double dt) {
 }
 void LivingEntity::moveWest(double dt) {
     sf::Vector2f oldpos = getPosition();
-    setPosition(sf::Vector2f(oldpos.x - SPEED * dt, oldpos.y));
+    setPosition(sf::Vector2f(oldpos.x - EntitySpeed * dt, oldpos.y));
 
     movement += 8;
 

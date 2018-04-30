@@ -6,8 +6,9 @@ BlackWarrior::BlackWarrior(World *world)
                        20, //Health
                        9)  //Inventory size
 {
-
+    EntitySpeed = 150;
 }
+
 
 void BlackWarrior::updateMovement(double dt) {
     //Simple AI where the entity moves towards a direction until it finds a block

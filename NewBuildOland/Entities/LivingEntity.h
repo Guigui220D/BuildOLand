@@ -35,13 +35,13 @@ protected:
 
     virtual void updateMovement(double dt) = 0;
 
+protected:
+    int EntitySpeed = 300;
 private:
     void initAnimations();
     void selectAnimation();
 
     Animation animations;
-
-    static const int SPEED = 100;
 
     unsigned short health;
     Inventory inventory;
