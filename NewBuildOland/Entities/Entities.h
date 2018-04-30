@@ -15,6 +15,9 @@ public:
 	void setCurrentWorld(World *world);
 
 	sf::Vector2f getWorldPos();
+
+	World *getCurrentWorld() const;
+
 protected:
 	World *currentWorld = nullptr;
 

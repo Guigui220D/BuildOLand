@@ -202,7 +202,9 @@ void StateGame::handleInput() {
 void StateGame::update(float dt) {
 	player->update(dt);
 
-	blackWarrior->update(dt);
+	if(blackWarrior->getCurrentWorld() == currentWorld) {
+		blackWarrior->update(dt);
+	}
 
 	for (int i = 0; i < entities.size(); i++)
 		entities[i].update(dt);
@@ -257,7 +259,10 @@ void StateGame::draw(sf::RenderWindow &window) {
 	for (int i = 0; i < entities.size(); i++)
 		window.draw(entities[i]);
 	window.draw(*player);
-	window.draw(*blackWarrior);
+
+	if(blackWarrior->getCurrentWorld() == currentWorld) {
+		window.draw(*blackWarrior);
+	}
 
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));

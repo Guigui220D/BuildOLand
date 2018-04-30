@@ -46,3 +46,7 @@ sf::Vector2f Entities::getWorldPos() {
 	return sf::Vector2f(position.x / StateGame::TILE_SIZE, position.y / StateGame::TILE_SIZE);
 
 }
+
+World *Entities::getCurrentWorld() const {
+    return currentWorld;
+}
