@@ -9,6 +9,7 @@
 #include "../Gui/InventoryGui.h"
 #include "../Events/GroundPlaceEvent.h"
 #include <math.h>
+#include "../Utils/NetworkManager.h"
 
 
 StateGame::StateGame(Game& game)
@@ -72,6 +73,8 @@ StateGame::StateGame(Game& game)
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
+
+	std::cout << "Connected = " << NetworkManager::connect() << "\n";
 }
 
 void StateGame::handleInput() {

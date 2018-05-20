@@ -27,7 +27,12 @@ bool NetworkManager::oneCodeSend(int code)
         return false;
     sf::Packet p;
     p << code;
-    server.send(p);
+    try { server.send(p); }
+    catch (std::exception e)
+    {
+        return false;
+    }
+
     return true;
 }
 
