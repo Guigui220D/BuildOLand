@@ -300,9 +300,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
-	for (unsigned int x = 0; x < size.x; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 24; x < (int)(player->getPosition().x / TILE_SIZE) + 24; x++)
 	{
-		for (unsigned int y = 0; y < size.y; y++)
+		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
 			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
