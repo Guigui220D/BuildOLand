@@ -38,7 +38,7 @@ public:
 	std::string getName();
 	StateGame* getStateGame();
 
-	std::vector<Entities*> entities;
+	const std::vector<Entities *> &getEntities() const;
 
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();
@@ -54,6 +54,8 @@ protected:
 
 	std::vector<unsigned short> groundIds;
 	std::vector<unsigned short> blockIds;
+
+	std::vector<Entities*> entities;
 private:
 	void saveWorldToFile(std::ofstream &worldFileFlux);
 	bool isBeingDeleted = false;
