@@ -9,15 +9,12 @@ FpsCounter::FpsCounter(StateGame* stateGame) : Gui(stateGame)
     font.loadFromFile("Res/Font/lucon.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
-    text.setCharacterSize(16);
-    text.setScale(sf::Vector2f(0.002f, 0.002f));
-    text.setPosition(sf::Vector2f(0.02, 0.02));
+    text.setCharacterSize(32);
+    text.setPosition(-stateGame->getGuiView().getSize().x / 2, -stateGame->getGuiView().getSize().y / 2);
 }
 
 FpsCounter::~FpsCounter()
-{
-    //dtor
-}
+{}
 
 void FpsCounter::draw(sf::RenderWindow &window)
 {

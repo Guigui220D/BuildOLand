@@ -263,6 +263,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	//Draw all entities
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		window.draw(*(currentWorld->getEntities()[i]));
+	//And draw the player
 	window.draw(*player);
 
 	//Draw the actual blocks
@@ -307,8 +308,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 	//Draw the map
 	window.setView(game->getGuiView());
-
 	window.draw(mapFrame);
+
 	mapView.setSize(game->getWorldView().getSize());
 	mapView.zoom(3);
 	mapView.setCenter(game->getWorldView().getCenter());
