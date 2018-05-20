@@ -16,8 +16,8 @@ public:
 
 	//Loads the world with the WorldManager class ?
 	//And returns true if success
-	bool loadWorld();
-	bool saveWorld();
+	virtual bool loadWorld();
+	virtual bool saveWorld();
 
 	//Method that generates the world procedurally
 	virtual void generateWorld() = 0;
