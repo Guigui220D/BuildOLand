@@ -1,6 +1,7 @@
 #include "StateGame.h"
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
+#include "../Worlds/NetworkWorld.h"
 #include <iostream>
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
@@ -15,7 +16,8 @@
 StateGame::StateGame(Game& game)
 	: StateBase(game) {
 	//Set the world
-	currentWorld = new MazeWorld(*this);
+	std::cout << "Connected = " << NetworkManager::connect() << "\n";
+	currentWorld = new NetworkWorld(*this);
 	tileset;
 
 	//Init the tileset to the event manager
@@ -73,8 +75,6 @@ StateGame::StateGame(Game& game)
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
-
-	std::cout << "Connected = " << NetworkManager::connect() << "\n";
 }
 
 void StateGame::handleInput() {
@@ -314,6 +314,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
 	window.draw(*player->getOnMap());
 
+    //Draw the gui
 	window.setView(game->getGuiView());
 
 	for (int i = 0; i < gui.size(); i++)
@@ -322,7 +323,7 @@ void StateGame::draw(sf::RenderWindow &window) {
         window.draw(*gui[i]);
         gui[i]->drawMore(window);
     }
-
+    //Draw the mouse
 	window.setView(game->getWorldView());
 	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
 	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
