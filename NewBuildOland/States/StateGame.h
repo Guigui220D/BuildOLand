@@ -41,6 +41,8 @@ public:
 
 	~StateGame();
 
+	void resizedEvent() override;
+
 private:
 
 	std::vector<std::unique_ptr<Gui>> gui;

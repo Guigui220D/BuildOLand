@@ -16,7 +16,8 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
     float inventoryHeight = inventorySprite.getLocalBounds().height;
     float inventoryMargin = 10.0f;
     inventorySprite.scale(inventoryScale, inventoryScale);
-    inventorySprite.setPosition(-inventoryWidth / 2 * inventoryScale, stateGame->getGuiView().getSize().y / 2 - inventoryHeight * inventoryScale - inventoryMargin);
+    inventorySprite.setPosition(-inventoryWidth / 2 * inventoryScale,
+                                stateGame->getGuiView().getSize().y / 2 - inventoryHeight * inventoryScale - inventoryMargin);
 
     //Load the inventory selected cursor
     if (!selectedTexture.loadFromFile("Res/inventorySelected.png"))

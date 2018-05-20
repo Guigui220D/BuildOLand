@@ -11,3 +11,7 @@ Game* StateBase::getGame()
 {
     return game;
 }
+
+void StateBase::resizedEvent() {
+
+}

@@ -17,7 +17,8 @@ StateGame::StateGame(Game& game)
 	: StateBase(game) {
 	//Set the world
 	std::cout << "Connected = " << NetworkManager::connect() << "\n";
-	currentWorld = new NetworkWorld(*this);
+//	currentWorld = new NetworkWorld(*this);
+	currentWorld = new MazeWorld(*this);
 	tileset;
 
 	//Init the tileset to the event manager
@@ -388,3 +389,10 @@ StateGame::~StateGame() {
 	delete currentWorld;
 }
 
+void StateGame::resizedEvent() {
+	//Send the event to all gui elements
+	for (int i = 0; i < gui.size(); i++)
+	{
+		gui[i]->eventResize();
+	}
+}

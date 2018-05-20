@@ -26,9 +26,15 @@ double FpsCounter::getFPS()
     return round(stateGame->getGame()->getFPS());
 }
 
-void FpsCounter::update(float dt)
-{
+void FpsCounter::update(float dt) {
     std::stringstream s;
     s << "FPS : " << getFPS();
     text.setString(s.str());
+
+}
+
+void FpsCounter::eventResize() {
+    //Put it back to the left
+    text.setPosition(-stateGame->getGuiView().getSize().x / 2,
+                     -stateGame->getGuiView().getSize().y / 2);
 }

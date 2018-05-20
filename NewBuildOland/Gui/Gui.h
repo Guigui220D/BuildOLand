@@ -12,6 +12,7 @@ public:
     virtual void draw(sf::RenderWindow &window) = 0;
     virtual void update(float dt) = 0;
 
+    virtual void eventResize();
 protected:
     StateGame* stateGame = nullptr;
 private:

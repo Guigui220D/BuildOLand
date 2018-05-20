@@ -22,6 +22,7 @@ Game::Game()
 	guiView.setCenter(0, 0);
 
 	updateView();
+
 	window.setMouseCursorVisible(false);
 
 	currentState = new StateMenu(*this);
@@ -91,6 +92,11 @@ void Game::updateView()
 		float xSize = ratio * 800;
 		worldView.setSize(sf::Vector2f(xSize, 800));
 		guiView.setSize(sf::Vector2f(xSize, 800));
+	}
+
+	if(currentState != nullptr) {
+		//Send an event to the state that it has been resized
+		currentState->resizedEvent();
 	}
 }
 

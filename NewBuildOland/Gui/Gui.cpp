@@ -8,3 +8,7 @@ Gui::Gui(StateGame* game) : stateGame(game)
 Gui::~Gui()
 {
 }
+
+void Gui::eventResize() {
+
+}
