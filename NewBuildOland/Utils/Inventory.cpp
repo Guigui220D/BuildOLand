@@ -38,6 +38,9 @@ bool Inventory::addItem(ItemStack itemStack) {
     return false;
 }
 
+unsigned short Inventory::getSize() const {
+    return size;
+}
 
 void Inventory::clearInventory() {
     ItemStack emptyItemStack;

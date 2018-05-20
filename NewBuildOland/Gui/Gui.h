@@ -3,17 +3,17 @@
 
 class StateGame;
 
-class Gui : public sf::RectangleShape
+class Gui
 {
-    public:
-        Gui(StateGame* game);
-        virtual ~Gui();
-        bool visible;
-        virtual void drawMore(sf::RenderWindow &window);
-        virtual void act();
+public:
+    Gui(StateGame* game);
+    virtual ~Gui();
 
-    protected:
-        StateGame* stateGame = nullptr;
-    private:
+    virtual void draw(sf::RenderWindow &window) = 0;
+    virtual void update(float dt) = 0;
+
+protected:
+    StateGame* stateGame = nullptr;
+private:
 
 };

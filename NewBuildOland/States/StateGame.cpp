@@ -67,9 +67,11 @@ StateGame::StateGame(Game& game)
 	cameraFollow = player;
 
 	//Setup the gui
+	inventoryGui = new InventoryGui(this, player->getInventory(), &inventoryCursorId);
+
 	gui = std::vector<std::unique_ptr<Gui>>();
-    gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
-    gui.push_back(std::unique_ptr<Gui>(new InventoryGui(this, player->getInventory(), &inventoryCursorId)));
+	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
+	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
@@ -119,6 +121,7 @@ void StateGame::handleInput() {
 								currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
                                 //Add the old ground to the inventory
                                 player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)));
+
 							} else {
 								//Send an event that the block was placed
 								EventManager::OnBlockBuild(
@@ -126,6 +129,8 @@ void StateGame::handleInput() {
 								//Place the block
 								currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
 							}
+							//And finally we update the inventory gui
+							inventoryGui->updateInventory();
 
 						}
 
@@ -165,7 +170,8 @@ void StateGame::handleInput() {
 
                         //Add the block to the inventory
                         player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)));
-
+						//And update the inventoryGui
+						inventoryGui->updateInventory();
 						//currentWorld->saveWorld();
 					}
 				}
@@ -181,12 +187,12 @@ void StateGame::handleInput() {
 	//To change the block being placed (Temporary)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)) {
 		if (!isPlaceKeyPressed) {
-			inventoryCursorId = inventoryCursorId >= 9 ? 0 : inventoryCursorId + 1;
+			inventoryCursorId = inventoryCursorId >= inventoryGui->getInventorySlots() - 1 ? 0 : inventoryCursorId + 1;
 		}
 		isPlaceKeyPressed = true;
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
 		if(!isPlaceKeyPressed) {
-            inventoryCursorId = inventoryCursorId <= 0 ? 9 : inventoryCursorId - 1;
+            inventoryCursorId = inventoryCursorId <= 0 ? inventoryGui->getInventorySlots() - 1 : inventoryCursorId - 1;
 		}
 		isPlaceKeyPressed = true;
 	} else {
@@ -197,9 +203,17 @@ void StateGame::handleInput() {
 void StateGame::update(float dt) {
 	player->update(dt);
 
+	//Update the entities of the world
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		currentWorld->getEntities()[i]->update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
+
+	//Update the GUI
+	for (int i = 0; i < gui.size(); i++)
+	{
+		gui[i]->update(dt);
+	}
+
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
@@ -318,9 +332,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 
 	for (int i = 0; i < gui.size(); i++)
     {
-        gui[i]->act();
-        window.draw(*gui[i]);
-        gui[i]->drawMore(window);
+		gui[i]->draw(window);
     }
 
 	window.setView(game->getWorldView());
@@ -332,6 +344,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 
 sf::View& StateGame::getMapView() {
 	return mapView;
+}
+sf::View& StateGame::getGuiView() {
+	return game->getGuiView();
 }
 
 TileSet* StateGame::getTileset() {
@@ -370,3 +385,4 @@ StateGame::~StateGame() {
 	//We delete pointers to prevent memory leaks
 	delete currentWorld;
 }
+

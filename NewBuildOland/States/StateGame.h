@@ -9,6 +9,7 @@
 #include "../Utils/SoundManager.h"
 #include "../Entities/Entities.h"
 #include "../Gui/Gui.h"
+#include "../Gui/InventoryGui.h"
 #include <vector>
 #include <memory>
 
@@ -22,7 +23,7 @@ public:
 	void draw(sf::RenderWindow &window) override;
 
 	sf::View& getMapView();
-
+	sf::View& getGuiView();
 	void setWorld(World &world);
 
 	TileSet* getTileset();
@@ -40,9 +41,11 @@ public:
 
 	~StateGame();
 
-	std::vector<std::unique_ptr<Gui>> gui;
-
 private:
+
+	std::vector<std::unique_ptr<Gui>> gui;
+	InventoryGui *inventoryGui;
+
 	World *currentWorld = nullptr;
 
 	sf::View mapView;

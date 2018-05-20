@@ -14,13 +14,13 @@ Game::Game()
 	//window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
-	guiView = sf::View();
 	//The worldView sizing is automated
 	worldView = sf::View();
 	worldView.setCenter(0, 0);
+
 	guiView = sf::View();
-	guiView.setSize(1, 1);
-	guiView.setCenter(0.5f, 0.5f);
+	guiView.setCenter(0, 0);
+
 	updateView();
 	window.setMouseCursorVisible(false);
 
@@ -83,12 +83,14 @@ void Game::updateView()
 		float ratio = (float)window.getSize().y / window.getSize().x;
 		float ySize = ratio * 800;
 		worldView.setSize(sf::Vector2f(800, ySize));
+		guiView.setSize(sf::Vector2f(800, ySize));
 	}
 	else
 	{
 		float ratio = (float)window.getSize().x / window.getSize().y;
 		float xSize = ratio * 800;
 		worldView.setSize(sf::Vector2f(xSize, 800));
+		guiView.setSize(sf::Vector2f(xSize, 800));
 	}
 }
 

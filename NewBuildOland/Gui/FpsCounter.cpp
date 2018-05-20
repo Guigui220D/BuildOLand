@@ -4,11 +4,8 @@
 #include <sstream>
 #include <cmath>
 
-FpsCounter::FpsCounter(StateGame* game) : Gui(game)
+FpsCounter::FpsCounter(StateGame* stateGame) : Gui(stateGame)
 {
-    setSize(sf::Vector2f(0.27f, 0.05f));
-    setPosition(sf::Vector2f(0.01f, 0.01f));
-    setFillColor(sf::Color::Transparent);
     font.loadFromFile("Res/Font/lucon.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
@@ -22,7 +19,7 @@ FpsCounter::~FpsCounter()
     //dtor
 }
 
-void FpsCounter::drawMore(sf::RenderWindow &window)
+void FpsCounter::draw(sf::RenderWindow &window)
 {
     window.draw(text);
 }
@@ -32,7 +29,7 @@ double FpsCounter::getFPS()
     return round(stateGame->getGame()->getFPS());
 }
 
-void FpsCounter::act()
+void FpsCounter::update(float dt)
 {
     std::stringstream s;
     s << "FPS : " << getFPS();

@@ -24,7 +24,7 @@ StateMenu::StateMenu(Game &game) : StateBase(game) {
     float logoWidth = logoSprite.getLocalBounds().width;
     float logoScale = 0.5;
     logoSprite.scale(logoScale, logoScale);
-    logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95 / 2);
+    logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
 
 
     //Load text
@@ -48,7 +48,15 @@ void StateMenu::handleInput() {
 }
 
 void StateMenu::update(float dt) {
-
+    elapsedTime+= dt;
+    if(elapsedTime > 2.0f) {
+        elapsedTime = 0.0f;
+        text.setString("Press <SPACE> to start the game !");
+        text.setPosition(-text.getLocalBounds().width / 2, 0);
+    } else if(elapsedTime > 1.0f) {
+        text.setString(" > Press <SPACE> to start the game ! <");
+        text.setPosition(-text.getLocalBounds().width / 2 - 4.5f, 0);
+    }
 }
 
 void StateMenu::draw(sf::RenderWindow &window) {

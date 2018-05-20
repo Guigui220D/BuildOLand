@@ -19,6 +19,8 @@ public:
 	Ground* getGroundById(unsigned int id);
 	unsigned short getBlockIdByName(std::string name);
 	unsigned short getGroundIdByName(std::string name);
+	Block* getBlockByName(std::string name);
+	Ground* getGroundByName(std::string name);
 	sf::Color getMapPixel(unsigned int groundId, unsigned int blockId);
 	sf::Color getSideTint(unsigned int id);
 	sf::Texture* getTexture();

@@ -83,6 +83,14 @@ Block* TileSet::getBlockById(unsigned int id) {
 	return blocks[id];
 }
 
+Block *TileSet::getBlockByName(std::string name) {
+	return getBlockById(getBlockIdByName(name));
+}
+
+Ground *TileSet::getGroundByName(std::string name) {
+	return getGroundById(getGroundIdByName(name));
+}
+
 
 sf::Color TileSet::getMapPixel(unsigned int groundId, unsigned int blockId)
 {

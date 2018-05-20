@@ -13,6 +13,8 @@ public:
 
     ItemStack* getItem(unsigned short pos);
 
+    unsigned short getSize() const;
+
 private:
     std::vector<ItemStack> inventory;
     unsigned short size;

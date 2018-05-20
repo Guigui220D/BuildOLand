@@ -23,6 +23,8 @@ private:
     sf::Font font;
     sf::Text text;
 
+    float elapsedTime = 0;
+
     bool isSpacePressed = false;
 };
 
