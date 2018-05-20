@@ -7,6 +7,10 @@ Game::Game()
 	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
 {
+	Image icon;
+	icon.loadFromFile("Res/icon.png");
+	window.setIcon(256,256,icon.getPixelsPtr());
+
 	//window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
@@ -20,7 +24,6 @@ Game::Game()
 	updateView();
 	window.setMouseCursorVisible(false);
 
-//	currentState = new StateGame(*this);
 	currentState = new StateMenu(*this);
 }
 
