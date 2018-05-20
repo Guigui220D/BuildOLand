@@ -206,5 +206,7 @@ void World::setDeleted() {
 
 World::~World()
 {
+    for (int i = 0; i < entities.size(); i++)
+        delete(entities.at(i));
 }
 

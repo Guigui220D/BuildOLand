@@ -8,7 +8,6 @@
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
 #include "../Events/GroundPlaceEvent.h"
-#include "../Entities/BlackWarrior.h"
 #include <math.h>
 
 
@@ -65,13 +64,6 @@ StateGame::StateGame(Game& game)
 	player = new Player(currentWorld);
 	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
 	cameraFollow = player;
-
-	blackWarrior = new BlackWarrior(currentWorld);
-	blackWarrior->init(4.0f, 0.0f);
-
-	//Setup the entity lists
-	entities = std::vector<Entities>();
-	entities.push_back(TestObject());
 
 	//Setup the gui
 	gui = std::vector<std::unique_ptr<Gui>>();
@@ -202,12 +194,8 @@ void StateGame::handleInput() {
 void StateGame::update(float dt) {
 	player->update(dt);
 
-	if(blackWarrior->getCurrentWorld() == currentWorld) {
-		blackWarrior->update(dt);
-	}
-
-	for (int i = 0; i < entities.size(); i++)
-		entities[i].update(dt);
+	for (int i = 0; i < currentWorld->entities.size(); i++)
+		currentWorld->entities[i]->update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 }
 
@@ -256,13 +244,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw all entities
-	for (int i = 0; i < entities.size(); i++)
-		window.draw(entities[i]);
+	for (int i = 0; i < currentWorld->entities.size(); i++)
+		window.draw(*(currentWorld->entities[i]));
 	window.draw(*player);
-
-	if(blackWarrior->getCurrentWorld() == currentWorld) {
-		window.draw(*blackWarrior);
-	}
 
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
@@ -323,8 +307,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw entities on map
-	for (int i = 0; i < entities.size(); i++)
-		window.draw(*entities[i].getOnMap());
+	for (int i = 0; i < currentWorld->entities.size(); i++)
+		window.draw(*(currentWorld->entities[i]->getOnMap()));
 	window.draw(*player->getOnMap());
 
 	window.setView(game->getGuiView());

@@ -4,18 +4,21 @@
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
 
+
+class Entities;
+
 class StateGame;
 
 class World
 {
 public:
 	World(StateGame& stateGame, std::string name = "world1");
-	
+
 	//Loads the world with the WorldManager class ?
 	//And returns true if success
 	bool loadWorld();
 	bool saveWorld();
-	
+
 	//Method that generates the world procedurally
 	virtual void generateWorld() = 0;
 
@@ -29,11 +32,13 @@ public:
 	void setGroundId(sf::Vector2u pos, unsigned short value);
 	void setBlockId(unsigned short x, unsigned short y, unsigned short value);
 	void setBlockId(sf::Vector2u pos, unsigned short value);
-	
+
 	sf::Vector2u getWorldSize();
 	sf::Vector2u getInitialPlayerPos();
 	std::string getName();
 	StateGame* getStateGame();
+
+	std::vector<Entities*> entities;
 
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();
@@ -52,6 +57,6 @@ protected:
 private:
 	void saveWorldToFile(std::ofstream &worldFileFlux);
 	bool isBeingDeleted = false;
-	
+
 };
 

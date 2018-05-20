@@ -9,7 +9,6 @@
 #include "../Utils/SoundManager.h"
 #include "../Entities/Entities.h"
 #include "../Gui/Gui.h"
-#include "../Entities/BlackWarrior.h"
 #include <vector>
 #include <memory>
 
@@ -41,7 +40,6 @@ public:
 
 	~StateGame();
 
-	std::vector<Entities> entities;
 	std::vector<std::unique_ptr<Gui>> gui;
 
 private:
@@ -64,7 +62,6 @@ private:
 	SoundManager soundManager;
 
 	Player *player;
-	BlackWarrior* blackWarrior;
 
 };
 

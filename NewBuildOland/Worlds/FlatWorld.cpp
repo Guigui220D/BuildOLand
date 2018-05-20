@@ -1,11 +1,13 @@
 #include "FlatWorld.h"
 #include <iostream>
+#include "../Entities/StaticObjects/TestObject.h"
 
 
 FlatWorld::FlatWorld(StateGame& stateGame)
 	: World(stateGame, "flatworld")
 {
 	loadWorld();
+	entities.push_back(new TestObject());
 }
 
 

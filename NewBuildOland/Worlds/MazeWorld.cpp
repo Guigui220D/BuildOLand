@@ -1,11 +1,18 @@
 #include "MazeWorld.h"
 #include "../States/StateGame.h"
+#include "../Entities/BlackWarrior.h"
 
 MazeWorld::MazeWorld(StateGame& stateGame)
 	: World(stateGame, "mazeworld")
 {
 	loadWorld();
 	playerPos = sf::Vector2u(1, 1);
+
+	{
+	    BlackWarrior* blackWarrior = new BlackWarrior(this);
+        blackWarrior->init(4.0f, 0.0f);
+        entities.push_back(blackWarrior);
+	}
 }
 
 
