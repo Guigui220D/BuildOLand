@@ -194,8 +194,8 @@ void StateGame::handleInput() {
 void StateGame::update(float dt) {
 	player->update(dt);
 
-	for (int i = 0; i < currentWorld->entities.size(); i++)
-		currentWorld->entities[i]->update(dt);
+	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+		currentWorld->getEntities()[i]->update(dt);
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 }
 
@@ -244,8 +244,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw all entities
-	for (int i = 0; i < currentWorld->entities.size(); i++)
-		window.draw(*(currentWorld->entities[i]));
+	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+		window.draw(*(currentWorld->getEntities()[i]));
 	window.draw(*player);
 
 	//Draw the actual blocks
@@ -307,8 +307,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw entities on map
-	for (int i = 0; i < currentWorld->entities.size(); i++)
-		window.draw(*(currentWorld->entities[i]->getOnMap()));
+	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
 	window.draw(*player->getOnMap());
 
 	window.setView(game->getGuiView());

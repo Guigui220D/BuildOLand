@@ -13,6 +13,7 @@ public:
 
 	sf::RenderWindow& getWindow();
 	StateBase* getCurrentState();
+	void setCurrentState(StateBase* state);
 
 	sf::View& getWorldView();
 	sf::View& getGuiView();

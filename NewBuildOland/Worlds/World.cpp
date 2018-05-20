@@ -210,3 +210,7 @@ World::~World()
         delete(entities.at(i));
 }
 
+const std::vector<Entities *> &World::getEntities() const {
+    return entities;
+}
+

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "States/StateMenu.h"
 #include <iostream>
 
 
@@ -19,7 +20,8 @@ Game::Game()
 	updateView();
 	window.setMouseCursorVisible(false);
 
-	currentState = new StateGame(*this);
+//	currentState = new StateGame(*this);
+	currentState = new StateMenu(*this);
 }
 
 void Game::run()
@@ -93,6 +95,12 @@ sf::RenderWindow& Game::getWindow() {
 
 StateBase* Game::getCurrentState() {
 	return currentState;
+}
+
+void Game::setCurrentState(StateBase *state) {
+	delete currentState;
+
+	currentState = state;
 }
 
 sf::View& Game::getWorldView() {
