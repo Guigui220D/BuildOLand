@@ -18,6 +18,13 @@ class NetworkManager
         {
             oneCodeSend(WORLD_REQUEST);
         };
+        //All synced (not asnychronous) receive functions
+        static inline sf::Packet recieve()
+        {
+            sf::Packet p;
+            server.receive(p);
+            return p;
+        };
     private:
         static sf::TcpSocket server;
         static bool connected;

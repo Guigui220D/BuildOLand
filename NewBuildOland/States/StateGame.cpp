@@ -1,6 +1,7 @@
 #include "StateGame.h"
 #include "../Worlds/FlatWorld.h"
 #include "../Worlds/MazeWorld.h"
+#include "../Worlds/NetworkWorld.h"
 #include <iostream>
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
@@ -15,7 +16,8 @@
 StateGame::StateGame(Game& game)
 	: StateBase(game) {
 	//Set the world
-	currentWorld = new MazeWorld(*this);
+	std::cout << "Connected = " << NetworkManager::connect() << "\n";
+	currentWorld = new NetworkWorld(*this);
 	tileset;
 
 	//Init the tileset to the event manager
@@ -75,8 +77,6 @@ StateGame::StateGame(Game& game)
 
 	//Temporary, for save button
 	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
-
-	std::cout << "Connected = " << NetworkManager::connect() << "\n";
 }
 
 void StateGame::handleInput() {
@@ -315,9 +315,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
-	for (unsigned int x = 0; x < size.x; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 24; x < (int)(player->getPosition().x / TILE_SIZE) + 24; x++)
 	{
-		for (unsigned int y = 0; y < size.y; y++)
+		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
 			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
 			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
@@ -329,13 +329,14 @@ void StateGame::draw(sf::RenderWindow &window) {
 		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
 	window.draw(*player->getOnMap());
 
+    //Draw the gui
 	window.setView(game->getGuiView());
 
 	for (int i = 0; i < gui.size(); i++)
     {
 		gui[i]->draw(window);
     }
-
+    //Draw the mouse
 	window.setView(game->getWorldView());
 	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
 	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);

@@ -1,4 +1,5 @@
 #include "NetworkManager.h"
+#include <iostream>
 
 sf::TcpSocket NetworkManager::server;
 bool NetworkManager::connected = false;
@@ -7,7 +8,16 @@ bool NetworkManager::connect()
 {
     if (connected)
         return false;
-    connected = server.connect("localhost", PORT) == sf::Socket::Done ? true : false;
+    try
+    {
+        connected = server.connect("localhost", PORT) == sf::Socket::Done ? true : false;
+    }
+    catch (std::exception e)
+    {
+        connected = false;
+    }
+    if (!connected)
+        std::cout << "Failed to connect" << std::endl;
     //TODO: Send a connect request
     return connected;
 }
