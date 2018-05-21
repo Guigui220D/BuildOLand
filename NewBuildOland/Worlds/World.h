@@ -40,6 +40,8 @@ public:
 
 	const std::vector<Entities *> &getEntities() const;
 
+	virtual void removeEntitiesThatNeedToBeRemoved();
+
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();
 	~World();

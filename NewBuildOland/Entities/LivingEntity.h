@@ -43,7 +43,7 @@ private:
 
     Animation animations;
 
-    unsigned short health;
+    short health;
     Inventory inventory;
 
     //The movement byte is used as a flag to choose the right animation

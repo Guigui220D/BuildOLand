@@ -17,14 +17,14 @@ void Player::initInventory(World* currentWorld) {
     //Later : save / load inventory from file
     TileSet* tileset = currentWorld->getStateGame()->getTileset();
 
-    inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(3), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
-    inventory->addItem(ItemStack(tileset->getGroundById(0), 123));
-    inventory->addItem(ItemStack(tileset->getGroundById(1), 123));
+    inventory->addItem(ItemStack(tileset->getBlockById(1), 10));
+    inventory->addItem(ItemStack(tileset->getBlockById(2), 10));
+    inventory->addItem(ItemStack(tileset->getBlockById(3), 10));
+    inventory->addItem(ItemStack(tileset->getBlockById(4), 10));
+    inventory->addItem(ItemStack(tileset->getBlockById(5), 10));
+    inventory->addItem(ItemStack(tileset->getBlockById(6), 10));
+    inventory->addItem(ItemStack(tileset->getGroundById(0), 12));
+    inventory->addItem(ItemStack(tileset->getGroundById(1), 12));
 }
 
 void Player::updateMovement(double dt) {

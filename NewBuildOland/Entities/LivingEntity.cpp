@@ -54,6 +54,8 @@ void LivingEntity::update(double dt) {
     selectAnimation();
     setTextureRect(animations.getRect());
 
+    if (health <= 0)
+        mustBeRemoved = true;
 }
 
 void LivingEntity::selectAnimation() {

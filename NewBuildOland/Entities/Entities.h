@@ -18,11 +18,13 @@ public:
 
 	World *getCurrentWorld() const;
 
+	bool mustBeRemoved = false;
+
 protected:
 	World *currentWorld = nullptr;
 
 private:
 	sf::CircleShape onMap;
-	
+
 };
 

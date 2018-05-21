@@ -214,3 +214,16 @@ const std::vector<Entities *> &World::getEntities() const {
     return entities;
 }
 
+void World::removeEntitiesThatNeedToBeRemoved()
+{
+    int j = 0;
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (entities.at(i - j)->mustBeRemoved)
+        {
+            entities.erase(entities.begin() + (i - j));
+            j++;
+        }
+    }
+}
+
