@@ -1,6 +1,6 @@
 ![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Title.png)
 
-#BuildOLand
+# BuildOLand
 
 BuildOLand is a 2d topview multiplayer building game!
 You can build, destroy things, play with your friend, etc...
@@ -11,7 +11,7 @@ We are constantly adding features, but we don't recomment downloading it now to 
 There is an old version of this game that I (Guigui220D) made, that is technically functionnal, but awfully coded, and I gave it up a long time ago.
 https://guiguii.itch.io/buildoland
 
-###Some screenshots :
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/house.png)
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/tnt.png)
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/thing.png)
+### Some screenshots :
+![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/house.PNG)
+![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/tnt.PNG)
+![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/thing.PNG)
