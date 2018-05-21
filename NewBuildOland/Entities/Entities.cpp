@@ -8,6 +8,9 @@ Entities::Entities(World *world)
 	onMap.setFillColor(sf::Color::Yellow);
 	onMap.setRadius(50);
 	onMap.setOrigin(sf::Vector2f(50, 50));
+
+	id = world->getStateGame()->getEntityId();
+	std::cout << "Entity got id " << id << std::endl;
 }
 
 

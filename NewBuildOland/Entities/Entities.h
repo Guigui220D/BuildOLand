@@ -20,11 +20,15 @@ public:
 
 	bool mustBeRemoved = false;
 
+	inline unsigned int getID() { return id; };
+
 protected:
 	World *currentWorld = nullptr;
 
 private:
 	sf::CircleShape onMap;
+
+	unsigned int id;
 
 };
 

@@ -13,21 +13,27 @@
 #include "../Utils/NetworkManager.h"
 
 
-StateGame::StateGame(Game& g)
-	: StateBase(g) {
+StateGame::StateGame(Game& g, bool online)
+	: StateBase(g)
+{
+    onlineMode = online;
 
-	/*
-	char nick[16];
-	for (int i = 0; i < 16; i++)
-        nick[i] = 0;
-	std::cout << "Input a nickname : \n";
-	std::cin >> nick;
-	std::cout << "Connected = " << NetworkManager::connect(nick) << "\n";
-	*/
+	if (onlineMode)
+    {
+        char nick[16];
+        for (int i = 0; i < 16; i++)
+            nick[i] = 0;
+        std::cout << "Input a nickname : \n";
+        std::cin >> nick;
+        std::cout << "Connected = " << NetworkManager::connect(nick) << "\n";
+        currentWorld = new NetworkWorld(*this);
+    }
+    else
+    {
+        currentWorld = new MazeWorld(*this);
+    }
 
-	//Set the world
-    //currentWorld = new NetworkWorld(*this);
-	currentWorld = new MazeWorld(*this);
+
 	tileset;
 
 	//Init the tileset to the event manager
@@ -422,4 +428,10 @@ void StateGame::handleEvent(sf::Event &event) {
             break;
     }
 
+}
+
+unsigned int StateGame::getEntityId()
+{
+    nextEntityId++;
+    return (nextEntityId - 1);
 }

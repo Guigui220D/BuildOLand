@@ -16,7 +16,7 @@
 class StateGame : public StateBase
 {
 public:
-	StateGame(Game& g);
+	StateGame(Game& g, bool online);
 
 	void handleInput()					override;
 	void update(float dt)				override;
@@ -43,6 +43,10 @@ public:
 
     void handleEvent(sf::Event &event) override;
 
+    inline bool isOnline() { return onlineMode; };
+
+    unsigned int getEntityId();
+
 private:
 
 	std::vector<std::unique_ptr<Gui>> gui;
@@ -67,6 +71,10 @@ private:
 	SoundManager soundManager;
 
 	Player *player;
+
+    bool onlineMode;
+
+    unsigned int nextEntityId = 0;
 
 };
 
