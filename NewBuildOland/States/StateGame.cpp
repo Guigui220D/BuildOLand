@@ -104,7 +104,7 @@ void StateGame::handleInput() {
 						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
 						Item *selectedItem = selectedItemStack->getItem();
 
-                        //If it isn't empty, and is a block
+                        //If it isn't empty, and is a placeable
                         if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable()) {
 							bool isGround = selectedItem->isGround();
                             //We remove an item (that was placed)
@@ -186,6 +186,7 @@ void StateGame::handleInput() {
 	}
 
 	//To change the block being placed (Temporary)
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal)) {
 		if (!isPlaceKeyPressed) {
 			inventoryCursorId = inventoryCursorId >= inventoryGui->getInventorySlots() - 1 ? 0 : inventoryCursorId + 1;

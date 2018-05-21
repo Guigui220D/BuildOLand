@@ -17,7 +17,7 @@ FlatWorld::~FlatWorld()
 
 void FlatWorld::generateWorld() {
 	//Set the world size
-	worldSize = sf::Vector2u(24, 24);
+	worldSize = sf::Vector2u(2000, 2000);
 	playerPos = sf::Vector2u(1, 1);
 	//Populate the ground array
 	for (unsigned int x = 0; x < worldSize.x; x++) {
