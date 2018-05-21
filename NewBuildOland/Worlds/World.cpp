@@ -47,7 +47,7 @@ bool World::loadWorld()
 		worldFile.close();
 		return true;
 	} else {
-		//The file doesn'text exist, create one
+		//The file doesn't exist, create one
 
 		//Create the folder (for windows only)
 		std::string const worldFolderName("./gamedata/worlds/");
