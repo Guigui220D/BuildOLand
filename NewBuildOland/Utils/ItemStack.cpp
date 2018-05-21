@@ -8,11 +8,26 @@ ItemStack::ItemStack() {
 }
 
 ItemStack::ItemStack(Item* item) {
+
+    //If it has a nullptr it's the same as an ItemStack() without arguments
+    if(item == nullptr) {
+        ItemStack::item = new ItemAir();
+        ItemStack::quantity = 0;
+        return;
+    }
+
     ItemStack::item = item;
     ItemStack::quantity = 1;
 }
 
 ItemStack::ItemStack(Item* item, unsigned short quantity) {
+    //If it has a nullptr it's the same as an ItemStack() with a quantity
+    if(item == nullptr) {
+        ItemStack::item = new ItemAir();
+        ItemStack::quantity = quantity;
+        return;
+    }
+
     ItemStack::item = item;
     ItemStack::quantity = quantity;
 }

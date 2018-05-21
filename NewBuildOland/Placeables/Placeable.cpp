@@ -23,10 +23,10 @@ sf::IntRect Placeable::getTextureRect()
 	return textureRect;
 }
 
-void Placeable::OnPlaceableEnter(PlaceableEnterEvent e)
+void Placeable::onPlaceableEnter(PlaceableEnterEvent e)
 {
 }
-void Placeable::OnPlaceableLeave(PlaceableLeaveEvent e)
+void Placeable::onPlaceableLeave(PlaceableLeaveEvent e)
 {
 }
 

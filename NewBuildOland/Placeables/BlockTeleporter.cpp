@@ -12,7 +12,7 @@ BlockTeleporter::~BlockTeleporter()
 {
 }
 
-void BlockTeleporter::OnPlaceableEnter(PlaceableEnterEvent e) {
+void BlockTeleporter::onPlaceableEnter(PlaceableEnterEvent e) {
 	World* oldWorld = e.getState()->getWorld();
 	World* newWorld = nullptr;
 
@@ -31,3 +31,4 @@ void BlockTeleporter::OnPlaceableEnter(PlaceableEnterEvent e) {
 	teleportSound->setVolume(20);
 	teleportSound->play();
 }
+

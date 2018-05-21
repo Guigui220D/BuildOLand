@@ -7,5 +7,7 @@ class TNTBlock : public Block
     public:
         TNTBlock(sf::IntRect textureRect, sf::IntRect faceRect);
         ~TNTBlock();
-        virtual void OnBlockBreak(BlockBreakEvent e) override;
+        virtual void onBlockBreak(BlockBreakEvent e) override;
+
+        Block *getBlockOnBreak(StateGame *stateGame) override;
 };

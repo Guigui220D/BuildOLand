@@ -13,7 +13,7 @@ BlockSaver::~BlockSaver()
 }
 
 
-void BlockSaver::OnPlaceableEnter(PlaceableEnterEvent e) {
+void BlockSaver::onPlaceableEnter(PlaceableEnterEvent e) {
 	std::cout << "Saved the world!" << std::endl;
 	e.getState()->getWorld()->saveWorld();
 

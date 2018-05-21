@@ -3,6 +3,7 @@
 #include "../Placeables/BlockSaver.h"
 #include "../Placeables/TNTBlock.h"
 #include "../Placeables/GroundGrass.h"
+#include "../Placeables/WornConcrete.h"
 #include <iostream>
 #include <math.h>
 //This is the tileset class that allows to get textures from a block id
@@ -38,7 +39,7 @@ void TileSet::generateGrounds()
 	grounds.push_back(new Ground(rectById(3), "SAND", sf::Color(215, 215, 60)));
 	grounds.push_back(new Ground(rectById(4), "WATER", sf::Color(60, 90, 210)));
 	grounds.push_back(new Ground(rectById(5), "CONCRETE", sf::Color(155, 155, 155)));
-	grounds.push_back(new Ground(rectById(19), "WORN_CONCRETE", sf::Color(135, 135, 135)));
+	grounds.push_back(new WornConcrete(rectById(19), "WORN_CONCRETE", sf::Color(135, 135, 135)));
 }
 
 sf::IntRect TileSet::rectById(unsigned int tilesetId)

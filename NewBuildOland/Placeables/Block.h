@@ -5,6 +5,7 @@ class BlockBuildEvent;
 class BlockBreakEvent;
 class PlaceableEnterEvent;
 class PlaceableLeaveEvent;
+class StateGame;
 
 class Block : public Placeable
 {
@@ -16,9 +17,11 @@ public:
 	sf::IntRect getSideRect();
 	sf::Color getSideTint();
 
+	virtual Block* getBlockOnBreak(StateGame* stateGame);
+
 	//Event methods
-	virtual void OnBlockBuild(BlockBuildEvent e);
-	virtual void OnBlockBreak(BlockBreakEvent e);
+	virtual void onBlockBuild(BlockBuildEvent e);
+	virtual void onBlockBreak(BlockBreakEvent e);
 
 	//Item methods
 	bool isGround() override;

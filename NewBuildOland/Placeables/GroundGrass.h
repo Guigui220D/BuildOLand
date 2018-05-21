@@ -9,7 +9,7 @@ class GroundGrass : public Ground {
 public:
     GroundGrass(sf::IntRect textureRect);
 
-    void OnPlaceableEnter(PlaceableEnterEvent e) override;
+    void onPlaceableEnter(PlaceableEnterEvent e) override;
 
 };
 

@@ -14,10 +14,14 @@ bool Ground::isGround() {
     return true;
 }
 
-void Ground::OnPlaceableEnter(PlaceableEnterEvent e) {
+void Ground::onPlaceableEnter(PlaceableEnterEvent e) {
 
 }
 
-void Ground::OnPlaceableLeave(PlaceableLeaveEvent e) {
+void Ground::onPlaceableLeave(PlaceableLeaveEvent e) {
 
+}
+
+Ground *Ground::getGroundOnBreak(StateGame *stateGame) {
+    return this;
 }

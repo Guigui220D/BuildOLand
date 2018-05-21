@@ -10,7 +10,7 @@ class FpsCounter : public Gui
         void draw(sf::RenderWindow &window) override;
         void update(float dt) override;
 
-    void eventResize() override;
+        void eventResize() override;
 
 protected:
 

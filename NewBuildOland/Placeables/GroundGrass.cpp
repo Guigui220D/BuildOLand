@@ -7,7 +7,7 @@ GroundGrass::GroundGrass(sf::IntRect textureRect)
 
 }
 
-void GroundGrass::OnPlaceableEnter(PlaceableEnterEvent e) {
+void GroundGrass::onPlaceableEnter(PlaceableEnterEvent e) {
     sf::Sound* saveSound = e.getState()->getSoundManager()->getSound("grass1.ogg");
 
     saveSound->setVolume(70);
