@@ -26,12 +26,15 @@ void TNTBlock::OnBlockBreak(BlockBreakEvent e)
             {
                 if (x * x + y * y <= 6)
                 {
-                    unsigned short id = e.getState()->getWorld()->getBlockId(pos + sf::Vector2u(x, y));
+                    unsigned short oldBlockId = e.getState()->getWorld()->getBlockId(pos + sf::Vector2u(x, y));
                     e.getState()->getWorld()->setBlockId(pos + sf::Vector2u(x, y), 0);
-                    EventManager::OnBlockBreak(BlockBreakEvent(pos + sf::Vector2u(x, y), id, nullptr, e.getState()));
+                    EventManager::OnBlockBreak(BlockBreakEvent(pos + sf::Vector2u(x, y), oldBlockId, nullptr, e.getState()));
                 }
-                if (x * x + y * y <= 4)
+                if (x * x + y * y <= 4) {
+                    unsigned short oldGroundId = e.getState()->getWorld()->getGroundId(pos + sf::Vector2u(x, y));
                     e.getState()->getWorld()->setGroundId(pos + sf::Vector2u(x, y), 4);
+                    EventManager::OnGroundPlace(GroundPlaceEvent(pos + sf::Vector2u(x, y), oldGroundId, 4, nullptr, e.getState()));
+                }
             }
         }
     }

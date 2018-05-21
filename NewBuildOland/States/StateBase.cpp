@@ -12,6 +12,6 @@ Game* StateBase::getGame()
     return game;
 }
 
-void StateBase::resizedEvent() {
+void StateBase::handleEvent(sf::Event &event) {
 
 }
