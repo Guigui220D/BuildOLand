@@ -216,6 +216,7 @@ void StateGame::handleInput() {
 void StateGame::update(float dt) {
 	player->update(dt);
 
+	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		currentWorld->getEntities()[i]->update(dt);

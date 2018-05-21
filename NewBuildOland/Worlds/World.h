@@ -38,8 +38,8 @@ public:
 	std::string getName();
 	StateGame* getStateGame();
 
-	const std::vector<Entities *> &getEntities() const;
-
+	const std::vector<Entities*> &getEntities() const;
+    virtual void addEntity(Entities* entity);
 	virtual void removeEntitiesThatNeedToBeRemoved();
 
 	//Call for telling the other methods that the world is deleted

@@ -227,3 +227,8 @@ void World::removeEntitiesThatNeedToBeRemoved()
     }
 }
 
+void World::addEntity(Entities* entity)
+{
+    entities.push_back(entity);
+}
+
