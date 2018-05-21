@@ -22,7 +22,7 @@ void TNTBlock::OnBlockBreak(BlockBreakEvent e)
     {
         for (int y = -2; y <= 2; y++)
         {
-            if (pos.x + x >= 0 && pos.y +y >= 0)
+            if ((int)pos.x + x >= 0 && (int)pos.y + y >= 0)
             {
                 if (x * x + y * y <= 6)
                 {
