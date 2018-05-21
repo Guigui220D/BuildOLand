@@ -27,7 +27,7 @@ void NetworkWorld::generateWorld()
         std::cout << "Failed to ask for the world" << std::endl;
         return;
     }
-    sf::Packet pack = NetworkManager::recieve();
+    sf::Packet pack = NetworkManager::syncReceive();
     unsigned xsize, ysize;
     pack >> xsize >> ysize;
     worldSize = sf::Vector2u(xsize, ysize);

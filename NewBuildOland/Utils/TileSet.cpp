@@ -21,7 +21,11 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(1), "AIR",				sf::Color(90, 70, 50),	false, false));
 	blocks.push_back(new Block(rectById(7), "LOG",				sf::Color(135, 90, 30),	true, true, rectById(12)));
 	blocks.push_back(new Block(rectById(6), "BRICK",			sf::Color(90, 90, 90),	true));
-	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE", sf::Color(135, 30, 30), false, false));
+	blocks.push_back(new Block(rectById(5), "CONCRETE",			sf::Color(90, 90, 90),	true));
+	blocks.push_back(new Block(rectById(15), "METAL",			sf::Color(200, 200, 200),true));
+	blocks.push_back(new Block(rectById(16), "GOLD",			sf::Color(255, 255, 200),true));
+	blocks.push_back(new Block(rectById(17), "TNT",				sf::Color(255, 0, 0),	true, true, rectById(18)));
+	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));
 	blocks.push_back(new BlockSaver(rectById(10)));
 	blocks.push_back(new BlockTeleporter(rectById(11)));
 

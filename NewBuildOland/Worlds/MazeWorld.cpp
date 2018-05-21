@@ -22,7 +22,7 @@ MazeWorld::~MazeWorld()
 
 void MazeWorld::generateWorld() {
 	//Set the world size
-	worldSize = sf::Vector2u(25, 25);
+	worldSize = sf::Vector2u(240, 240);
 	unsigned short const DEFAULT_GROUND = 3;
 	unsigned short const DEFAULT_BLOCK = 0;
 

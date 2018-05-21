@@ -1,25 +1,75 @@
 #include "NetworkManager.h"
 #include <iostream>
+#include <string>
 
 sf::TcpSocket NetworkManager::server;
 bool NetworkManager::connected = false;
 
-bool NetworkManager::connect()
+bool NetworkManager::connect(char nick[16])
 {
     if (connected)
         return false;
+    //Connect
     try
     {
-        connected = server.connect("localhost", PORT) == sf::Socket::Done ? true : false;
+        server.connect("localhost", PORT) == sf::Socket::Done;
     }
     catch (std::exception e)
     {
-        connected = false;
-    }
-    if (!connected)
         std::cout << "Failed to connect" << std::endl;
-    //TODO: Send a connect request
-    return connected;
+        return false;
+    }
+    //Request a connection with the nickname
+    {
+        sf::Packet p;
+        p << REQUEST_CONNECTION << nick;
+        try
+        {
+            server.send(p);
+        }
+        catch (std::exception e)
+        {
+            std::cout << "Failed to send a connection request" << std::endl;
+            return false;
+        }
+    }
+    std::cout << "Sent a connection request" << std::endl;
+    //Get the answer
+    {
+        sf::Packet p = syncReceive();
+        int response = 0;
+        p >> response;
+        //If accepted, response = 1, else 0
+        if (!response)
+        {
+            int reason = 0;
+            p >> reason;
+            switch (reason)
+            {
+            case REASON_NULL:
+                std::cout << "Connection refused, no reason" << std::endl;
+                break;
+            case REASON_SERVER_NOT_READY:
+                std::cout << "Connection refused, server not ready" << std::endl;
+                break;
+            case REASON_SERVER_FULL:
+                std::cout << "Connection refused, server is full" << std::endl;
+                break;
+            case REASON_NICK_ALREADY_TAKEN:
+                std::cout << "Connection refused, this nick is already taken" << std::endl;
+                break;
+            case REASON_BANNED:
+                std::cout << "Connection refused, you are banned" << std::endl;
+                break;
+            default:
+                std::cout << "Connection refused, no reason" << std::endl;
+                break;
+            }
+            return false;
+        }
+    }
+    connected = true;
+    return true;
 }
 
 bool NetworkManager::disconnect()
@@ -42,8 +92,8 @@ bool NetworkManager::oneCodeSend(int code)
     {
         return false;
     }
-
     return true;
 }
+
 
 

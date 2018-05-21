@@ -22,6 +22,7 @@ void Player::initInventory(World* currentWorld) {
     inventory->addItem(ItemStack(tileset->getBlockById(3), 10));
     inventory->addItem(ItemStack(tileset->getBlockById(4), 10));
     inventory->addItem(ItemStack(tileset->getBlockById(5), 5));
+    inventory->addItem(ItemStack(tileset->getBlockById(6), 5));
     inventory->addItem(ItemStack(tileset->getGroundById(0), 123));
 
 }
