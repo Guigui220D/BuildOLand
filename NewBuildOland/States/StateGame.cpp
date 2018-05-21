@@ -397,10 +397,28 @@ StateGame::~StateGame() {
 	delete currentWorld;
 }
 
-void StateGame::resizedEvent() {
-	//Send the event to all gui elements
-	for (int i = 0; i < gui.size(); i++)
-	{
-		gui[i]->eventResize();
-	}
+void StateGame::handleEvent(sf::Event &event) {
+
+    switch (event.type) {
+        //RESIZE EVENT
+        case sf::Event::Resized:
+            //Send the event to all gui elements
+            for (int i = 0; i < gui.size(); i++)
+            {
+                gui[i]->eventResize();
+            }
+            break;
+
+        //SCROLL EVENT
+        case sf::Event::MouseWheelScrolled:
+            //Change the position of the cursor
+            if(event.mouseWheelScroll.delta < 0) {
+                inventoryCursorId = inventoryCursorId >= inventoryGui->getInventorySlots() - 1 ? 0 : inventoryCursorId + 1;
+            } else {
+                inventoryCursorId = inventoryCursorId <= 0 ? inventoryGui->getInventorySlots() - 1 : inventoryCursorId - 1;
+            }
+
+            break;
+    }
+
 }

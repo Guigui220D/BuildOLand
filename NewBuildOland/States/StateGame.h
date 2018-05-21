@@ -41,7 +41,7 @@ public:
 
 	~StateGame();
 
-	void resizedEvent() override;
+    void handleEvent(sf::Event &event) override;
 
 private:
 

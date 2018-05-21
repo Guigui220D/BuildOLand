@@ -43,15 +43,20 @@ void Game::run()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-			if (event.type == sf::Event::Resized)
+			if (event.type == sf::Event::Resized) {
 				updateView();
+			}
+
+			//send the event to the current state
+			currentState->handleEvent(event);
+
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
 		}
 
 		//Then update everything in that state (positions etc..)
 		//The argument is the time between the last frame (delta time)
-		//todo: calculate the real delta time
 		if (window.hasFocus())
 		currentState->update(clk.restart().asSeconds());
 
@@ -94,10 +99,6 @@ void Game::updateView()
 		guiView.setSize(sf::Vector2f(xSize, 800));
 	}
 
-	if(currentState != nullptr) {
-		//Send an event to the state that it has been resized
-		currentState->resizedEvent();
-	}
 }
 
 sf::RenderWindow& Game::getWindow() {
