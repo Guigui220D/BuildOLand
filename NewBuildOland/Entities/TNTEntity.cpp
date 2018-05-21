@@ -20,7 +20,14 @@ TNTEntity::~TNTEntity()
 
 void TNTEntity::update(double delta)
 {
-    if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 2.0f)
+    int demiSeconds = (int)(fuse.getElapsedTime().asSeconds() * 2);
+    if (demiSeconds % 2)
+    {
+        setFillColor(sf::Color(127, 127, 127));
+    }
+    else
+        setFillColor(sf::Color::White);
+    if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
     {
         sf::Sound* boomSound = currentWorld->getStateGame()->getSoundManager()->getSound("explosion.wav");
         boomSound->setVolume(20);
