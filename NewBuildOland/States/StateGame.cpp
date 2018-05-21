@@ -88,7 +88,7 @@ StateGame::StateGame(Game& g)
 	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
 
 	//Temporary, for save button
-	currentWorld->setBlockId(sf::Vector2u(0, 0), 4);
+	currentWorld->setBlockId(sf::Vector2u(0, 0), 8);
 }
 
 void StateGame::handleInput() {

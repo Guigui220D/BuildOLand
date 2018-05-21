@@ -18,7 +18,7 @@ World::World(StateGame& stateGame, std::string name)
 bool World::loadWorld()
 {
 	//Check if file exists
-	std::string const worldFileName("./../gamedata/worlds/" + worldName + ".bol");
+	std::string const worldFileName("./gamedata/worlds/" + worldName + ".bol");
 
 	std::ifstream worldFile(worldFileName.c_str(), std::ios::binary | std::ios::in);
 	if(worldFile.is_open()) {
@@ -50,7 +50,7 @@ bool World::loadWorld()
 		//The file doesn'text exist, create one
 
 		//Create the folder (for windows only)
-		std::string const worldFolderName("./../gamedata/worlds/");
+		std::string const worldFolderName("./gamedata/worlds/");
 		FileManager::createFolder(worldFolderName);
 
 		//Create the file
@@ -75,7 +75,7 @@ bool World::loadWorld()
 
 bool World::saveWorld()
 {
-	std::string const worldFileName("./../gamedata/worlds/" + worldName + ".bol");
+	std::string const worldFileName("./gamedata/worlds/" + worldName + ".bol");
 
 	//Recreate the file
 	std::ofstream worldFileFlux(worldFileName.c_str(), std::ios::binary | std::ios::out);
