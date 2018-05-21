@@ -8,6 +8,6 @@ public:
 	~BlockTeleporter();
 
 	//Event methods
-	void OnPlaceableEnter(PlaceableEnterEvent e) override;
+	void onPlaceableEnter(PlaceableEnterEvent e) override;
 };
 

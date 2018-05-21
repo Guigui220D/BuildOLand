@@ -16,7 +16,6 @@ void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
     TileSet* tileset = currentWorld->getStateGame()->getTileset();
-
     inventory->addItem(ItemStack(tileset->getBlockById(1), 10));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 10));
     inventory->addItem(ItemStack(tileset->getBlockById(3), 10));

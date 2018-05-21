@@ -11,7 +11,7 @@ TNTBlock::~TNTBlock()
     //dtor
 }
 
-void TNTBlock::OnBlockBreak(BlockBreakEvent e)
+void TNTBlock::onBlockBreak(BlockBreakEvent e)
 {
     sf::Vector2u pos = e.getPosition();
     //Explosion
@@ -38,4 +38,9 @@ void TNTBlock::OnBlockBreak(BlockBreakEvent e)
             }
         }
     }
+}
+
+Block *TNTBlock::getBlockOnBreak(StateGame *stateGame) {
+    //Return nothing
+    return nullptr;
 }

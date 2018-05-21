@@ -131,8 +131,8 @@ void StateGame::handleInput() {
 										GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, player, this));
 								//Place the ground
 								currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
-                                //Add the old ground to the inventory
-                                player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)));
+                                //Add the old ground to the inventory (the one that you should get when you break it)
+                                player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)->getGroundOnBreak(this)));
 
 							} else {
 								//Send an event that the block was placed
@@ -180,8 +180,8 @@ void StateGame::handleInput() {
 						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
 						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, player, this));
 
-                        //Add the block to the inventory
-                        player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)));
+                        //Add the block to the inventory that you should get when you break it
+                        player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)->getBlockOnBreak(this)));
 						//And update the inventoryGui
 						inventoryGui->updateInventory();
 						//currentWorld->saveWorld();

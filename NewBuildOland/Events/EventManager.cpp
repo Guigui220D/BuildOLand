@@ -20,7 +20,7 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
 	//std::cout << "Event : Block " << tileset->getBlockById(e.getOldBlock())->getName() << " broken at " << e.getPosition().x << ", " << e.getPosition().y << "\n";
 
 	//Send event to the block
-	tileset->getBlockById(e.getOldBlock())->OnBlockBreak(e);
+	tileset->getBlockById(e.getOldBlock())->onBlockBreak(e);
 }
 
 void EventManager::OnBlockBuild(BlockBuildEvent e)
@@ -28,7 +28,7 @@ void EventManager::OnBlockBuild(BlockBuildEvent e)
 	//std::cout << "Event : Block " << e.getBlock() << " built at " << e.getPosition().x << ", " << e.getPosition().y << "\n";
 
 	//Send event to the block
-	tileset->getBlockById(e.getBlock())->OnBlockBuild(e);
+    tileset->getBlockById(e.getBlock())->onBlockBuild(e);
 }
 
 void EventManager::OnGroundPlace(GroundPlaceEvent e)
@@ -43,10 +43,10 @@ void EventManager::OnGroundPlace(GroundPlaceEvent e)
 void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)
 {
 	//Send event to the block
-	tileset->getBlockById(e.getBlockId())->OnPlaceableEnter(e);
+	tileset->getBlockById(e.getBlockId())->onPlaceableEnter(e);
 
 	//Send event to the ground
-	tileset->getGroundById(e.getGroundId())->OnPlaceableEnter(e);
+	tileset->getGroundById(e.getGroundId())->onPlaceableEnter(e);
 
 }
 
