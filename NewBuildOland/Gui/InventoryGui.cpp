@@ -28,22 +28,28 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
     selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36) * inventoryScale,
                                inventorySprite.getPosition().y);
 
+    //Load the font in order to show the quantity of the items
+    if (!font.loadFromFile("Res/Font/Akashi.ttf"))
+        std::cout << "ERROR LOADING FROM 'Res/Font/Akashi.ttf'" << std::endl;
 
     //Load the item images
     for(unsigned i = 0; i < inventorySlots; i++){
+        //Place the sprite correctly
         sf::Sprite* item = new Sprite();
         item->setScale(inventoryScale, inventoryScale);
         item->setPosition(inventorySprite.getPosition().x + 4 * inventoryScale + (i * 36) * inventoryScale ,
                           inventorySprite.getPosition().y + 4 * inventoryScale);
         itemSprites.push_back(item);
+
+        //And place the text correctly
+        sf::Text* text = new Text();
+        text->setFont(font);
+        text->setFillColor(sf::Color::White);
+        text->setCharacterSize(8 * inventoryScale);
+        //No need for setting the position now, as we need to change it according to the length of the text
+        itemTexts.push_back(text);
     }
 
-    font.loadFromFile("Res/Font/lucon.ttf");
-//    text.setFont(font);
-//    text.setFillColor(sf::Color::Black);
-//    text.setCharacterSize(16);
-//    text.setScale(sf::Vector2f(0.002f, 0.002f));
-//    text.setPosition(sf::Vector2f(0.3, 0.02));
 
     updateInventory();
 }
@@ -70,9 +76,19 @@ void InventoryGui::draw(sf::RenderWindow &window) {
 
     //Draw all items of the bar
     for(int i = 0; i < inventorySlots; i++) {
+        //Draw the sprites
         window.draw(*itemSprites[i]);
-    }
 
+        //And draw the text shadow
+        sf::Vector2f textPos = itemTexts[i]->getPosition();
+        itemTexts[i]->setFillColor(sf::Color(0, 0, 0, 100));
+        itemTexts[i]->setPosition(textPos.x + 2, textPos.y + 2);
+        window.draw(*itemTexts[i]);
+        //And draw the real text
+        itemTexts[i]->setFillColor(sf::Color(255, 255, 255, 255));
+        itemTexts[i]->setPosition(textPos.x, textPos.y);
+        window.draw(*itemTexts[i]);
+    }
     //Draw the selected cursor
     window.draw(selectedSprite);
 }
@@ -82,7 +98,8 @@ void InventoryGui::updateInventory() {
     //Update the items of the inventory
 
     for(int i = 0; i < inventorySlots; i++) {
-        Item *item = inventory->getItem(i)->getItem();
+        ItemStack *itemStack = inventory->getItem(i);
+        Item *item = itemStack->getItem();
         sf::IntRect textureRect;
 
         //Get the item rect
@@ -98,6 +115,12 @@ void InventoryGui::updateInventory() {
         } else {
             itemSprites[i]->setTextureRect(sf::IntRect(0, 0, 0, 0));
         }
+
+        //Set the quantity of the item
+        itemTexts[i]->setString(std::to_string(itemStack->getQuantity()));
+        itemTexts[i]->setPosition(inventorySprite.getPosition().x + 34 * inventoryScale + (i * 36) * inventoryScale - itemTexts[i]->getLocalBounds().width,
+                                  inventorySprite.getPosition().y + 26 * inventoryScale);
+
 
     }
 }

@@ -29,19 +29,19 @@ void Player::initInventory(World* currentWorld) {
 
 void Player::updateMovement(double dt) {
     //HANDLE INPUT
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
     {
         moveWest(dt);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         moveEast(dt);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
     {
         moveNorth(dt);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         moveSouth(dt);
     }

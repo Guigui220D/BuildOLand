@@ -30,9 +30,9 @@ private:
 
 
     std::vector<sf::Sprite*> itemSprites;
+    std::vector<sf::Text*> itemTexts;
 
     sf::Font font;
-//    sf::Text text;
     Inventory *inventory;
     unsigned short *cursorId;
 };
