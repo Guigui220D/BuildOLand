@@ -13,11 +13,20 @@
 #include "../Utils/NetworkManager.h"
 
 
-StateGame::StateGame(Game& game)
-	: StateBase(game) {
+StateGame::StateGame(Game& g)
+	: StateBase(g) {
+
+	/*
+	char nick[16];
+	for (int i = 0; i < 16; i++)
+        nick[i] = 0;
+	std::cout << "Input a nickname : \n";
+	std::cin >> nick;
+	std::cout << "Connected = " << NetworkManager::connect(nick) << "\n";
+	*/
+
 	//Set the world
-	std::cout << "Connected = " << NetworkManager::connect() << "\n";
-//	currentWorld = new NetworkWorld(*this);
+    //currentWorld = new NetworkWorld(*this);
 	currentWorld = new MazeWorld(*this);
 	tileset;
 
@@ -43,6 +52,8 @@ StateGame::StateGame(Game& game)
 	mapFrame.setOutlineThickness(0.005f);
 	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
+	mapView.setSize(game->getWorldView().getSize());
+	mapView.zoom(3);
 
 	worldDraw = sf::RectangleShape();
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
@@ -308,11 +319,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 		}
 	}
 	//Draw the map
-	window.setView(game->getGuiView());
-	window.draw(mapFrame);
-
-	mapView.setSize(game->getWorldView().getSize());
-	mapView.zoom(3);
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
@@ -329,6 +335,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
 	window.draw(*player->getOnMap());
+	window.draw(mapFrame);
 
     //Draw the gui
 	window.setView(game->getGuiView());

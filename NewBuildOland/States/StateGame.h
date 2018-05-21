@@ -16,7 +16,7 @@
 class StateGame : public StateBase
 {
 public:
-	StateGame(Game& game);
+	StateGame(Game& g);
 
 	void handleInput()					override;
 	void update(float dt)				override;
