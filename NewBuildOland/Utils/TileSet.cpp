@@ -38,6 +38,7 @@ void TileSet::generateGrounds()
 	grounds.push_back(new Ground(rectById(3), "SAND", sf::Color(215, 215, 60)));
 	grounds.push_back(new Ground(rectById(4), "WATER", sf::Color(60, 90, 210)));
 	grounds.push_back(new Ground(rectById(5), "CONCRETE", sf::Color(155, 155, 155)));
+	grounds.push_back(new Ground(rectById(19), "WORN_CONCRETE", sf::Color(155, 155, 155)));
 }
 
 sf::IntRect TileSet::rectById(unsigned int tilesetId)

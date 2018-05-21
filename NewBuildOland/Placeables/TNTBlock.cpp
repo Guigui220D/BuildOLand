@@ -28,7 +28,7 @@ void TNTBlock::OnBlockBreak(BlockBreakEvent e)
                 if (x * x + y * y <= 6)
                     e.getState()->getWorld()->setBlockId(pos + sf::Vector2u(x, y), 0);
                 if (x * x + y * y <= 4)
-                    e.getState()->getWorld()->setGroundId(pos + sf::Vector2u(x, y), 3);
+                    e.getState()->getWorld()->setGroundId(pos + sf::Vector2u(x, y), 4);
             }
         }
     }
