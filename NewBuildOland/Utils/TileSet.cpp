@@ -1,6 +1,7 @@
 #include "TileSet.h"
 #include "../Placeables/BlockTeleporter.h"
 #include "../Placeables/BlockSaver.h"
+#include "../Placeables/TNTBlock.h"
 #include "../Placeables/GroundGrass.h"
 #include <iostream>
 #include <math.h>
@@ -24,7 +25,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(5), "CONCRETE",			sf::Color(90, 90, 90),	true));
 	blocks.push_back(new Block(rectById(15), "METAL",			sf::Color(200, 200, 200),true));
 	blocks.push_back(new Block(rectById(16), "GOLD",			sf::Color(255, 255, 200),true));
-	blocks.push_back(new Block(rectById(17), "TNT",				sf::Color(255, 0, 0),	true, true, rectById(18)));
+	blocks.push_back(new TNTBlock(rectById(17), rectById(18)));
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));
 	blocks.push_back(new BlockSaver(rectById(10)));
 	blocks.push_back(new BlockTeleporter(rectById(11)));
