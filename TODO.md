@@ -4,14 +4,11 @@
 
 - [ ] Path finding for AI entities
 - [ ] User interface and pause
-- [ ] Mangement system for changing between states
-- [ ] Move player control input to player class
+- [ ] Online mode
 
 ### Less important things to implement :
 - [ ] Maze generator
 - [ ] Add an interactBlockEvent
-
-### Things to correct :
 
 ### Completed :
 - [x] Create proper todo list
@@ -20,3 +17,4 @@
 - [x] Interactive blocks
 - [x] Give entites a pointer to their StateGame (through world)
 - [x] Sound manager
+- [x] Inventory
