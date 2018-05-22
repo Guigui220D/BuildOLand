@@ -6,11 +6,11 @@ TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2u pos)
 {
     worldPos = pos;
     fuse.restart();
-    setSize(sf::Vector2f(100, 100));
+    setSize(sf::Vector2f(80, 120));
     texture.loadFromFile("Res/tntentity.png");
     setTexture(&texture);
     setPosition(sf::Vector2f(pos.x * StateGame::TILE_SIZE, pos.y * StateGame::TILE_SIZE));
-    setOrigin(sf::Vector2f(50, 50));
+    setOrigin(sf::Vector2f(40, 80));
     setOnMapColor(sf::Color::Red);
 }
 
