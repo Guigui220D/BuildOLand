@@ -1,11 +1,11 @@
 #pragma once
 #include "Placeable.h"
-#include "../Events/BlockInteractEvent.h"
 
 class BlockBuildEvent;
 class BlockBreakEvent;
 class PlaceableEnterEvent;
 class PlaceableLeaveEvent;
+class BlockInteractEvent;
 class StateGame;
 
 class Block : public Placeable

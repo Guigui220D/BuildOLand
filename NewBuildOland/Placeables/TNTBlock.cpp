@@ -18,3 +18,8 @@ void TNTBlock::onBlockInteract(BlockInteractEvent e)
     e.getState()->getWorld()->addEntity(new TNTEntity(e.getState()->getWorld(), e.getState()->getWorld()->getNextEntityId(), e.getPosition()));
 
 }
+
+void TNTBlock::onBlockBreak(BlockBreakEvent e) {
+    sf::Vector2u pos = e.getPosition();
+    e.getState()->getWorld()->addEntity(new TNTEntity(e.getState()->getWorld(), e.getState()->getWorld()->getNextEntityId(), e.getPosition()));
+}

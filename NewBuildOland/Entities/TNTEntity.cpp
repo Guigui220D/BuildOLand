@@ -43,12 +43,12 @@ void TNTEntity::update(double delta)
                     {
                         unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2u(xpos + x, ypos + y));
                         currentWorld->setBlockId(sf::Vector2u(xpos + x, ypos + y), 0);
-                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(xpos + x, ypos + y), oldBlockId, nullptr, currentWorld->getStateGame()));
+                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
                     }
                     if (x * x + y * y <= 4) {
                         unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(xpos + x, ypos + y));
                         currentWorld->setGroundId(sf::Vector2u(xpos + x, ypos + y), 4);
-                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(xpos + x, ypos + y), oldGroundId, 4, nullptr, currentWorld->getStateGame()));
+                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
                     }
                 }
             }

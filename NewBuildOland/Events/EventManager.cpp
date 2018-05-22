@@ -55,5 +55,5 @@ void EventManager::OnPlaceableLeave(PlaceableLeaveEvent e)
 
 void EventManager::OnBlockInteract(BlockInteractEvent e)
 {
-    tileset->getBlockById(e.getBlockId())->onBlockInteract(e);
+    tileset->getBlockById(e.getBlock())->onBlockInteract(e);
 }
