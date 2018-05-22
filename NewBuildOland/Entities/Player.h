@@ -11,10 +11,12 @@ public:
 	Player(World *world);
 	~Player();
 
+	inline void setCurrentWorld(World* newWorld) { currentWorld = newWorld; };
+
 private:
 	sf::Vector2u lastPos;
 
-	void initInventory(World *currentWorld);
+	void initInventory(World* currentWorld);
 
 protected:
 	std::string getTextureName() override;

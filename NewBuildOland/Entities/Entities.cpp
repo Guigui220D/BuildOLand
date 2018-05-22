@@ -28,28 +28,9 @@ sf::CircleShape* Entities::getOnMap()
 	return &onMap;
 }
 
-void Entities::setOnMapColor(sf::Color color)
+sf::Vector2f Entities::getWorldPos()
 {
-	onMap.setFillColor(color);
-}
-
-void Entities::setOnMapRadius(float radius)
-{
-	onMap.setRadius(radius);
-}
-
-void Entities::setCurrentWorld(World *world)
-{
-	currentWorld = world;
-}
-
-sf::Vector2f Entities::getWorldPos() {
 	sf::Vector2f position = getPosition();
-
 	return sf::Vector2f(position.x / StateGame::TILE_SIZE, position.y / StateGame::TILE_SIZE);
-
 }
 
-World *Entities::getCurrentWorld() const {
-    return currentWorld;
-}

@@ -11,6 +11,7 @@ TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2u pos)
     setTexture(&texture);
     setPosition(sf::Vector2f(pos.x * StateGame::TILE_SIZE, pos.y * StateGame::TILE_SIZE));
     setOrigin(sf::Vector2f(50, 50));
+    setOnMapColor(sf::Color::Red);
 }
 
 TNTEntity::~TNTEntity()
@@ -21,12 +22,10 @@ TNTEntity::~TNTEntity()
 void TNTEntity::update(double delta)
 {
     int demiSeconds = (int)(fuse.getElapsedTime().asSeconds() * 2);
-    if (demiSeconds % 2)
-    {
-        setFillColor(sf::Color(127, 127, 127));
-    }
-    else
-        setFillColor(sf::Color::White);
+
+    setFillColor((demiSeconds % 2) ? sf::Color(127, 127, 127) : sf::Color::White);
+    setOnMapColor((demiSeconds % 2) ? sf::Color::Black : sf::Color::Red);
+
     if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
     {
         sf::Sound* boomSound = currentWorld->getStateGame()->getSoundManager()->getSound("explosion.wav");

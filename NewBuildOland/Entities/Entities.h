@@ -9,14 +9,14 @@ public:
 	Entities(World *world, unsigned int id);
 	~Entities();
 	virtual void update(double delta);
+
 	sf::CircleShape* getOnMap();
-	void setOnMapColor(sf::Color color);
-	void setOnMapRadius(float radius);
-	void setCurrentWorld(World *world);
+	inline void setOnMapColor(sf::Color color) { onMap.setFillColor(color); };
+	void setOnMapRadius(float radius) { onMap.setRadius(radius); };
 
 	sf::Vector2f getWorldPos();
 
-	World *getCurrentWorld() const;
+	inline World *getCurrentWorld() const { return currentWorld; };
 
 	bool mustBeRemoved = false;
 
