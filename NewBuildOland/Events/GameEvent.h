@@ -6,8 +6,8 @@ class GameEvent
 public:
 	GameEvent(StateGame* state);
 	~GameEvent();
-	StateGame* getState();
+	inline StateGame* getState() { return game; };
 protected:
-	StateGame * game;
+	StateGame* game;
 };
 

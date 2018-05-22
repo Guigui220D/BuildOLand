@@ -1,8 +1,6 @@
 #include <iostream>
 #include "EventManager.h"
 #include "../States/StateGame.h"
-#include "GroundPlaceEvent.h"
-
 
 TileSet* EventManager::tileset;
 
@@ -53,4 +51,9 @@ void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)
 void EventManager::OnPlaceableLeave(PlaceableLeaveEvent e)
 {
 
+}
+
+void EventManager::OnBlockInteract(BlockInteractEvent e)
+{
+    tileset->getBlockById(e.getBlockId())->onBlockInteract(e);
 }

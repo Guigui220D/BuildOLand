@@ -9,9 +9,9 @@ class BlockBuildEvent : public GameEvent
 public:
 	BlockBuildEvent(sf::Vector2u pos, unsigned int newblock, Entities* entity, StateGame* state);
 	~BlockBuildEvent();
-	sf::Vector2u getPosition();
-	unsigned int getBlock();
-	Entities* getEntity();
+	inline sf::Vector2u getPosition() { return position; };
+	inline unsigned int getBlock() { return newBlock; };
+	inline Entities* getEntity() { return entit; };
 protected:
 	sf::Vector2u position;
 	unsigned int newBlock;

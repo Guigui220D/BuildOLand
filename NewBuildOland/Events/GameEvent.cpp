@@ -10,8 +10,3 @@ GameEvent::GameEvent(StateGame* state)
 GameEvent::~GameEvent()
 {
 }
-
-StateGame * GameEvent::getState()
-{
-	return game;
-}

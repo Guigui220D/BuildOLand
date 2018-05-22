@@ -1,5 +1,6 @@
 #pragma once
 #include "Placeable.h"
+#include "../Events/BlockInteractEvent.h"
 
 class BlockBuildEvent;
 class BlockBreakEvent;
@@ -22,6 +23,7 @@ public:
 	//Event methods
 	virtual void onBlockBuild(BlockBuildEvent e);
 	virtual void onBlockBreak(BlockBreakEvent e);
+	virtual void onBlockInteract(BlockInteractEvent e);
 
 	//Item methods
 	bool isGround() override;

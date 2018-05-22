@@ -33,20 +33,28 @@ sf::Color Block::getSideTint()
 
 
 //Event methods
-void Block::onBlockBuild(BlockBuildEvent e) {
+void Block::onBlockBuild(BlockBuildEvent e)
+{
 	Sound* blockPlaceSound = e.getState()->getSoundManager()->getSound("blockPlace.ogg");
 	blockPlaceSound->setVolume(30);
 	blockPlaceSound->play();
 
 }
-void Block::onBlockBreak(BlockBreakEvent e) {
+void Block::onBlockBreak(BlockBreakEvent e)
+{
+
+}
+void Block::onBlockInteract(BlockInteractEvent e)
+{
 
 }
 
-bool Block::isGround() {
+bool Block::isGround()
+{
     return false;
 }
 
-Block *Block::getBlockOnBreak(StateGame* stateGame) {
+Block *Block::getBlockOnBreak(StateGame* stateGame)
+{
 	return this;
 }

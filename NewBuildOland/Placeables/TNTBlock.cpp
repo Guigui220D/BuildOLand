@@ -12,14 +12,9 @@ TNTBlock::~TNTBlock()
     //dtor
 }
 
-void TNTBlock::onBlockBreak(BlockBreakEvent e)
+void TNTBlock::onBlockInteract(BlockInteractEvent e)
 {
     sf::Vector2u pos = e.getPosition();
     e.getState()->getWorld()->addEntity(new TNTEntity(e.getState()->getWorld(), e.getState()->getWorld()->getNextEntityId(), e.getPosition()));
 
-}
-
-Block *TNTBlock::getBlockOnBreak(StateGame *stateGame) {
-    //Return nothing
-    return nullptr;
 }

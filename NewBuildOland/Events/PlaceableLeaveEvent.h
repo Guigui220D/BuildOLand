@@ -8,12 +8,12 @@ class PlaceableLeaveEvent : public GameEvent
 public:
 	PlaceableLeaveEvent(sf::Vector2u pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame* state);
 	~PlaceableLeaveEvent();
-	sf::Vector2u getTilePos();
-	Player* getPlayer();
-	unsigned short getBlockId();
-	unsigned short getGroundId();
+	inline sf::Vector2u getTilePos() { return tilePos; };
+	inline Player* getPlayer() { return entit; };
+	inline unsigned short getBlockId() { return blockId; };
+	inline unsigned short getGroundId() { return groundId; };
 protected:
-	Player * entit;
+	Player* entit;
 	sf::Vector2u tilePos;
 	unsigned short blockId;
 	unsigned short groundId;

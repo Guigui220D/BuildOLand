@@ -12,17 +12,3 @@ BlockBreakEvent::~BlockBreakEvent()
 {
 }
 
-sf::Vector2u BlockBreakEvent::getPosition()
-{
-	return position;
-}
-
-unsigned int BlockBreakEvent::getOldBlock()
-{
-	return oldBlock;
-}
-
-Entities* BlockBreakEvent::getEntity()
-{
-	return entit;
-}

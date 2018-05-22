@@ -5,6 +5,7 @@
 #include "PlaceableEnterEvent.h"
 #include "PlaceableLeaveEvent.h"
 #include "GroundPlaceEvent.h"
+#include "BlockInteractEvent.h"
 
 class TileSet;
 
@@ -18,6 +19,7 @@ public:
 	static void OnGroundPlace(GroundPlaceEvent e);
 	static void OnPlaceableEnter(PlaceableEnterEvent e);
 	static void OnPlaceableLeave(PlaceableLeaveEvent e);
+	static void OnBlockInteract(BlockInteractEvent e);
 
 	static TileSet* tileset;
 private:

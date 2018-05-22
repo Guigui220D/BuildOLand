@@ -11,23 +11,3 @@ PlaceableEnterEvent::PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsig
 PlaceableEnterEvent::~PlaceableEnterEvent()
 {
 }
-
-sf::Vector2u PlaceableEnterEvent::getTilePos()
-{
-	return tilePos;
-}
-
-Player* PlaceableEnterEvent::getPlayer()
-{
-	return entit;
-}
-
-unsigned short PlaceableEnterEvent::getBlockId()
-{
-	return blockId;
-}
-
-unsigned short PlaceableEnterEvent::getGroundId()
-{
-	return groundId;
-}

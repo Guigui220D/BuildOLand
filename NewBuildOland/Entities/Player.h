@@ -1,8 +1,8 @@
 #pragma once
-#include "Entities.h"
-#include "PhysicEntity.h"
-#include "../Utils/Animation.h"
-#include "../Utils/Inventory.h"
+//#include "Entities.h"
+//#include "PhysicEntity.h"
+//#include "../Utils/Animation.h"
+//#include "../Utils/Inventory.h"
 #include "LivingEntity.h"
 
 class Player : public LivingEntity

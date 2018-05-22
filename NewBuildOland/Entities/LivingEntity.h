@@ -1,7 +1,4 @@
-
 #pragma once
-
-
 #include "PhysicEntity.h"
 #include "../Utils/Animation.h"
 #include "../Utils/Inventory.h"
