@@ -1,8 +1,8 @@
 #include <cmath>
 #include "BlackWarrior.h"
 
-BlackWarrior::BlackWarrior(World *world)
-        : LivingEntity(world,
+BlackWarrior::BlackWarrior(World *world, unsigned id)
+        : LivingEntity(world, id,
                        20, //Health
                        9)  //Inventory size
 {

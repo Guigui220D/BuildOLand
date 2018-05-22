@@ -12,42 +12,45 @@
 #include "../Gui/InventoryGui.h"
 #include <vector>
 #include <memory>
+#include "../Utils/NetworkManager.h"
 
 class StateGame : public StateBase
 {
 public:
+    unsigned static const int TILE_SIZE = 100;
+	const float TILE_SIZE_FLOAT = 100.0f;
+
 	StateGame(Game& g, bool online);
+	~StateGame();
 
 	void handleInput()					override;
 	void update(float dt)				override;
 	void draw(sf::RenderWindow &window) override;
 
-	sf::View& getMapView();
+	inline sf::View& getMapView() { return mapView; };
 	sf::View& getGuiView();
 	void setWorld(World &world);
 
-	TileSet* getTileset();
+	inline TileSet* getTileset() { return &tileset; };
 
 	Entities* cameraFollow;
 
-	unsigned static const int TILE_SIZE = 100;
-	const float TILE_SIZE_FLOAT = 100.0f;
+	inline void setClicks() { rightClicking = leftClicking = true; };
 
-	void setClicks();
+	inline World* getWorld() { return currentWorld; };
 
-	World* getWorld();
-
-	SoundManager* getSoundManager();
-
-	~StateGame();
+	inline SoundManager* getSoundManager() { return &soundManager; };
 
     void handleEvent(sf::Event &event) override;
 
     inline bool isOnline() { return onlineMode; };
+    inline NetworkManager* getNetworkManager() { return &nManager; };
 
-    unsigned int getEntityId();
 
 private:
+
+    NetworkManager nManager;
+    bool onlineMode;
 
 	std::vector<std::unique_ptr<Gui>> gui;
 	InventoryGui *inventoryGui;
@@ -72,9 +75,7 @@ private:
 
 	Player *player;
 
-    bool onlineMode;
 
-    unsigned int nextEntityId = 0;
 
 };
 

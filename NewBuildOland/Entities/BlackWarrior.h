@@ -6,7 +6,7 @@
 
 class BlackWarrior : public LivingEntity {
 public:
-    BlackWarrior(World *world);
+    BlackWarrior(World *world, unsigned id);
 protected:
     std::string getTextureName() override;
     std::vector<IntRect> getIdleAnim() override;

@@ -1,8 +1,8 @@
 #include "StaticObject.h"
 
 
-StaticObject::StaticObject(World *world)
-	: Entities(world)
+StaticObject::StaticObject(World *world, unsigned id)
+	: Entities(world, id)
 {
 	setOnMapColor(sf::Color::Transparent);
 	setOnMapRadius(0);

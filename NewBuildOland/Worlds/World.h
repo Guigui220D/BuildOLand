@@ -41,6 +41,11 @@ public:
 	const std::vector<Entities*> &getEntities() const;
     virtual void addEntity(Entities* entity);
 	virtual void removeEntitiesThatNeedToBeRemoved();
+	inline unsigned int getNextEntityId()
+    {
+        nextEntityId++;
+        return nextEntityId - 1;
+    }
 
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();
@@ -58,9 +63,12 @@ protected:
 	std::vector<unsigned short> blockIds;
 
 	std::vector<Entities*> entities;
+
 private:
 	void saveWorldToFile(std::ofstream &worldFileFlux);
 	bool isBeingDeleted = false;
+
+	unsigned int nextEntityId = 0;
 
 };
 

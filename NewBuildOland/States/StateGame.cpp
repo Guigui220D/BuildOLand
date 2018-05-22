@@ -5,12 +5,11 @@
 #include <iostream>
 #include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
-#include "../Entities/StaticObjects/TestObject.h"
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
 #include "../Events/GroundPlaceEvent.h"
 #include <math.h>
-#include "../Utils/NetworkManager.h"
+
 
 
 StateGame::StateGame(Game& g, bool online)
@@ -25,7 +24,7 @@ StateGame::StateGame(Game& g, bool online)
             nick[i] = 0;
         std::cout << "Input a nickname : \n";
         std::cin >> nick;
-        std::cout << "Connected = " << NetworkManager::connect(nick) << "\n";
+        std::cout << "Connected = " << nManager.connect(nick) << "\n";
         currentWorld = new NetworkWorld(*this);
     }
     else
@@ -360,17 +359,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(mouse);
 }
 
-sf::View& StateGame::getMapView() {
-	return mapView;
-}
-sf::View& StateGame::getGuiView() {
-	return game->getGuiView();
-}
-
-TileSet* StateGame::getTileset() {
-	return &tileset;
-}
-
 void StateGame::setWorld(World &world) {
 	//Save the old world
 	currentWorld->saveWorld();
@@ -384,19 +372,6 @@ void StateGame::setWorld(World &world) {
 
 	//Set the current world for the player
 	player->setCurrentWorld(currentWorld);
-}
-
-void StateGame::setClicks() {
-	rightClicking = true;
-	leftClicking = true;
-}
-
-World * StateGame::getWorld() {
-	return currentWorld;
-}
-
-SoundManager* StateGame::getSoundManager() {
-	return &soundManager;
 }
 
 StateGame::~StateGame() {
@@ -430,8 +405,5 @@ void StateGame::handleEvent(sf::Event &event) {
 
 }
 
-unsigned int StateGame::getEntityId()
-{
-    nextEntityId++;
-    return (nextEntityId - 1);
-}
+sf::View& StateGame::getGuiView() { return game->getGuiView(); };
+

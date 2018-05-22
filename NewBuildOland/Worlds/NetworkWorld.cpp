@@ -1,5 +1,5 @@
 #include "NetworkWorld.h"
-#include "../Utils/NetworkManager.h"
+
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -18,7 +18,7 @@ NetworkWorld::~NetworkWorld()
 void NetworkWorld::generateWorld()
 {
     std::cout << "Sending a request to get world data" << std::endl;
-    if (!NetworkManager::askForWorld())
+    if (!getNetworkManager()->askForWorld())
     {
         worldSize = sf::Vector2u(1, 1);
         playerPos = sf::Vector2u();
@@ -27,7 +27,7 @@ void NetworkWorld::generateWorld()
         std::cout << "Failed to ask for the world" << std::endl;
         return;
     }
-    sf::Packet pack = NetworkManager::syncReceive();
+    sf::Packet pack = getNetworkManager()->syncReceive();
     unsigned xsize, ysize;
     pack >> xsize >> ysize;
     worldSize = sf::Vector2u(xsize, ysize);

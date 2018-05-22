@@ -4,7 +4,7 @@
 class TNTEntity : public Entities
 {
     public:
-        TNTEntity(World* world, sf::Vector2u pos);
+        TNTEntity(World* world, unsigned id, sf::Vector2u pos);
         virtual ~TNTEntity();
         void update(double delta) override;
 

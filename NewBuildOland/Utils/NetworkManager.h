@@ -8,25 +8,25 @@ class NetworkManager
     public:
         static const unsigned short PORT = 54321;
 
-        static bool connect(char nick[16]);
-        static bool disconnect();
-        static inline bool isConnected() { return connected; };
+        bool connect(char nick[16]);
+        bool disconnect();
+        inline bool isConnected() { return connected; };
         //All send functions
-        static inline bool askForWorld()
+        inline bool askForWorld()
         {
             return oneCodeSend(REQUEST_WORLD);
         };
         //All synced (not asnychronous) receive functions
-        static inline sf::Packet syncReceive()
+        inline sf::Packet syncReceive()
         {
             sf::Packet p;
             server.receive(p);
             return p;
         };
     private:
-        static sf::TcpSocket server;
-        static bool connected;
-        static bool oneCodeSend(int code);
+        sf::TcpSocket server;
+        bool connected;
+        bool oneCodeSend(int code);
 
         //All message codes
         static const int DISCONNECT = 0;

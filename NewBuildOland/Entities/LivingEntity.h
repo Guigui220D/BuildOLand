@@ -11,7 +11,7 @@ class LivingEntity : public PhysicEntity {
 //Has also an inventory, health
 
 public:
-    LivingEntity(World *world, unsigned short maxHealth, unsigned short inventorySize);
+    LivingEntity(World *world, unsigned id, unsigned short maxHealth, unsigned short inventorySize);
     void init(float posX, float posY);
 
     void update(double dt) override;

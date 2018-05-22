@@ -4,7 +4,7 @@
 class PhysicEntity : public Entities
 {
 public:
-	PhysicEntity(World *world);
+	PhysicEntity(World *world, unsigned id);
 	~PhysicEntity();
 	void update(double delta) override;
 	int touchesBlock();

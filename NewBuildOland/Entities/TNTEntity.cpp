@@ -1,8 +1,8 @@
 #include "TNTEntity.h"
 #include "../Events/EventManager.h"
 
-TNTEntity::TNTEntity(World* world, sf::Vector2u pos)
-    : Entities(world)
+TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2u pos)
+    : Entities(world, id)
 {
     worldPos = pos;
     fuse.restart();

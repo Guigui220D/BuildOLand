@@ -1,6 +1,8 @@
 #pragma once
 #include "World.h"
 #include "SFML/Network.hpp"
+#include "../Utils/NetworkManager.h"
+#include "../States/StateGame.h"
 
 class NetworkWorld : public World
 {
@@ -12,6 +14,8 @@ class NetworkWorld : public World
 
         bool loadWorld() override;
         bool saveWorld() override;
+
+        inline NetworkManager* getNetworkManager() { return stateGame->getNetworkManager(); };
 
     protected:
 

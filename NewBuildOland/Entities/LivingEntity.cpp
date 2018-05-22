@@ -3,8 +3,8 @@
 #include "../States/StateGame.h"
 #include "../Events/EventManager.h"
 
-LivingEntity::LivingEntity(World *world, unsigned short maxHealth, unsigned short inventorySize)
-    : PhysicEntity(world)
+LivingEntity::LivingEntity(World *world, unsigned id, unsigned short maxHealth, unsigned short inventorySize)
+    : PhysicEntity(world, id)
     , inventory(inventorySize)
     , health(maxHealth)
 {

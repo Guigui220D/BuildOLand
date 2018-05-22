@@ -2,9 +2,6 @@
 #include <iostream>
 #include <string>
 
-sf::TcpSocket NetworkManager::server;
-bool NetworkManager::connected = false;
-
 bool NetworkManager::connect(char nick[16])
 {
     if (connected)

@@ -10,7 +10,7 @@ MazeWorld::MazeWorld(StateGame& stateGame)
 	playerPos = sf::Vector2u(1, 1);
 
 	{
-	    BlackWarrior* blackWarrior = new BlackWarrior(this);
+	    BlackWarrior* blackWarrior = new BlackWarrior(this, 0);
         blackWarrior->init(4.0f, 0.0f);
         entities.push_back(blackWarrior);
 	}
