@@ -1,4 +1,4 @@
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Title.png)
+![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Title.png)
 
 # BuildOLand
 
@@ -12,6 +12,6 @@ There is an old version of this game that Guigui220D made, that is technically f
 https://guiguii.itch.io/buildoland
 
 ### Some screenshots :
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/house.PNG)
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/tnt.PNG)
-![Title image](https://github.com/BuildOLand/BuildOLand/blob/master/Screenshots/thing.PNG)
+![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/house.PNG)
+![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/tnt.PNG)
+![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/thing.PNG)
