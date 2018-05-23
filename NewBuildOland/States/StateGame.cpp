@@ -3,13 +3,12 @@
 #include "../Worlds/MazeWorld.h"
 #include "../Worlds/NetworkWorld.h"
 #include <iostream>
-#include "../Events/EventManager.h"
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
-#include "../Events/GroundPlaceEvent.h"
 #include <math.h>
 
+#include "../Events/EventManager.h"
 
 
 StateGame::StateGame(Game& g, bool online)
@@ -114,44 +113,51 @@ void StateGame::handleInput() {
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
-					if (clickX >= 0 && clickY >= 0 && currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0) {
-						//Remove block from player Inventory
-						Inventory *inventory = player->getInventory();
-						ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
-						Item *selectedItem = selectedItemStack->getItem();
+					if (clickX >= 0 && clickY >= 0)
+                    {
+                        if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0)
+                        {
+                            //Remove block from player Inventory
+                            Inventory *inventory = player->getInventory();
+                            ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
+                            Item *selectedItem = selectedItemStack->getItem();
 
-                        //If it isn't empty, and is a placeable
-                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable()) {
-							bool isGround = selectedItem->isGround();
-                            //We remove an item (that was placed)
-							selectedItemStack->remove();
-							//Get the id from the tileset
-							unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
-																  : tileset.getBlockIdByName(selectedItem->getName());
-							if(isGround) {
-                                //Get the old ground
-                                unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
-								//Send an event that the ground was placed
-								EventManager::OnGroundPlace(
-										GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, player, this));
-								//Place the ground
-								currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
-                                //Add the old ground to the inventory (the one that you should get when you break it)
-                                player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)->getGroundOnBreak(this)));
+                                //If it isn't empty, and is a placeable
+                            if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable())
+                            {
+                                bool isGround = selectedItem->isGround();
+                                //We remove an item (that was placed)
+                                selectedItemStack->remove();
+                                //Get the id from the tileset
+                                unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
+                                                                        : tileset.getBlockIdByName(selectedItem->getName());
+                                if(isGround)
+                                {
+                                    //Get the old ground
+                                    unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
+                                    //Send an event that the ground was placed
+                                    EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, player, this));
+                                    //Place the ground
+                                    currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
+                                    //Add the old ground to the inventory (the one that you should get when you break it)
+                                    player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)->getGroundOnBreak(this)));
 
-							} else {
-								//Send an event that the block was placed
-								EventManager::OnBlockBuild(
-										BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, player, this));
-								//Place the block
-								currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
-							}
-							//And finally we update the inventory gui
-							inventoryGui->updateInventory();
-
-						}
-
-						//currentWorld->saveWorld();
+                                }
+                                else
+                                {
+                                    //Send an event that the block was placed
+                                    EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, player, this));
+                                    //Place the block
+                                    currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
+                                }
+                                //And finally we update the inventory gui
+                                inventoryGui->updateInventory();
+                            }
+                        }
+                        else
+                        {
+                            EventManager::OnBlockInteract(BlockInteractEvent(sf::Vector2u(clickX, clickY), currentWorld->getBlockId(sf::Vector2u(clickX, clickY)), player, this));
+                        }
 					}
 				}
 			}
@@ -180,16 +186,19 @@ void StateGame::handleInput() {
                     //Get the block that was clicked on
                     unsigned short selectedBlockId = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
 
-                    if (clickX >= 0 && clickY >= 0 && selectedBlockId  != 0) {
+                    if (clickX >= 0 && clickY >= 0)
+                    {
+                        if (selectedBlockId  != 0)
+                        {
+                            currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
+                            EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, player, this));
 
-						currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-						EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, player, this));
-
-                        //Add the block to the inventory that you should get when you break it
-                        player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)->getBlockOnBreak(this)));
-						//And update the inventoryGui
-						inventoryGui->updateInventory();
-						//currentWorld->saveWorld();
+                            //Add the block to the inventory that you should get when you break it
+                            player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)->getBlockOnBreak(this)));
+                            //And update the inventoryGui
+                            inventoryGui->updateInventory();
+                            //currentWorld->saveWorld();
+                        }
 					}
 				}
 			}

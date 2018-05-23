@@ -8,6 +8,4 @@ class TNTBlock : public Block
         TNTBlock(sf::IntRect textureRect, sf::IntRect faceRect);
         ~TNTBlock();
         virtual void onBlockInteract(BlockInteractEvent e) override;
-
-    void onBlockBreak(BlockBreakEvent e) override;
 };
