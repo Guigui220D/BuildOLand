@@ -3,6 +3,7 @@
 
 
 #include "StateBase.h"
+#include "../Gui/MenuButton.h"
 
 class StateMenu : public StateBase {
 
@@ -14,18 +15,19 @@ public:
     void draw(sf::RenderWindow &window) override;
 
 private:
-    sf::Texture backgroundImage;
-    sf::Sprite backgroundSprite;
+    sf::Texture tilesetTexture;
+    sf::RectangleShape backgroundRect;
 
     sf::Texture logo;
     sf::Sprite logoSprite;
 
-    sf::Font font;
-    sf::Text text;
+    MenuButton buttonLocal;
+    MenuButton buttonMultiplayer;
 
     float elapsedTime = 0;
 
     bool isSpacePressed = false;
+    bool isMouseLeftClicked = false;
 };
 
 

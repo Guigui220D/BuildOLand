@@ -20,7 +20,7 @@ public:
     unsigned static const int TILE_SIZE = 100;
 	const float TILE_SIZE_FLOAT = 100.0f;
 
-	StateGame(Game& g, bool online);
+	StateGame(Game& game, bool online);
 	~StateGame();
 
 	void handleInput()					override;

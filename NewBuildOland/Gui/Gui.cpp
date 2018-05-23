@@ -1,7 +1,7 @@
 #include "Gui.h"
 #include <iostream>
 
-Gui::Gui(StateGame* game) : stateGame(game)
+Gui::Gui(StateGame* stateGame) : stateGame(stateGame)
 {
 }
 
@@ -11,4 +11,16 @@ Gui::~Gui()
 
 void Gui::eventResize() {
 
+}
+
+bool Gui::isReleased(sf::Vector2i mousePos) {
+    return false;
+}
+
+bool Gui::isActive(sf::Vector2i mousePos) {
+    return false;
+}
+
+bool Gui::isHovered(sf::Vector2i mousePos) {
+    return false;
 }

@@ -1,19 +1,22 @@
+#include <cmath>
 #include "StateMenu.h"
 #include "../Game.h"
 
-StateMenu::StateMenu(Game &game) : StateBase(game) {
+StateMenu::StateMenu(Game &game) : StateBase(game)
+    , buttonLocal(this, "Local", sf::Vector2f(0, -100))
+    , buttonMultiplayer(this, "Multiplayer", sf::Vector2f(0, 100))
+{
+    game.getWindow().setMouseCursorVisible(true);
 
     //Load background image
-    if (!backgroundImage.loadFromFile("Res/menubackground.jpg"))
+    if (!tilesetTexture.loadFromFile("Res/newTileset.png"))
     {
-        std::cout << "ERROR LOADING FROM 'Res/menubackground.jpg'" << std::endl;
+        std::cout << "ERROR LOADING FROM 'Res/newTileset.png'" << std::endl;
     }
-    backgroundSprite.setTexture(backgroundImage);
-    float backgroundWidth = backgroundSprite.getLocalBounds().width;
-    float backgroundHeight = backgroundSprite.getLocalBounds().height;
-    float backgroundScale = 0.7;
-    backgroundSprite.scale(backgroundScale, backgroundScale);
-    backgroundSprite.setPosition(- backgroundWidth / 2 * backgroundScale, - backgroundHeight / 2 * backgroundScale);
+    backgroundRect.setTexture(&tilesetTexture);
+    backgroundRect.setTextureRect(sf::IntRect(69, 1, 32, 32));
+    backgroundRect.setSize(sf::Vector2f(StateGame::TILE_SIZE, StateGame::TILE_SIZE));
+    backgroundRect.setPosition(0, 0);
 
     //Loading buildoland logo
     if (!logo.loadFromFile("Res/logo.png"))
@@ -26,44 +29,67 @@ StateMenu::StateMenu(Game &game) : StateBase(game) {
     logoSprite.scale(logoScale, logoScale);
     logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
 
-
-    //Load text
-    font.loadFromFile("Res/Font/lucon.ttf");
-    text.setFont(font);
-    text.setFillColor(sf::Color::Black);
-    text.setCharacterSize(35);
-    text.setString("Press <SPACE> to start the game !");
-    text.setPosition(-text.getLocalBounds().width / 2, 0);
 }
 
 void StateMenu::handleInput() {
-    if(sf::Keyboard::isKeyPressed(Keyboard::Space) && !isSpacePressed) {
+    Vector2i mousePos = sf::Mouse::getPosition(game->getWindow());
 
-        //Init the state game
-        game->setCurrentState(new StateGame(*game, false));
-        isSpacePressed = true;
-    } else if(!sf::Keyboard::isKeyPressed(Keyboard::Space)){
-        isSpacePressed = false;
+    //Handle onHover for the guiElements
+    buttonMultiplayer.isHovered(mousePos);
+    buttonLocal.isHovered(mousePos);
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        if(!isMouseLeftClicked) {
+            //Just got clicked
+            buttonMultiplayer.isActive(mousePos);
+            buttonLocal.isActive(mousePos);
+        }
+        isMouseLeftClicked = true;
+
+    } else {
+        if(isMouseLeftClicked) {
+            //Just released the click
+            isMouseLeftClicked = false;
+
+            //Send the event to the gui
+            if(buttonLocal.isReleased(mousePos)) {
+                //init the stategame as a local game
+                game->setCurrentState(new StateGame(*game, false));
+            }
+            if(buttonMultiplayer.isReleased(mousePos)) {
+                //init the stategame as an online game
+                game->setCurrentState(new StateGame(*game, true));
+            }
+        }
     }
+
 }
 
 void StateMenu::update(float dt) {
-    elapsedTime+= dt;
-    if(elapsedTime > 2.0f) {
-        elapsedTime = 0.0f;
-        text.setString("Press <SPACE> to start the game !");
-        text.setPosition(-text.getLocalBounds().width / 2, 0);
-    } else if(elapsedTime > 1.0f) {
-        text.setString(" > Press <SPACE> to start the game ! <");
-        text.setPosition(-text.getLocalBounds().width / 2 - 4.5f, 0);
-    }
+    buttonLocal.update(dt);
+    buttonMultiplayer.update(dt);
 }
 
 void StateMenu::draw(sf::RenderWindow &window) {
     window.setView(game->getWorldView());
 
-    window.draw(backgroundSprite);
+    //======== BACKGROUND TILES ========//
+    //Numbers of tiles you can fit into the width and height
+    int rectNbX = ceil(window.getView().getSize().x / backgroundRect.getSize().x);
+    int rectNbY = ceil(window.getView().getSize().y / backgroundRect.getSize().y);
 
+    //Draw each tile
+    float rectSize = backgroundRect.getSize().x;
+    for(int x = -rectNbX / 2; x < rectNbX / 2 + 1; x++) {
+        for(int y = -rectNbY / 2; y < rectNbY / 2 + 2; y++) {
+
+            //From the center as origin, we draw in the x and y axis the grass texture.
+            backgroundRect.setPosition(-rectSize / 2.0f - x * rectSize, -rectSize / 2.0f - y * rectSize);
+            window.draw(backgroundRect);
+        }
+    }
+
+    //============= LOGO =============//
     //Draw the logo shadow
     sf::Vector2f logoPos = logoSprite.getPosition();
     logoSprite.setColor(sf::Color(0, 0, 0, 100));
@@ -74,5 +100,8 @@ void StateMenu::draw(sf::RenderWindow &window) {
     logoSprite.setPosition(logoPos.x, logoPos.y);
     window.draw(logoSprite);
 
-    window.draw(text);
+    //And draw the button
+    buttonLocal.draw(window);
+    buttonMultiplayer.draw(window);
+
 }
