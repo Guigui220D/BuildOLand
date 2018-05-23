@@ -35,7 +35,7 @@ public:
 
 	Entities* cameraFollow;
 
-	inline void setClicks() { rightClicking = leftClicking = true; };
+	inline void setClicks() { leftClicking = rightClicking = true; };
 
 	inline World* getWorld() { return currentWorld; };
 
@@ -64,8 +64,8 @@ private:
 	sf::RectangleShape pointer;
 	sf::RectangleShape mouse;
 
-	bool leftClicking = false;
 	bool rightClicking = false;
+	bool leftClicking = false;
 
 	unsigned short inventoryCursorId = 0;
 	bool isPlaceKeyPressed = false;

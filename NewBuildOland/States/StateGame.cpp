@@ -98,9 +98,9 @@ StateGame::StateGame(Game& g, bool online)
 void StateGame::handleInput() {
 	//Temporary, for testing
 	//This is crappy code
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		if (!leftClicking)
+		if (!rightClicking)
 		{
 			//Gets the mouse pos in the window
 			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
@@ -162,15 +162,15 @@ void StateGame::handleInput() {
 				}
 			}
 		}
-		leftClicking = true;
+		rightClicking = true;
 	}
 	else
 	{
-		leftClicking = false;
+		rightClicking = false;
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		if (!rightClicking)
+		if (!leftClicking)
 		{
 			//Gets the mouse pos in the window
 			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
@@ -203,11 +203,11 @@ void StateGame::handleInput() {
 				}
 			}
 		}
-		rightClicking = true;
+		leftClicking = true;
 	}
 	else
 	{
-		rightClicking = false;
+		leftClicking = false;
 	}
 
 	//To change the block being placed (Temporary)
