@@ -8,7 +8,6 @@
 
 ### Less important things to implement :
 - [ ] Maze generator
-- [ ] Add an interactBlockEvent
 
 ### Completed :
 - [x] Create proper todo list
@@ -18,3 +17,4 @@
 - [x] Give entites a pointer to their StateGame (through world)
 - [x] Sound manager
 - [x] Inventory
+- [x] Add an interactBlockEvent
