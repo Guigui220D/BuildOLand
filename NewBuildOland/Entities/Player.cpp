@@ -18,7 +18,7 @@ void Player::initInventory(World* currentWorld) {
     TileSet* tileset = currentWorld->getStateGame()->getTileset();
     inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(3), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
