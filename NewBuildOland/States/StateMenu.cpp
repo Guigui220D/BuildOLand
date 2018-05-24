@@ -40,7 +40,7 @@ void StateMenu::handleInput() {
     if(sf::Keyboard::isKeyPressed(Keyboard::Space) && !isSpacePressed) {
 
         //Init the state game
-        game->setCurrentState(new StateGame(*game, false));
+        game->setCurrentState(new StateGame(*game, true));
         isSpacePressed = true;
     } else if(!sf::Keyboard::isKeyPressed(Keyboard::Space)){
         isSpacePressed = false;

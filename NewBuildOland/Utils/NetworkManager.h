@@ -25,7 +25,7 @@ class NetworkManager
         };
     private:
         sf::TcpSocket server;
-        bool connected;
+        bool connected = false;
         bool oneCodeSend(int code);
 
         //All message codes

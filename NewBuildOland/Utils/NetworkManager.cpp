@@ -16,6 +16,7 @@ bool NetworkManager::connect(char nick[16])
         std::cout << "Failed to connect" << std::endl;
         return false;
     }
+    std::cout << "Connected to the server" << std::endl;
     //Request a connection with the nickname
     {
         sf::Packet p;

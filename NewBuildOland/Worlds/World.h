@@ -46,6 +46,7 @@ public:
         nextEntityId++;
         return nextEntityId - 1;
     }
+    Entities* getEntityById(unsigned int id);
 
 	//Call for telling the other methods that the world is deleted
 	void setDeleted();

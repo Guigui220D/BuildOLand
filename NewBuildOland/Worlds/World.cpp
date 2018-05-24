@@ -232,3 +232,17 @@ void World::addEntity(Entities* entity)
     entities.push_back(entity);
 }
 
+Entities* World::getEntityById(unsigned int id)
+{
+    Entities* rep = nullptr;
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (entities.at(i)->getID() == id)
+        {
+            rep = entities.at(i);
+            break;
+        }
+    }
+    return rep;
+}
+
