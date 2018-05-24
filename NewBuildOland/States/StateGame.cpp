@@ -11,10 +11,12 @@
 #include "../Events/EventManager.h"
 
 
-StateGame::StateGame(Game& g, bool online)
-	: StateBase(g)
+StateGame::StateGame(Game& game, bool online)
+	: StateBase(game)
 {
-    onlineMode = online;
+	game.getWindow().setMouseCursorVisible(false);
+
+	onlineMode = online;
 
 	if (onlineMode)
     {
@@ -56,7 +58,7 @@ StateGame::StateGame(Game& g, bool online)
 	mapFrame.setOutlineThickness(0.005f);
 	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
-	mapView.setSize(game->getWorldView().getSize());
+	mapView.setSize(game.getWorldView().getSize());
 	mapView.zoom(3);
 
 	worldDraw = sf::RectangleShape();
@@ -98,9 +100,9 @@ StateGame::StateGame(Game& g, bool online)
 void StateGame::handleInput() {
 	//Temporary, for testing
 	//This is crappy code
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		if (!leftClicking)
+		if (!rightClicking)
 		{
 			//Gets the mouse pos in the window
 			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
@@ -162,15 +164,15 @@ void StateGame::handleInput() {
 				}
 			}
 		}
-		leftClicking = true;
+		rightClicking = true;
 	}
 	else
 	{
-		leftClicking = false;
+		rightClicking = false;
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		if (!rightClicking)
+		if (!leftClicking)
 		{
 			//Gets the mouse pos in the window
 			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
@@ -183,7 +185,7 @@ void StateGame::handleInput() {
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
-                    //Get the block that was clicked on
+                    //Get the block that was released on
                     unsigned short selectedBlockId = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
 
                     if (clickX >= 0 && clickY >= 0)
@@ -203,11 +205,11 @@ void StateGame::handleInput() {
 				}
 			}
 		}
-		rightClicking = true;
+		leftClicking = true;
 	}
 	else
 	{
-		rightClicking = false;
+		leftClicking = false;
 	}
 
 	//To change the block being placed (Temporary)

@@ -23,8 +23,6 @@ Game::Game()
 
 	updateView();
 
-	window.setMouseCursorVisible(false);
-
 	currentState = new StateMenu(*this);
 }
 

@@ -12,6 +12,6 @@ There is an old version of this game that Guigui220D made, that is technically f
 https://guiguii.itch.io/buildoland
 
 ### Some screenshots :
-![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/house.PNG)
-![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/tnt.PNG)
-![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Screenshots/thing.PNG)
+![Title image](https://cdn.discordapp.com/attachments/374301369273679873/448890329907855360/house.PNG)
+![Title image](https://cdn.discordapp.com/attachments/374301369273679873/448890326984294400/tnt.PNG)
+![Title image](https://cdn.discordapp.com/attachments/374301369273679873/448890314812424203/thing.PNG)
