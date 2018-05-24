@@ -18,6 +18,8 @@ public:
     bool isHovered(sf::Vector2i mousePos) override;
     bool isActive(sf::Vector2i mousePos) override;
 
+    void eventResize() override;
+
 private:
     StateMenu* stateMenu;
 
@@ -30,6 +32,8 @@ private:
     bool hovered = false;
     bool active = false;
     bool released = false;
+
+    bool justGotResized = false;
 };
 
 

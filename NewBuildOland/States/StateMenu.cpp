@@ -105,3 +105,15 @@ void StateMenu::draw(sf::RenderWindow &window) {
     buttonMultiplayer.draw(window);
 
 }
+
+void StateMenu::handleEvent(sf::Event &event) {
+    switch (event.type) {
+        //RESIZE EVENT
+        case sf::Event::Resized:
+            //Send the event to all gui elements
+            buttonMultiplayer.eventResize();
+            buttonLocal.eventResize();
+            break;
+    }
+
+}

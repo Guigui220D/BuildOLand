@@ -14,6 +14,8 @@ public:
     void update(float dt) override;
     void draw(sf::RenderWindow &window) override;
 
+    void handleEvent(sf::Event &event) override;
+
 private:
     sf::Texture tilesetTexture;
     sf::RectangleShape backgroundRect;

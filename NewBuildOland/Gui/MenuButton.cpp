@@ -61,8 +61,11 @@ bool MenuButton::isReleased(sf::Vector2i mousePos) {
     released = pixelPos.x > background.getPosition().x &&
               pixelPos.x < background.getPosition().x + background.getSize().x &&
               pixelPos.y > background.getPosition().y &&
-              pixelPos.y < background.getPosition().y + background.getSize().y;
-
+              pixelPos.y < background.getPosition().y + background.getSize().y &&
+              !justGotResized;
+    if(justGotResized) {
+        justGotResized = false;
+    }
     return released;
 }
 
@@ -91,4 +94,8 @@ bool MenuButton::isHovered(sf::Vector2i mousePos) {
         active = false;
     }
     return hovered;
+}
+
+void MenuButton::eventResize() {
+    justGotResized = true;
 }
