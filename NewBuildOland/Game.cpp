@@ -73,6 +73,8 @@ void Game::run()
 			lastFps = fps;
 		}
 	}
+
+	currentState->onStop();
 }
 
 void Game::updateView()

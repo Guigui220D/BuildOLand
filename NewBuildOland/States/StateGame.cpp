@@ -416,5 +416,11 @@ void StateGame::handleEvent(sf::Event &event) {
 
 }
 
+void StateGame::onStop()
+{
+    if (onlineMode)
+        nManager.disconnect();
+}
+
 sf::View& StateGame::getGuiView() { return game->getGuiView(); };
 

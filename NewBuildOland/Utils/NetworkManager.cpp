@@ -35,7 +35,7 @@ bool NetworkManager::connect(char nick[16])
     //Get the answer
     {
         sf::Packet p = syncReceive();
-        int response = 0;
+        bool response = false;
         p >> response;
         //If accepted, response = 1, else 0
         if (!response)
@@ -75,6 +75,7 @@ bool NetworkManager::disconnect()
     if (!connected)
         return false;
     //TODO: Try to send a disconnect message
+    oneCodeSend(DISCONNECT);
     server.disconnect();
     connected = false;
 }

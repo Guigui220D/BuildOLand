@@ -26,6 +26,7 @@ public:
 	void handleInput()					override;
 	void update(float dt)				override;
 	void draw(sf::RenderWindow &window) override;
+	void onStop()                       override;
 
 	inline sf::View& getMapView() { return mapView; };
 	sf::View& getGuiView();

@@ -15,3 +15,8 @@ Game* StateBase::getGame()
 void StateBase::handleEvent(sf::Event &event) {
 
 }
+
+void StateBase::onStop()
+{
+
+}
