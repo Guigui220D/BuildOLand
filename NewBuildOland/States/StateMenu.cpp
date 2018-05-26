@@ -125,6 +125,8 @@ void StateMenu::handleEvent(sf::Event &event) {
             //Send the event to all gui elements
             buttonMultiplayer.eventResize();
             buttonLocal.eventResize();
+            //Reposition sfml logo
+            sfmlSprite.setPosition(-game->getWorldView().getSize().x / 2 * 0.97f, game->getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.85f);
             break;
     }
 
