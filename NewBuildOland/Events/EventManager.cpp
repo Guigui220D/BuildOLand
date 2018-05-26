@@ -3,6 +3,7 @@
 #include "../States/StateGame.h"
 
 TileSet* EventManager::tileset;
+StateGame* EventManager::state;
 
 EventManager::EventManager()
 {
@@ -19,6 +20,9 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
 
 	//Send event to the block
 	tileset->getBlockById(e.getOldBlock())->onBlockBreak(e);
+
+	if (state->isOnline())
+        state->getNetworkManager()->sendBlockBreak(e.getPosition());
 }
 
 void EventManager::OnBlockBuild(BlockBuildEvent e)
@@ -27,6 +31,9 @@ void EventManager::OnBlockBuild(BlockBuildEvent e)
 
 	//Send event to the block
     tileset->getBlockById(e.getBlock())->onBlockBuild(e);
+
+    if (state->isOnline())
+        state->getNetworkManager()->sendBlockBuild(e.getPosition(), e.getBlock());
 }
 
 void EventManager::OnGroundPlace(GroundPlaceEvent e)
@@ -36,6 +43,9 @@ void EventManager::OnGroundPlace(GroundPlaceEvent e)
 	//Send event to the block
 //    tileset->getGroundById(e.getNewGround())->OnGroundPlaced(e);
 //    tileset->getGroundById(e.getNewGround())->OnGroundRePlaced(e);
+
+    if (state->isOnline())
+        state->getNetworkManager()->sendGroundChange(e.getPosition(), e.getNewGround());
 }
 
 void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)

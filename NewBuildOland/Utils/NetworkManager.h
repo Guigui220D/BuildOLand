@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
-
+#include <iostream>
 
 class NetworkManager
 {
@@ -16,9 +16,13 @@ class NetworkManager
         {
             return oneCodeSend(REQUEST_WORLD);
         };
+        bool sendBlockBuild(sf::Vector2u pos, unsigned short block);
+        bool sendBlockBreak(sf::Vector2u pos);
+        bool sendGroundChange(sf::Vector2u, unsigned short ground);
         //All synced (not asnychronous) receive functions
         inline sf::Packet syncReceive()
         {
+            std::cout << "Received something\n";
             sf::Packet p;
             server.receive(p);
             return p;
@@ -27,6 +31,15 @@ class NetworkManager
         sf::TcpSocket server;
         bool connected = false;
         bool oneCodeSend(int code);
+        inline bool sendPacket(sf::Packet p)
+        {
+            try { server.send(p); }
+            catch (std::exception e)
+            {
+                return false;
+            }
+            return true;
+        }
 
         //All message codes
         static const int DISCONNECT = 0;

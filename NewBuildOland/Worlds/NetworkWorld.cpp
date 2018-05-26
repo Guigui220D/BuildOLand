@@ -30,6 +30,7 @@ void NetworkWorld::generateWorld()
     sf::Packet pack = getNetworkManager()->syncReceive();
     unsigned xsize, ysize;
     pack >> xsize >> ysize;
+    std::cout << "Size " << xsize << " by " << ysize << std::endl;
     worldSize = sf::Vector2u(xsize, ysize);
     playerPos = sf::Vector2u();
 

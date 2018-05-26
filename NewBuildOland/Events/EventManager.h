@@ -8,6 +8,7 @@
 #include "BlockInteractEvent.h"
 
 class TileSet;
+class StateGame;
 
 class EventManager
 {
@@ -22,6 +23,7 @@ public:
 	static void OnBlockInteract(BlockInteractEvent e);
 
 	static TileSet* tileset;
+	static StateGame* state;
 private:
 };
 

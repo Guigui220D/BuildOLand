@@ -1,5 +1,4 @@
 #include "NetworkManager.h"
-#include <iostream>
 #include <string>
 
 bool NetworkManager::connect(char nick[16])
@@ -89,12 +88,39 @@ bool NetworkManager::oneCodeSend(int code)
         return false;
     sf::Packet p;
     p << code;
-    try { server.send(p); }
-    catch (std::exception e)
-    {
-        return false;
-    }
-    return true;
+    return sendPacket(p);
+}
+
+bool NetworkManager::sendBlockBreak(sf::Vector2u pos)
+{
+    sf::Packet p;
+    p << 3; //Edition code
+    p << 0; //Block break code
+    p << pos.x;
+    p << pos.y;
+    return sendPacket(p);
+}
+
+bool NetworkManager::sendBlockBuild(sf::Vector2u pos, unsigned short block)
+{
+    sf::Packet p;
+    p << 3; //Edition code
+    p << 1; //Block build code
+    p << pos.x;
+    p << pos.y;
+    p << block;
+    return sendPacket(p);
+}
+
+bool NetworkManager::sendGroundChange(sf::Vector2u pos, unsigned short ground)
+{
+    sf::Packet p;
+    p << 3; //Edition code
+    p << 0; //Ground place code
+    p << pos.x;
+    p << pos.y;
+    p << ground;
+    return sendPacket(p);
 }
 
 

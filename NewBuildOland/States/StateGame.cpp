@@ -38,6 +38,7 @@ StateGame::StateGame(Game& game, bool online)
 
 	//Init the tileset to the event manager
 	EventManager::tileset = &tileset;
+	EventManager::state = this;
 
 	//Init the sound manager
 	soundManager;
