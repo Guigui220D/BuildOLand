@@ -21,7 +21,9 @@ private:
     sf::RectangleShape backgroundRect;
 
     sf::Texture logo;
+    sf::Texture sfmlLogo;
     sf::Sprite logoSprite;
+    sf::Sprite sfmlSprite;
 
     MenuButton buttonLocal;
     MenuButton buttonMultiplayer;

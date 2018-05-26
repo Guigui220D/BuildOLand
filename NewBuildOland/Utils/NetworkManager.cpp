@@ -35,7 +35,7 @@ bool NetworkManager::connect(char nick[16])
     //Get the answer
     {
         sf::Packet p = syncReceive();
-        bool response = false;
+        bool response = true;
         p >> response;
         //If accepted, response = 1, else 0
         if (!response)
@@ -58,6 +58,9 @@ bool NetworkManager::connect(char nick[16])
                 break;
             case REASON_BANNED:
                 std::cout << "Connection refused, you are banned" << std::endl;
+                break;
+            case REASON_ALREADY_CONNECTED:
+                std::cout << "Connection refused, already connected ???" << std::endl;
                 break;
             default:
                 std::cout << "Connection refused, no reason" << std::endl;

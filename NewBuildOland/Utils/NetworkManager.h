@@ -41,6 +41,8 @@ class NetworkManager
         static const int REASON_SERVER_NOT_READY = 1;
         static const int REASON_SERVER_FULL = 2;
         static const int REASON_NICK_ALREADY_TAKEN = 3;
-        static const int REASON_BANNED = 4;
+        static const int REASON_INVALID_NICK = 4;
+        static const int REASON_BANNED = 5;
+        static const int REASON_ALREADY_CONNECTED = 6;
 
 };

@@ -29,6 +29,14 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     logoSprite.scale(logoScale, logoScale);
     logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
 
+    //Loading sfml logo
+    if (sfmlLogo.loadFromFile("Res/sfml-logo-small.png"))
+    {
+        std::cout << "ERROR LOADING FROM 'Res/sfml-logo-small.png'" << std::endl;
+    }
+    sfmlSprite.setScale(0.75f, 0.75f);
+    sfmlSprite.setTexture(sfmlLogo);
+    sfmlSprite.setPosition(-game.getWorldView().getSize().x / 2 * 0.97f, game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.85f);
 }
 
 void StateMenu::handleInput() {
@@ -100,6 +108,9 @@ void StateMenu::draw(sf::RenderWindow &window) {
     logoSprite.setColor(sf::Color(255, 255, 255, 255));
     logoSprite.setPosition(logoPos.x, logoPos.y);
     window.draw(logoSprite);
+
+    //============= SFML =============//
+    window.draw(sfmlSprite);
 
     //And draw the button
     buttonLocal.draw(window);
