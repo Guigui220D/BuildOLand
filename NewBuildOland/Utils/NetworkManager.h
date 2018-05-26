@@ -2,6 +2,7 @@
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
 #include <iostream>
+#include "PacketCodes.h"
 
 class NetworkManager
 {
@@ -14,7 +15,7 @@ class NetworkManager
         //All send functions
         inline bool askForWorld()
         {
-            return oneCodeSend(REQUEST_WORLD);
+            return oneCodeSend(MainCodes::requestWorld);
         };
         bool sendBlockBuild(sf::Vector2u pos, unsigned short block);
         bool sendBlockBreak(sf::Vector2u pos);
@@ -40,22 +41,5 @@ class NetworkManager
             }
             return true;
         }
-
-        //All message codes
-        static const int DISCONNECT = 0;
-        static const int REQUEST_CONNECTION = 1;
-        static const int REQUEST_WORLD = 2;
-
-        static const int CONNECT_REFUSED = 0;
-        static const int CONNECT_ACCEPT = 1;
-
-        //Connection refused codes
-        static const int REASON_NULL = 0;
-        static const int REASON_SERVER_NOT_READY = 1;
-        static const int REASON_SERVER_FULL = 2;
-        static const int REASON_NICK_ALREADY_TAKEN = 3;
-        static const int REASON_INVALID_NICK = 4;
-        static const int REASON_BANNED = 5;
-        static const int REASON_ALREADY_CONNECTED = 6;
 
 };
