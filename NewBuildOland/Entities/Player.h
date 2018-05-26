@@ -8,15 +8,20 @@
 class Player : public LivingEntity
 {
 public:
-	Player(World *world);
+	Player(World *world, sf::String displayName);
 	~Player();
+	void drawMore(sf::RenderWindow& window) override;
 
 	inline void setCurrentWorld(World* newWorld) { currentWorld = newWorld; };
+
+	inline sf::String getDisplayName() { return nameText.getString(); };
 
 private:
 	sf::Vector2u lastPos;
 
 	void initInventory(World* currentWorld);
+
+	sf::Font font;
 
 protected:
 	std::string getTextureName() override;
@@ -27,5 +32,7 @@ protected:
 	std::vector<IntRect> getWestWalkAnim() override;
 
 	void updateMovement(double dt) override;
+
+	sf::Text nameText; //Display name
 };
 

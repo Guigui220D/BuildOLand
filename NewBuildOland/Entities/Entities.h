@@ -13,6 +13,7 @@ public:
 	sf::CircleShape* getOnMap();
 	inline void setOnMapColor(sf::Color color) { onMap.setFillColor(color); };
 	void setOnMapRadius(float radius) { onMap.setRadius(radius); };
+	virtual void drawMore(sf::RenderWindow& window);
 
 	sf::Vector2f getWorldPos();
 

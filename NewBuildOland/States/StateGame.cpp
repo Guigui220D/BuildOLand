@@ -82,7 +82,7 @@ StateGame::StateGame(Game& game, bool online)
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
 
-	player = new Player(currentWorld);
+	player = new Player(currentWorld, "Player");
 	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
 	cameraFollow = player;
 
@@ -292,9 +292,13 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 	//Draw all entities
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
-		window.draw(*(currentWorld->getEntities()[i]));
+    {
+        window.draw(*(currentWorld->getEntities()[i]));
+        (*currentWorld->getEntities()[i]).drawMore(window);
+    }
 	//And draw the player
 	window.draw(*player);
+	player->drawMore(window);
 
 	//Draw the actual blocks
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
