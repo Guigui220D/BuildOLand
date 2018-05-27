@@ -71,7 +71,7 @@ void StateMenu::handleInput() {
                 //init the stategame as a local game
                 game->setCurrentState(new StateGame(*game, false));
             }
-            if(buttonMultiplayer.isReleased(mousePos)) {
+            else if(buttonMultiplayer.isReleased(mousePos)) {
                 //init the stategame as an online game
                 game->setCurrentState(new StateGame(*game, true, nickInput.getInputText(), adressInput.getInputText()));
             }
