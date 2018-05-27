@@ -13,6 +13,7 @@
 
 StateGame::StateGame(Game& game, bool online)
 	: StateBase(game)
+	, nManager(this)
 {
 	game.getWindow().setMouseCursorVisible(false);
 

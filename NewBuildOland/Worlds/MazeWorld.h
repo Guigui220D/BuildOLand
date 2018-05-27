@@ -7,7 +7,7 @@ public:
 	MazeWorld(StateGame& stateGame);
 	~MazeWorld();
 
-	void generateWorld() override;
+	void generateWorld(sf::Packet p = sf::Packet()) override;
 
 private:
 };

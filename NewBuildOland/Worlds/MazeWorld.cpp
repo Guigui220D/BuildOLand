@@ -21,7 +21,10 @@ MazeWorld::~MazeWorld()
 {
 }
 
-void MazeWorld::generateWorld() {
+void MazeWorld::generateWorld(sf::Packet p) {
+    //Clear the world
+    groundIds.clear();
+    blockIds.clear();
 	//Set the world size
 	worldSize = sf::Vector2u(240, 240);
 	unsigned short const DEFAULT_GROUND = 3;

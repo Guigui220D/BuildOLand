@@ -4,10 +4,14 @@
 #include <iostream>
 #include "PacketCodes.h"
 
+class StateGame;
+
 class NetworkManager
 {
     public:
         static const unsigned short PORT = 54321;
+
+        NetworkManager(StateGame* stategame);
 
         bool connect(char nick[16]);
         bool disconnect();
@@ -20,7 +24,7 @@ class NetworkManager
         bool sendBlockBuild(sf::Vector2u pos, unsigned short block);
         bool sendBlockBreak(sf::Vector2u pos);
         bool sendGroundChange(sf::Vector2u, unsigned short ground);
-        //All synced (not asnychronous) receive functions
+        //Receive functions
         inline sf::Packet syncReceive()
         {
             std::cout << "Received something\n";
@@ -28,6 +32,7 @@ class NetworkManager
             server.receive(p);
             return p;
         };
+
     private:
         sf::TcpSocket server;
         bool connected = false;
@@ -41,5 +46,11 @@ class NetworkManager
             }
             return true;
         }
+
+        sf::Thread receiveThread;   //Functions to receive data
+        void receive();
+
+        StateGame* game;
+
 
 };

@@ -1,5 +1,13 @@
 #include "NetworkManager.h"
 #include <string>
+#include "../States/StateGame.h"
+
+
+NetworkManager::NetworkManager(StateGame* stategame)
+    : receiveThread(&receive, this)
+{
+    game = stategame;
+}
 
 bool NetworkManager::connect(char nick[16])
 {
@@ -72,6 +80,7 @@ bool NetworkManager::connect(char nick[16])
         }
     }
     connected = true;
+    receiveThread.launch();
     return true;
 }
 
@@ -79,10 +88,54 @@ bool NetworkManager::disconnect()
 {
     if (!connected)
         return false;
-    //TODO: Try to send a disconnect message
+    receiveThread.terminate();
     oneCodeSend(MainCodes::disconnect);
     server.disconnect();
     connected = false;
+    std::cout << "Dz\n";
+    return true;
+}
+
+void NetworkManager::receive()
+{
+    std::cout << "Started receive thread\n";
+    while (1)
+    {
+        sf::Packet rec;
+        if (server.receive(rec) == sf::Socket::Done)
+        {
+            int code;
+            rec >> code;
+            std::cout << "Received code " << code << "\n";
+            switch (code)
+            {
+            case MainCodes::edition:
+                {
+                    int editionCode = 0;
+                    rec >> editionCode;
+                    unsigned int x = 0, y = 0;
+                    unsigned short id = 0;
+                    rec >> x >> y >> id;
+                    switch (editionCode)
+                    {
+                    case EditionCodes::setBlock:
+                        game->getWorld()->setBlockId(sf::Vector2u(x, y), id);
+                        break;
+
+                    case EditionCodes::setGround:
+                        game->getWorld()->setGroundId(sf::Vector2u(x, y), id);
+                        break;
+                    }
+                }
+                break;
+
+                case MainCodes::sendWorld:
+                    {
+                        game->getWorld()->generateWorld(rec);
+                    }
+            }
+        }
+    }
 }
 
 bool NetworkManager::oneCodeSend(int code)

@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\system.hpp>
+#include <SFML\Network.hpp>
 #include <vector>
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
@@ -20,7 +21,7 @@ public:
 	virtual bool saveWorld();
 
 	//Method that generates the world procedurally
-	virtual void generateWorld() = 0;
+	virtual void generateWorld(sf::Packet p = sf::Packet()) = 0;
 
 	unsigned short getGroundId(unsigned short x, unsigned short y);
 	unsigned short getGroundId(sf::Vector2u pos);

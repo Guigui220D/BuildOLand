@@ -13,7 +13,10 @@ FlatWorld::~FlatWorld()
 {
 }
 
-void FlatWorld::generateWorld() {
+void FlatWorld::generateWorld(sf::Packet p) {
+    //Clear the world
+    groundIds.clear();
+    blockIds.clear();
 	//Set the world size
 	worldSize = sf::Vector2u(2000, 2000);
 	playerPos = sf::Vector2u(1, 1);
