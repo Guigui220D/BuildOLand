@@ -4,6 +4,7 @@
 
 #include "StateBase.h"
 #include "../Gui/MenuButton.h"
+#include "../Gui/TextInput.h"
 
 class StateMenu : public StateBase {
 
@@ -27,6 +28,8 @@ private:
 
     MenuButton buttonLocal;
     MenuButton buttonMultiplayer;
+    TextInput nickInput;
+    TextInput adressInput;
 
     float elapsedTime = 0;
 

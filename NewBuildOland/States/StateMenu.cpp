@@ -5,6 +5,8 @@
 StateMenu::StateMenu(Game &game) : StateBase(game)
     , buttonLocal(this, "Local", sf::Vector2f(0, -100))
     , buttonMultiplayer(this, "Multiplayer", sf::Vector2f(0, 100))
+    , nickInput(this, sf::Vector2f(0, 200), "Username", 16)
+    , adressInput(this, sf::Vector2f(0, 300), "Adress:port", 0)
 {
     game.getWindow().setMouseCursorVisible(true);
 
@@ -30,13 +32,14 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
 
     //Loading sfml logo
-    if (sfmlLogo.loadFromFile("Res/sfml-logo-small.png"))
+    if (!sfmlLogo.loadFromFile("Res/sfml-logo-small.png"))
     {
         std::cout << "ERROR LOADING FROM 'Res/sfml-logo-small.png'" << std::endl;
     }
-    sfmlSprite.setScale(0.75f, 0.75f);
+    sfmlSprite.setScale(0.5f, 0.5f);
     sfmlSprite.setTexture(sfmlLogo);
-    sfmlSprite.setPosition(-game.getWorldView().getSize().x / 2 * 0.97f, game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.85f);
+    sfmlSprite.setPosition(-game.getWorldView().getSize().x / 2 * 0.97f,
+                            game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
 }
 
 void StateMenu::handleInput() {
@@ -45,12 +48,16 @@ void StateMenu::handleInput() {
     //Handle onHover for the guiElements
     buttonMultiplayer.isHovered(mousePos);
     buttonLocal.isHovered(mousePos);
+    nickInput.isHovered(mousePos);
+    adressInput.isHovered(mousePos);
 
     if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
         if(!isMouseLeftClicked) {
             //Just got clicked
             buttonMultiplayer.isActive(mousePos);
             buttonLocal.isActive(mousePos);
+            nickInput.isActive(mousePos);
+            adressInput.isActive(mousePos);
         }
         isMouseLeftClicked = true;
 
@@ -66,7 +73,7 @@ void StateMenu::handleInput() {
             }
             if(buttonMultiplayer.isReleased(mousePos)) {
                 //init the stategame as an online game
-                game->setCurrentState(new StateGame(*game, true));
+                game->setCurrentState(new StateGame(*game, true, nickInput.getInputText(), adressInput.getInputText()));
             }
         }
     }
@@ -77,6 +84,7 @@ void StateMenu::handleInput() {
 void StateMenu::update(float dt) {
     buttonLocal.update(dt);
     buttonMultiplayer.update(dt);
+    nickInput.update(dt);
 }
 
 void StateMenu::draw(sf::RenderWindow &window) {
@@ -115,6 +123,9 @@ void StateMenu::draw(sf::RenderWindow &window) {
     //And draw the button
     buttonLocal.draw(window);
     buttonMultiplayer.draw(window);
+    nickInput.draw(window);
+    adressInput.draw(window);
+
 
 }
 
@@ -125,8 +136,15 @@ void StateMenu::handleEvent(sf::Event &event) {
             //Send the event to all gui elements
             buttonMultiplayer.eventResize();
             buttonLocal.eventResize();
+            nickInput.eventResize();
+            adressInput.eventResize();
             //Reposition sfml logo
-            sfmlSprite.setPosition(-game->getWorldView().getSize().x / 2 * 0.97f, game->getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.85f);
+            sfmlSprite.setPosition(-game->getWorldView().getSize().x / 2 * 0.97f,
+                                   game->getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
+            break;
+        case sf::Event::TextEntered:
+            nickInput.eventInput(event.text.unicode);
+            adressInput.eventInput(event.text.unicode);
             break;
     }
 
