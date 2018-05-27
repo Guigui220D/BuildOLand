@@ -20,7 +20,7 @@ public:
     unsigned static const int TILE_SIZE = 100;
 	const float TILE_SIZE_FLOAT = 100.0f;
 
-	StateGame(Game& game, bool online);
+	StateGame(Game& game, bool online, std::string playerName = "Player", std::string adressInput = "");
 	~StateGame();
 
 	void handleInput()					override;

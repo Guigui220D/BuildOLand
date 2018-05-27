@@ -7,11 +7,12 @@
 #include "../Gui/FpsCounter.h"
 #include "../Gui/InventoryGui.h"
 #include <math.h>
-
+#include <cstring>
+#include <sstream>
 #include "../Events/EventManager.h"
 
 
-StateGame::StateGame(Game& game, bool online)
+StateGame::StateGame(Game& game, bool online, std::string playerName, std::string adressInput)
 	: StateBase(game)
 {
 	game.getWindow().setMouseCursorVisible(false);
@@ -20,11 +21,23 @@ StateGame::StateGame(Game& game, bool online)
 
 	if (onlineMode)
     {
+        //Username from string to char array
         char nick[16];
         for (int i = 0; i < 16; i++)
             nick[i] = 0;
-        std::cout << "Input a nickname : \n";
-        std::cin >> nick;
+        strcpy(nick, playerName.c_str());
+
+        //Getting the url and port as separate variables
+        std::string adressUrl;
+        unsigned short adressPort;
+        std::replace(adressInput.begin(), adressInput.end(), ':', ' ');  // replacing ':' by ' '
+        std::stringstream adressStream(adressInput);
+        adressStream >> adressUrl;
+        adressStream >> adressPort;
+
+        std::cout << adressUrl << ":"  << adressPort << std::endl;
+
+        //Usinge the network manager to connect to the server
         std::cout << "Connected = " << nManager.connect(nick) << "\n";
         currentWorld = new NetworkWorld(*this);
     }

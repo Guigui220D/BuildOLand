@@ -28,6 +28,7 @@ class NetworkManager
             server.receive(p);
             return p;
         };
+    
     private:
         sf::TcpSocket server;
         bool connected = false;
