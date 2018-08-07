@@ -17,6 +17,10 @@ class NetworkManager
         bool disconnect();
         inline bool isConnected() { return connected; };
         //All send functions
+        inline bool sendPacket(sf::Packet p)
+        {
+            return socket.send(p, server, PORT) == sf::Socket::Done;
+        }
         inline bool askForWorld()
         {
             return oneCodeSend(MainCodes::requestWorld);
@@ -47,10 +51,6 @@ class NetworkManager
 
         bool connected = false;
         bool oneCodeSend(int code);
-        inline bool sendPacket(sf::Packet p)
-        {
-            return socket.send(p, server, PORT) == sf::Socket::Done;
-        }
 
         sf::Thread receiveThread;   //Functions to receive data
         void receive();

@@ -31,6 +31,7 @@ void Game::run()
 	sf::Clock clk = Clock();
 	sf::Clock fpsClk = Clock();
 	int count = 0;
+	focused = window.hasFocus();
 	//Start the game loop
 	while (window.isOpen())
 	{
@@ -45,17 +46,26 @@ void Game::run()
 				updateView();
 			}
 
+			if (event.type == sf::Event::LostFocus) {
+                focused = false;
+			}
+
+			if (event.type == sf::Event::GainedFocus) {
+                focused = true;
+			}
+
 			//send the event to the current state
 			currentState->handleEvent(event);
 
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
+
 		}
 
 		//Then update everything in that state (positions etc..)
 		//The argument is the time between the last frame (delta time)
-		currentState->update(clk.restart().asSeconds());
+        currentState->update(clk.restart().asSeconds(), focused);
 
 		window.clear();
 		//Finally draw everything on the window after the changes have been made

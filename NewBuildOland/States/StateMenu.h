@@ -11,11 +11,11 @@ class StateMenu : public StateBase {
 public:
     StateMenu(Game &game);
 
-    void handleInput() override;
-    void update(float dt) override;
+    void handleInput()                  override;
+    void update(float dt, bool focused) override;
     void draw(sf::RenderWindow &window) override;
 
-    void handleEvent(sf::Event &event) override;
+    void handleEvent(sf::Event &event)  override;
 
 private:
     sf::Texture tilesetTexture;

@@ -17,11 +17,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
     if (connected)
         return false;
     //Connect
-    try
-    {
-        socket.bind(sf::Socket::AnyPort);
-    }
-    catch (std::exception e)
+    if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
     {
         std::cout << "Failed to connect" << std::endl;
         return false;
@@ -31,11 +27,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
     {
         sf::Packet p;
         p << MainCodes::requestConnection << nick;
-        try
-        {
-            socket.send(p, server, PORT);
-        }
-        catch (std::exception e)
+        if (socket.send(p, server, PORT) != sf::Socket::Done)
         {
             std::cout << "Failed to send a connection request" << std::endl;
             return false;
@@ -95,12 +87,13 @@ bool NetworkManager::disconnect()
     receiveThread.terminate();
     oneCodeSend(MainCodes::disconnect);
     connected = false;
-    std::cout << "Dz\n";
+    std::cout << "Disconnected\n";
     return true;
 }
 
 void NetworkManager::receive()
 {
+    //This is where we handle all incoming packets
     std::cout << "Started receive thread\n";
     while (1)
     {
@@ -158,8 +151,29 @@ void NetworkManager::receive()
                     rec >> id;
                     if (id != playerID)
                     {
-                        game->getWorld()->getEntityById(id)->mustBeRemoved = true;
+                        Entities* ent = game->getWorld()->getEntityById(id);
+                        if (ent == nullptr)
+                        {
+                           std::cout << "Entity with id " << id << " must be removed but doesn't exist.\n";
+                           break;
+                        }
+                        ent->mustBeRemoved = true;
                     }
+                }
+                break;
+
+            case MainCodes::primitivePosPacket:
+                {
+                    float x, y;
+                    unsigned int id;
+                    rec >> x >> y >> id;
+                    Entities* ent = game->getWorld()->getEntityById(id);
+                    if (ent == nullptr)
+                    {
+                        std::cout << "Entity with id " << id << " must be moved but doesn't exist.\n";
+                        break;
+                    }
+                    ent->setPosition(x, y);
                 }
                 break;
             }

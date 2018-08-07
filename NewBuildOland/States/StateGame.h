@@ -24,7 +24,7 @@ public:
 	~StateGame();
 
 	void handleInput()					override;
-	void update(float dt)				override;
+	void update(float dt, bool focused)	override;
 	void draw(sf::RenderWindow &window) override;
 	void onStop()                       override;
 

@@ -11,7 +11,7 @@ public:
 	StateBase(Game& game);
 
 	virtual void handleInput() = 0;
-	virtual void update(float dt) = 0;
+	virtual void update(float dt, bool focused) = 0;
 	virtual void draw(sf::RenderWindow &window) = 0;
 	virtual void handleEvent(sf::Event &event);
 	virtual void onStop();

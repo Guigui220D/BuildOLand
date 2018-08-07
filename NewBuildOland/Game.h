@@ -36,4 +36,5 @@ private:
 	sf::View worldView;
 
 	double lastFps;
+	bool focused;
 };

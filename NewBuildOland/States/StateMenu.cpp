@@ -81,7 +81,7 @@ void StateMenu::handleInput() {
 
 }
 
-void StateMenu::update(float dt) {
+void StateMenu::update(float dt, bool focused) {
     buttonLocal.update(dt);
     buttonMultiplayer.update(dt);
     nickInput.update(dt);
