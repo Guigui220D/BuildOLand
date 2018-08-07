@@ -9,7 +9,7 @@ class StateGame;
 class NetworkManager
 {
     public:
-        static const unsigned short PORT = 54321;
+        static const unsigned short PORT = 54320;
 
         NetworkManager(StateGame* stategame);
 

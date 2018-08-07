@@ -136,9 +136,11 @@ void NetworkManager::receive()
                 {
                     unsigned int id;
                     rec >> id;
+                    char nick[16];
+                    rec >> nick;
                     if (id != playerID)
                     {
-                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), "Player", id);
+                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), nick, id);
                         oplayer->init(0, 0);
                         game->getWorld()->addEntity(oplayer);
                     }
