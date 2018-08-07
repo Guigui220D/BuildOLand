@@ -12,34 +12,35 @@
 #include "../Events/EventManager.h"
 
 
-StateGame::StateGame(Game& game, bool online, std::string playerName, std::string adressInput)
+StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput)
 	: StateBase(game)
 	, nManager(this)
 {
 	game.getWindow().setMouseCursorVisible(false);
 
 	onlineMode = online;
+    char nick[16] = "Player";
 
 	if (onlineMode)
     {
         //Username from string to char array
-        char nick[16];
         for (int i = 0; i < 16; i++)
             nick[i] = 0;
         strcpy(nick, playerName.c_str());
 
         //Getting the url and port as separate variables
-        std::string adressUrl;
-        unsigned short adressPort;
-        std::replace(adressInput.begin(), adressInput.end(), ':', ' ');  // replacing ':' by ' '
-        std::stringstream adressStream(adressInput);
-        adressStream >> adressUrl;
-        adressStream >> adressPort;
+        std::string addressUrl;
+        unsigned short addressPort;
+        std::replace(addressInput.begin(), addressInput.end(), ':', ' ');  // replacing ':' by ' '
+        std::stringstream addressStream(addressInput);
+        addressStream >> addressUrl;
+        addressStream >> addressPort;
 
-        std::cout << adressUrl << ":"  << adressPort << std::endl;
+        std::cout << addressUrl << ":"  << addressPort << std::endl;
+        sf::IpAddress address(addressUrl);
 
         //Usinge the network manager to connect to the server
-        std::cout << "Connected = " << nManager.connect(nick) << "\n";
+        std::cout << "Connected = " << nManager.connect(nick, address, 54321) << "\n";
         currentWorld = new NetworkWorld(*this);
     }
     else
@@ -97,7 +98,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
 
-	player = new Player(currentWorld, "Player");
+	player = new Player(currentWorld, nick);
 	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
 	cameraFollow = player;
 
@@ -153,7 +154,7 @@ void StateGame::handleInput() {
                                     //Get the old ground
                                     unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
                                     //Send an event that the ground was placed
-                                    EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(clickX, clickY), placeableId, oldGroundId, player, this));
+                                    EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(clickX, clickY), oldGroundId, placeableId, player, this));
                                     //Place the ground
                                     currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
                                     //Add the old ground to the inventory (the one that you should get when you break it)

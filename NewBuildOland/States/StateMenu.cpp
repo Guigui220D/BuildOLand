@@ -6,7 +6,7 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     , buttonLocal(this, "Local", sf::Vector2f(0, -100))
     , buttonMultiplayer(this, "Multiplayer", sf::Vector2f(0, 100))
     , nickInput(this, sf::Vector2f(0, 200), "Username", 16)
-    , adressInput(this, sf::Vector2f(0, 300), "Adress:port", 0)
+    , adressInput(this, sf::Vector2f(0, 300), "Address", 0)
 {
     game.getWindow().setMouseCursorVisible(true);
 

@@ -9,9 +9,9 @@ NetworkManager::NetworkManager(StateGame* stategame)
     game = stategame;
 }
 
-bool NetworkManager::connect(char nick[16])
+bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned short port)
 {
-    server = sf::IpAddress::LocalHost; //Temporary
+    server = address; //Temporary
 
     if (connected)
         return false;

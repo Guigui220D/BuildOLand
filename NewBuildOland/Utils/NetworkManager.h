@@ -13,7 +13,7 @@ class NetworkManager
 
         NetworkManager(StateGame* stategame);
 
-        bool connect(char nick[16]);
+        bool connect(char nick[16], sf::IpAddress address, unsigned short port);
         bool disconnect();
         inline bool isConnected() { return connected; };
         //All send functions
