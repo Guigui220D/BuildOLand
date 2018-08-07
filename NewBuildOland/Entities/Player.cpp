@@ -6,8 +6,8 @@
 #include "../Events/PlaceableLeaveEvent.h"
 #include <math.h>
 
-Player::Player(World *world, sf::String displayName)
-	: LivingEntity(world, 0, 20, 9) //Player's id client side is always 0, because it doesn't matter
+Player::Player(World *world, sf::String displayName, unsigned int id)
+	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
 
@@ -128,3 +128,4 @@ void Player::drawMore(sf::RenderWindow& window)
     nameText.setPosition(getPosition() - sf::Vector2f(nameText.getGlobalBounds().width / 2.f, getSize().y));
     window.draw(nameText);
 }
+

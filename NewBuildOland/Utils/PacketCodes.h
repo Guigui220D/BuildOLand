@@ -10,7 +10,10 @@ enum MainCodes
     //Both directions
     edition = 3,             //Break block, build block or change ground
     //Server -> Client
-    sendWorld = 4
+    sendWorld = 4,
+    addEntity = 5,
+    removeEntity = 6,
+    entityAction = 7
 };
 
 enum RefuseCodes

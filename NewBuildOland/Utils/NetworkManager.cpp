@@ -1,6 +1,7 @@
 #include "NetworkManager.h"
 #include <string>
 #include "../States/StateGame.h"
+#include "../Entities/OtherPlayer.h"
 
 
 NetworkManager::NetworkManager(StateGame* stategame)
@@ -80,6 +81,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
             }
             return false;
         }
+        p >> playerID;
     }
     connected = true;
     receiveThread.launch();
@@ -109,7 +111,6 @@ void NetworkManager::receive()
         {
             int code;
             rec >> code;
-            std::cout << "Received code " << code << "\n";
             switch (code)
             {
             case MainCodes::edition:
@@ -135,6 +136,30 @@ void NetworkManager::receive()
             case MainCodes::sendWorld:
                 {
                     game->getWorld()->generateWorld(rec);
+                }
+                break;
+
+            case MainCodes::addEntity:
+                {
+                    unsigned int id;
+                    rec >> id;
+                    if (id != playerID)
+                    {
+                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), "Test", id);
+                        oplayer->init(0, 0);
+                        game->getWorld()->addEntity(oplayer);
+                    }
+                }
+                break;
+
+            case MainCodes::removeEntity:
+                {
+                    unsigned int id;
+                    rec >> id;
+                    if (id != playerID)
+                    {
+                        game->getWorld()->getEntityById(id)->mustBeRemoved = true;
+                    }
                 }
                 break;
             }

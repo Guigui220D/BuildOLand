@@ -45,7 +45,7 @@ public:
 	inline unsigned int getNextEntityId()
     {
         nextEntityId++;
-        return nextEntityId - 1;
+        return nextEntityId;
     }
     Entities* getEntityById(unsigned int id);
 

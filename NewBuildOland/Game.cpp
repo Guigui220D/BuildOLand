@@ -55,7 +55,6 @@ void Game::run()
 
 		//Then update everything in that state (positions etc..)
 		//The argument is the time between the last frame (delta time)
-		if (window.hasFocus())
 		currentState->update(clk.restart().asSeconds());
 
 		window.clear();

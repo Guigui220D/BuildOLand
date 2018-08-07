@@ -8,7 +8,7 @@
 class Player : public LivingEntity
 {
 public:
-	Player(World *world, sf::String displayName);
+	Player(World *world, sf::String displayName, unsigned int id);
 	~Player();
 	void drawMore(sf::RenderWindow& window) override;
 

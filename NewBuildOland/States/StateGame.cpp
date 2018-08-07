@@ -98,7 +98,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	(*t).loadFromFile("Res/hand.png");
 	mouse.setTexture(t);
 
-	player = new Player(currentWorld, nick);
+    player = new Player(currentWorld, nick, nManager.getPlayerID());    //Player id should be 0 if it's offline
 	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
 	cameraFollow = player;
 
@@ -109,8 +109,6 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
 	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
 
-	//Temporary, for save button
-	currentWorld->setBlockId(sf::Vector2u(0, 0), 10);
 }
 
 void StateGame::handleInput() {
@@ -250,8 +248,10 @@ void StateGame::update(float dt) {
 
 	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world
+
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		currentWorld->getEntities()[i]->update(dt);
+
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 
 	//Update the GUI

@@ -39,6 +39,8 @@ class NetworkManager
             return p;
         };
 
+        inline unsigned int getPlayerID() { return playerID; };
+
     private:
         sf::UdpSocket socket;
         sf::IpAddress server;
@@ -54,6 +56,8 @@ class NetworkManager
         void receive();
 
         StateGame* game;
+
+        unsigned int playerID = 0;
 
 
 };

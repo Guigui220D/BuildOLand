@@ -45,4 +45,5 @@ void MazeWorld::generateWorld(sf::Packet p) {
 			}
 		}
 	}
+	setBlockId(0, 0, 10);
 }
