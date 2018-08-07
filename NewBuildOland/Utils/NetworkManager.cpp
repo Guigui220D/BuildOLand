@@ -138,7 +138,7 @@ void NetworkManager::receive()
                     rec >> id;
                     if (id != playerID)
                     {
-                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), "Test", id);
+                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), "Player", id);
                         oplayer->init(0, 0);
                         game->getWorld()->addEntity(oplayer);
                     }
@@ -161,21 +161,23 @@ void NetworkManager::receive()
                     }
                 }
                 break;
-
-            case MainCodes::primitivePosPacket:
+            case MainCodes::entityAction:
                 {
-                    float x, y;
                     unsigned int id;
-                    rec >> x >> y >> id;
-                    Entities* ent = game->getWorld()->getEntityById(id);
-                    if (ent == nullptr)
+                    rec >> id;
+                    if (id != playerID)
                     {
-                        std::cout << "Entity with id " << id << " must be moved but doesn't exist.\n";
-                        break;
+                        Entities* ent = game->getWorld()->getEntityById(id);
+                        if (ent == nullptr)
+                        {
+                           std::cout << "Entity with id " << id << " must move but doesn't exist.\n";
+                           break;
+                        }
+                        ent->takePacket(rec);
                     }
-                    ent->setPosition(x, y);
                 }
                 break;
+
             }
         }
     }

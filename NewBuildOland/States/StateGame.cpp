@@ -246,12 +246,6 @@ void StateGame::handleInput() {
 void StateGame::update(float dt, bool focused) {
     if (focused)
         player->update(dt);
-	//Temporary
-	{
-	    sf::Packet posPacket;
-	    posPacket << 8 << player->getPosition().x << player->getPosition().y;
-	    nManager.sendPacket(posPacket);
-	}
 
 	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world

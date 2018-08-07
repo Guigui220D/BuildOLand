@@ -35,21 +35,35 @@ void Player::initInventory(World* currentWorld) {
 
 void Player::updateMovement(double dt) {
     //HANDLE INPUT
+    unsigned char lastKeysState = keysState;
+    keysState = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
     {
         moveWest(dt);
+        keysState += 0b0001;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         moveEast(dt);
+        keysState += 0b0010;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
     {
         moveNorth(dt);
+        keysState += 0b0100;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         moveSouth(dt);
+        keysState += 0b1000;
+    }
+
+    //if player changed direction, send to server
+    if (currentWorld->getStateGame()->isOnline() && lastKeysState != keysState)
+    {
+        sf::Packet p;
+        p << MainCodes::playerMovement << keysState << getPosition().x << getPosition().y;
+        currentWorld->getStateGame()->getNetworkManager()->sendPacket(p);
     }
 
     //Block enter and leave event

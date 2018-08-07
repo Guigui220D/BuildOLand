@@ -23,6 +23,8 @@ public:
 
 	inline unsigned int getID() { return id; };
 
+	inline virtual void takePacket(sf::Packet p) {}
+
 protected:
 	World *currentWorld = nullptr;
 

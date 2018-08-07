@@ -16,6 +16,8 @@ class OtherPlayer : public LivingEntity
         inline void setCurrentWorld(World* newWorld) { currentWorld = newWorld; };
         inline sf::String getDisplayName() { return nameText.getString(); };
 
+        virtual void takePacket(sf::Packet p) override;
+
     protected:
 
         std::string getTextureName() override;
@@ -29,10 +31,13 @@ class OtherPlayer : public LivingEntity
 
         sf::Text nameText; //Display name
 
+
     private:
 
         sf::Vector2u lastPos;
         sf::Font font;
+
+        unsigned char movement;
 };
 
 

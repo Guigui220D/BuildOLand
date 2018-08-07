@@ -34,5 +34,8 @@ protected:
 	void updateMovement(double dt) override;
 
 	sf::Text nameText; //Display name
+
+	//Used to send data to server
+	unsigned char keysState = 0;
 };
 

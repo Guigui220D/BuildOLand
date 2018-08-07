@@ -7,9 +7,9 @@ enum MainCodes
     disconnect = 0,
     requestConnection = 1,
     requestWorld = 2,
+    playerMovement = 8,
     //Both directions
     edition = 3,             //Break block, build block or change ground
-    primitivePosPacket = 8,  //for testing only
     //Server -> Client
     sendWorld = 4,
     addEntity = 5,

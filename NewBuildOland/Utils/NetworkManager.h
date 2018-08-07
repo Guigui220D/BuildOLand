@@ -19,7 +19,9 @@ class NetworkManager
         //All send functions
         inline bool sendPacket(sf::Packet p)
         {
-            return socket.send(p, server, PORT) == sf::Socket::Done;
+            if (connected)
+                return socket.send(p, server, PORT) == sf::Socket::Done;
+            return false;
         }
         inline bool askForWorld()
         {
