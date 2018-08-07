@@ -11,26 +11,28 @@ NetworkManager::NetworkManager(StateGame* stategame)
 
 bool NetworkManager::connect(char nick[16])
 {
+    server = sf::IpAddress::LocalHost; //Temporary
+
     if (connected)
         return false;
     //Connect
     try
     {
-        server.connect("localhost", PORT) == sf::Socket::Done;
+        socket.bind(sf::Socket::AnyPort);
     }
     catch (std::exception e)
     {
         std::cout << "Failed to connect" << std::endl;
         return false;
     }
-    std::cout << "Connected to the server" << std::endl;
+    std::cout << "Bound to port : " << socket.getLocalPort() << std::endl;
     //Request a connection with the nickname
     {
         sf::Packet p;
         p << MainCodes::requestConnection << nick;
         try
         {
-            server.send(p);
+            socket.send(p, server, PORT);
         }
         catch (std::exception e)
         {
@@ -90,7 +92,6 @@ bool NetworkManager::disconnect()
         return false;
     receiveThread.terminate();
     oneCodeSend(MainCodes::disconnect);
-    server.disconnect();
     connected = false;
     std::cout << "Dz\n";
     return true;
@@ -102,7 +103,9 @@ void NetworkManager::receive()
     while (1)
     {
         sf::Packet rec;
-        if (server.receive(rec) == sf::Socket::Done)
+        sf::IpAddress sender;
+        unsigned short port;
+        if (socket.receive(rec, sender, port) == sf::Socket::Done)
         {
             int code;
             rec >> code;
@@ -129,10 +132,11 @@ void NetworkManager::receive()
                 }
                 break;
 
-                case MainCodes::sendWorld:
-                    {
-                        game->getWorld()->generateWorld(rec);
-                    }
+            case MainCodes::sendWorld:
+                {
+                    game->getWorld()->generateWorld(rec);
+                }
+                break;
             }
         }
     }

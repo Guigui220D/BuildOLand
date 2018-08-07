@@ -29,22 +29,25 @@ class NetworkManager
         {
             std::cout << "Received something\n";
             sf::Packet p;
-            server.receive(p);
+            sf::IpAddress sender;
+            unsigned short port;
+            socket.receive(p, sender, port);
+            if (sender != server || port != PORT)
+            {
+                std::cout << "Warning : it was not from the server\n";
+            }
             return p;
         };
 
     private:
-        sf::TcpSocket server;
+        sf::UdpSocket socket;
+        sf::IpAddress server;
+
         bool connected = false;
         bool oneCodeSend(int code);
         inline bool sendPacket(sf::Packet p)
         {
-            try { server.send(p); }
-            catch (std::exception e)
-            {
-                return false;
-            }
-            return true;
+            return socket.send(p, server, PORT) == sf::Socket::Done;
         }
 
         sf::Thread receiveThread;   //Functions to receive data
