@@ -135,13 +135,14 @@ void NetworkManager::receive()
             case MainCodes::addEntity:
                 {
                     unsigned int id;
-                    rec >> id;
                     char nick[16];
-                    rec >> nick;
-                    if (id != playerID)
+                    rec >> id >> nick;
+
+                    if (id != playerID && game->getWorld()->getEntityById(id) == nullptr)
                     {
                         OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), nick, id);
                         oplayer->init(0, 0);
+                        oplayer->takePacket(rec);
                         game->getWorld()->addEntity(oplayer);
                     }
                 }
