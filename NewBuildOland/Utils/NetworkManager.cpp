@@ -180,6 +180,14 @@ void NetworkManager::receive()
                 }
                 break;
 
+            case MainCodes::ping:
+                {
+                    sf::Packet ping;
+                    ping << MainCodes::pong;
+                    socket.send(ping, server, PORT);
+                }
+                break;
+
             }
         }
     }

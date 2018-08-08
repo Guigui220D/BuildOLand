@@ -10,6 +10,8 @@ enum MainCodes
     playerMovement = 8,
     //Both directions
     edition = 3,             //Break block, build block or change ground
+    ping = -1,
+    pong = -2,
     //Server -> Client
     sendWorld = 4,
     addEntity = 5,
