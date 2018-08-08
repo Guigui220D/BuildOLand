@@ -45,6 +45,7 @@ public:
     void handleEvent(sf::Event &event) override;
 
     inline bool isOnline() { return onlineMode; };
+    inline bool isOnlineAndAvailible() { return onlineMode && nManager.isConnected(); };
     inline NetworkManager* getNetworkManager() { return &nManager; };
 
 

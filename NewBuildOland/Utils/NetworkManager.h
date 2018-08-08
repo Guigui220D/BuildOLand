@@ -34,11 +34,13 @@ class NetworkManager
         //Receive functions
         inline sf::Packet syncReceive()
         {
-            std::cout << "Received something\n";
             sf::Packet p;
+            if (!connected)
+                return p;
             sf::IpAddress sender;
             unsigned short port;
             socket.receive(p, sender, port);
+            std::cout << "Received something\n";
             if (sender != server || port != PORT)
             {
                 std::cout << "Warning : it was not from the server\n";

@@ -46,7 +46,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
             p >> reason;
             switch (reason)
             {
-            case RefuseCodes::null:
+            case RefuseCodes::noReasonRefuse:
                 std::cout << "Connection refused, no reason" << std::endl;
                 break;
             case RefuseCodes::serverNotReady:
@@ -61,7 +61,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
             case RefuseCodes::invalidNick:
                 std::cout << "Connection refused, wrong nick" << std::endl;
                 break;
-            case RefuseCodes::banned:
+            case RefuseCodes::bannedRefuse:
                 std::cout << "Connection refused, you are banned" << std::endl;
                 break;
             case RefuseCodes::alreadyConnected:
@@ -84,10 +84,10 @@ bool NetworkManager::disconnect()
 {
     if (!connected)
         return false;
-    receiveThread.terminate();
     oneCodeSend(MainCodes::disconnect);
     connected = false;
     std::cout << "Disconnected\n";
+    receiveThread.terminate();
     return true;
 }
 
@@ -164,6 +164,7 @@ void NetworkManager::receive()
                     }
                 }
                 break;
+
             case MainCodes::entityAction:
                 {
                     unsigned int id;
@@ -179,6 +180,13 @@ void NetworkManager::receive()
                         ent->takePacket(rec);
                     }
                 }
+                break;
+
+            case MainCodes::kick:
+                //TODO: Proper kick
+                std::cout << "Got kicked!\n";
+                disconnect();
+                std::cout << "Got kicked!\n";
                 break;
 
             case MainCodes::ping:

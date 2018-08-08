@@ -16,7 +16,7 @@ EventManager::~EventManager()
 
 void EventManager::OnBlockBreak(BlockBreakEvent e)
 {
-	if (!state->isOnline())
+	if (!state->isOnlineAndAvailible())
     {
         //Send event to the block
         tileset->getBlockById(e.getOldBlock())->onBlockBreak(e);
@@ -27,7 +27,7 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
 
 void EventManager::OnBlockBuild(BlockBuildEvent e)
 {
-    if (!state->isOnline())
+    if (!state->isOnlineAndAvailible())
     {
         //Send event to the block
         tileset->getBlockById(e.getBlock())->onBlockBuild(e);
@@ -42,13 +42,13 @@ void EventManager::OnGroundPlace(GroundPlaceEvent e)
 //    tileset->getGroundById(e.getNewGround())->OnGroundPlaced(e);
 //    tileset->getGroundById(e.getNewGround())->OnGroundRePlaced(e);
 
-    if (state->isOnline())  //Send event to server
+    if (state->isOnlineAndAvailible())  //Send event to server
         state->getNetworkManager()->sendGroundChange(e.getPosition(), e.getNewGround());
 }
 
 void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)
 {
-    if (!state->isOnline())
+    if (!state->isOnlineAndAvailible())
     {
         //Send events to tiles
         tileset->getBlockById(e.getBlockId())->onPlaceableEnter(e);
@@ -64,7 +64,7 @@ void EventManager::OnPlaceableLeave(PlaceableLeaveEvent e)
 
 void EventManager::OnBlockInteract(BlockInteractEvent e)
 {
-    if (!state->isOnline())
+    if (!state->isOnlineAndAvailible())
     {
         //Send event to block
         tileset->getBlockById(e.getBlock())->onBlockInteract(e);

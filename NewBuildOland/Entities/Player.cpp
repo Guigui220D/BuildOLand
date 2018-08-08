@@ -59,7 +59,7 @@ void Player::updateMovement(double dt) {
     }
 
     //if player changed direction, send to server
-    if (currentWorld->getStateGame()->isOnline() && lastKeysState != keysState)
+    if (currentWorld->getStateGame()->isOnlineAndAvailible() && lastKeysState != keysState)
     {
         sf::Packet p;
         p << MainCodes::playerMovement << keysState << getPosition().x << getPosition().y;
