@@ -110,7 +110,7 @@ void NetworkManager::receive()
                 {
                     int editionCode = 0;
                     rec >> editionCode;
-                    unsigned int x = 0, y = 0;
+                    unsigned int x, y;
                     unsigned short id = 0;
                     rec >> x >> y >> id;
                     switch (editionCode)
