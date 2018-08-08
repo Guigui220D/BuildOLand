@@ -235,5 +235,14 @@ bool NetworkManager::sendGroundChange(sf::Vector2u pos, unsigned short ground)
     return sendPacket(p);
 }
 
+bool NetworkManager::sendInteractEvent(sf::Vector2u pos)
+{
+    sf::Packet p;
+    p << MainCodes::blockInteract;
+    p << pos.x;
+    p << pos.y;
+    return sendPacket(p);
+}
+
 
 

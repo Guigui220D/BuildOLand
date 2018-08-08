@@ -8,6 +8,7 @@ enum MainCodes
     requestConnection = 1,
     requestWorld = 2,
     playerMovement = 8,
+    blockInteract = 9,
     //Both directions
     edition = 3,             //Break block, build block or change ground
     ping = -1,
