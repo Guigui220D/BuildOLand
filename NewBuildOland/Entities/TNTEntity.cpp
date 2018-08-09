@@ -26,33 +26,36 @@ void TNTEntity::update(double delta)
     setFillColor((demiSeconds % 2) ? sf::Color(127, 127, 127) : sf::Color::White);
     setOnMapColor((demiSeconds % 2) ? sf::Color::Black : sf::Color::Red);
 
-    if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
+    if (!currentWorld->getStateGame()->isOnlineAndAvailible())
     {
-        sf::Sound* boomSound = currentWorld->getStateGame()->getSoundManager()->getSound("explosion.wav");
-        boomSound->setVolume(20);
-        boomSound->play();
-        int xpos = worldPos.x;
-        int ypos = worldPos.y;
-        for (int x = -2; x <= 2; x++)
+        if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
         {
-            for (int y = -2; y <= 2; y++)
+            sf::Sound* boomSound = currentWorld->getStateGame()->getSoundManager()->getSound("explosion.wav");
+            boomSound->setVolume(20);
+            boomSound->play();
+            int xpos = worldPos.x;
+            int ypos = worldPos.y;
+            for (int x = -2; x <= 2; x++)
             {
-                if ((int)xpos + x >= 0 && (int)ypos + y >= 0)
+                for (int y = -2; y <= 2; y++)
                 {
-                    if (x * x + y * y <= 6)
+                    if ((int)xpos + x >= 0 && (int)ypos + y >= 0)
                     {
-                        unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2u(xpos + x, ypos + y));
-                        currentWorld->setBlockId(sf::Vector2u(xpos + x, ypos + y), 0);
-                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
-                    }
-                    if (x * x + y * y <= 4) {
-                        unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(xpos + x, ypos + y));
-                        currentWorld->setGroundId(sf::Vector2u(xpos + x, ypos + y), 4);
-                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
+                        if (x * x + y * y <= 6)
+                        {
+                            unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2u(xpos + x, ypos + y));
+                            currentWorld->setBlockId(sf::Vector2u(xpos + x, ypos + y), 0);
+                            EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
+                        }
+                        if (x * x + y * y <= 4) {
+                            unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(xpos + x, ypos + y));
+                            currentWorld->setGroundId(sf::Vector2u(xpos + x, ypos + y), 4);
+                            EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
+                        }
                     }
                 }
             }
+            mustBeRemoved = true;
         }
-        mustBeRemoved = true;
     }
 }

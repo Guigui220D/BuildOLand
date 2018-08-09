@@ -35,8 +35,6 @@ class NetworkManager
         inline sf::Packet syncReceive()
         {
             sf::Packet p;
-            if (!connected)
-                return p;
             sf::IpAddress sender;
             unsigned short port;
             socket.receive(p, sender, port);
@@ -62,7 +60,7 @@ class NetworkManager
 
         StateGame* game;
 
-        unsigned int playerID = 0;
+        unsigned int playerID;
 
 
 };

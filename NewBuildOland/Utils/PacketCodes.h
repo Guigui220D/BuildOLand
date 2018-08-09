@@ -7,19 +7,19 @@ enum MainCodes
     disconnect = 0,
     requestConnection = 1,
     requestWorld = 2,
-    playerMovement = 8,
-    blockInteract = 9,
+    playerMovement = 3,
+    blockInteract = 4,
     //Both directions
-    edition = 3,             //Break block, build block or change ground
+    edition = 5,             //Break block, build block or change ground
     ping = -1,
     pong = -2,
     //Server -> Client
-    sendWorld = 4,
-    addEntity = 5,
-    removeEntity = 6,
-    entityAction = 7,
-    kick = 10,
-    notConnected = 11
+    kick = 6,
+    notConnected = 7,
+    sendWorld = 8,
+    addEntity = 9,
+    removeEntity = 10,
+    entityAction = 11,
 };
 
 enum RefuseCodes
@@ -53,4 +53,11 @@ enum EditionCodes
     //Server ->Client
     setBlock = 3,
     setGround = 4
+};
+
+enum EntityCodes
+{
+    player = 0,
+    blackWarrior = 1,
+    tnt = 2
 };

@@ -227,6 +227,17 @@ void World::removeEntitiesThatNeedToBeRemoved()
     }
 }
 
+void World::removeEntityNowById(unsigned int id)
+{
+    for (auto i = entities.begin(); i < entities.end(); i++)
+    {
+        if ((*i)->getID() == id)
+        {
+            i = entities.erase(i);
+        }
+    }
+}
+
 void World::addEntity(Entities* entity)
 {
     entities.push_back(entity);

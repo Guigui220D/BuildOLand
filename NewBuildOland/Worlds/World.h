@@ -42,6 +42,7 @@ public:
 	const std::vector<Entities*> &getEntities() const;
     virtual void addEntity(Entities* entity);
 	virtual void removeEntitiesThatNeedToBeRemoved();
+	virtual void removeEntityNowById(unsigned int id);
 	inline unsigned int getNextEntityId()
     {
         nextEntityId++;

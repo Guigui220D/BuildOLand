@@ -1,7 +1,9 @@
 #include "NetworkManager.h"
 #include <string>
 #include "../States/StateGame.h"
+
 #include "../Entities/OtherPlayer.h"
+#include "../Entities/TNTEntity.h"
 
 
 NetworkManager::NetworkManager(StateGame* stategame)
@@ -37,7 +39,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
     //Get the answer
     {
         sf::Packet p = syncReceive();
-        bool response = true;
+        bool response = false;
         p >> response;
         //If accepted, response = 1, else 0
         if (!response)
@@ -74,6 +76,7 @@ bool NetworkManager::connect(char nick[16], sf::IpAddress address, unsigned shor
             return false;
         }
         p >> playerID;
+        std::cout << "ID Should be " << playerID << std::endl;
     }
     connected = true;
     receiveThread.launch();
@@ -135,15 +138,37 @@ void NetworkManager::receive()
             case MainCodes::addEntity:
                 {
                     unsigned int id;
-                    char nick[16];
-                    rec >> id >> nick;
+                    int type;
+                    rec >> type >> id;
 
-                    if (id != playerID && game->getWorld()->getEntityById(id) == nullptr)
+                    if (id != playerID)
                     {
-                        OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), nick, id);
-                        oplayer->init(0, 0);
-                        oplayer->takePacket(rec);
-                        game->getWorld()->addEntity(oplayer);
+                        //Remove entity if it already exists
+                        if (game->getWorld()->getEntityById(id) != nullptr)
+                            game->getWorld()->removeEntityNowById(id);
+                        //Depending on the type
+                        switch (type)
+                        {
+                        case EntityCodes::player:
+                            {
+                                char nick[16];
+                                rec >> nick;
+                                OtherPlayer* oplayer = new OtherPlayer(game->getWorld(), nick, id);
+                                oplayer->init(0, 0);
+                                oplayer->takePacket(rec);
+                                game->getWorld()->addEntity(oplayer);
+                            }
+                            break;
+
+                        case EntityCodes::tnt:
+                            {
+                                unsigned int x, y;
+                                rec >> x >> y;
+                                TNTEntity* tnt = new TNTEntity(game->getWorld(), id, sf::Vector2u(x, y));
+                                game->getWorld()->addEntity(tnt);
+                            }
+                            break;
+                        }
                     }
                 }
                 break;
@@ -174,7 +199,7 @@ void NetworkManager::receive()
                         Entities* ent = game->getWorld()->getEntityById(id);
                         if (ent == nullptr)
                         {
-                           std::cout << "Entity with id " << id << " must move but doesn't exist.\n";
+                           std::cout << "Entity with id " << id << " has something to do but doesn't exist.\n";
                            break;
                         }
                         ent->takePacket(rec);
