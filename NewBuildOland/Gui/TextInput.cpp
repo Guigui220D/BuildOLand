@@ -1,9 +1,9 @@
 #include "TextInput.h"
-#include "../States/StateMenu.h"
+#include "../States/StateBase.h"
 #include "../Game.h"
 
-TextInput::TextInput(StateMenu *stateMenu, sf::Vector2f pos, std::string placeHolder, unsigned maxSize) : Gui(nullptr)
-    , stateMenu(stateMenu)
+TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize) : Gui(nullptr)
+    , stateBase(stateBase)
     , pos(pos)
     , inputText(placeHolder)
     , maxSize(maxSize)
@@ -52,7 +52,7 @@ void TextInput::draw(sf::RenderWindow &window) {
 
 bool TextInput::isActive(sf::Vector2i mousePos) {
 
-    sf::Vector2f pixelPos = stateMenu->getGame()->getWindow().mapPixelToCoords(mousePos);
+    sf::Vector2f pixelPos = stateBase->getGame()->getWindow().mapPixelToCoords(mousePos);
 
     wasActive = active;
 

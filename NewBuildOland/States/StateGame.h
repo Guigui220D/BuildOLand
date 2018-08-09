@@ -13,6 +13,8 @@
 #include <vector>
 #include <memory>
 #include "../Utils/NetworkManager.h"
+#include "../Utils/AssetManager.h"
+#include "../Gui/ChatGui.h"
 
 class StateGame : public StateBase
 {
@@ -46,7 +48,9 @@ public:
 
     inline bool isOnline() { return onlineMode; };
     inline bool isOnlineAndAvailible() { return onlineMode && nManager.isConnected(); };
-    inline NetworkManager* getNetworkManager() { return &nManager; };
+    inline NetworkManager* getNetworkManager() { return &nManager; }
+
+	inline AssetManager* getAssetManager() { return &assetManager; };
 
 
 private:
@@ -56,6 +60,7 @@ private:
 
 	std::vector<std::unique_ptr<Gui>> gui;
 	InventoryGui *inventoryGui;
+	ChatGui *chatGui;
 
 	World *currentWorld = nullptr;
 
@@ -74,6 +79,7 @@ private:
 
 	TileSet tileset;
 	SoundManager soundManager;
+	AssetManager assetManager;
 
 	Player *player;
 
