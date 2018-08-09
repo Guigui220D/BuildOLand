@@ -48,17 +48,10 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
         currentWorld = new MazeWorld(*this);
     }
 
-
-	tileset;
-
 	//Init the tileset to the event manager
 	EventManager::tileset = &tileset;
 	EventManager::state = this;
 
-    //Init the asset manager
-    assetManager;
-	//Init the sound manager
-	soundManager;
 	sf::Music* backgroundMusic = soundManager.getMusic("fantasymusic.ogg");
 	backgroundMusic->setVolume(20);
 	backgroundMusic->play();
@@ -256,6 +249,8 @@ void StateGame::handleInput() {
 }
 
 void StateGame::update(float dt, bool focused) {
+    currentWorld->updateChunks();
+
     if (focused)
         player->update(dt);
 
@@ -419,6 +414,7 @@ void StateGame::setWorld(World &world) {
 StateGame::~StateGame() {
 	//We delete pointers to prevent memory leaks
 	delete currentWorld;
+	std::cout << "Stategame delete\n";
 }
 
 void StateGame::handleEvent(sf::Event &event) {
@@ -427,7 +423,7 @@ void StateGame::handleEvent(sf::Event &event) {
         //RESIZE EVENT
         case sf::Event::Resized:
             //Send the event to all gui elements
-            for (int i = 0; i < gui.size(); i++)
+            for (unsigned int i = 0; i < gui.size(); i++)
             {
                 gui[i]->eventResize();
             }

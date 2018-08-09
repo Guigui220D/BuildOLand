@@ -23,7 +23,7 @@ public:
 	const float TILE_SIZE_FLOAT = 100.0f;
 
 	StateGame(Game& game, bool online, std::string playerName = "Player", std::string adressInput = "");
-	~StateGame();
+	~StateGame() override;
 
 	void handleInput()					override;
 	void update(float dt, bool focused)	override;

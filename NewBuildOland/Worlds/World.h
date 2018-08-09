@@ -14,7 +14,10 @@ class StateGame;
 class World
 {
 public:
+    static const int UNLOAD_DISTANCE = 64;
+
 	World(StateGame& stateGame, std::string name = "world");
+	virtual ~World();
 
 	unsigned short getGroundId(sf::Vector2i pos);
 	unsigned short getBlockId(sf::Vector2i pos);
@@ -33,7 +36,26 @@ public:
 	inline unsigned int getNextEntityId() { return ++nextEntityId; };
     Entities* getEntityById(unsigned int id);
 
-    //Chunk functions
+    virtual void updateChunks();
+    virtual void loadChunk(sf::Vector2i chunk);
+    virtual void unloadChunk(sf::Vector2i chunk, bool erase);
+    virtual void flushChunkCache();
+
+	//Call for telling the other methods that the world is deleted
+	inline void setDeleted() { isBeingDeleted = true; };
+
+protected:
+	StateGame* stateGame = nullptr;
+
+	long worldSeed;
+	std::string worldName;
+
+	std::vector<Entities*> entities;
+
+	//Chunks
+	std::map<uint64_t, Chunk> loadedChunks;
+	std::vector<Chunk> chunkCache;
+
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
         { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };
     inline bool isChunkLoaded(sf::Vector2i chunkPos) { return loadedChunks.find(vector2iToInt64(chunkPos)) != loadedChunks.end(); };
@@ -45,19 +67,6 @@ public:
             lon |= 0xFFFFFFFF & vec.y;
             return lon;
         };
-
-	//Call for telling the other methods that the world is deleted
-	inline void setDeleted() { isBeingDeleted = true; };
-	~World();
-protected:
-	StateGame* stateGame = nullptr;
-
-	long worldSeed;
-	std::string worldName;
-
-	std::vector<Entities*> entities;
-
-	std::map<uint64_t, Chunk> loadedChunks;
 
 private:
 	bool isBeingDeleted = false;

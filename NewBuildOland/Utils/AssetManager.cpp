@@ -4,7 +4,7 @@
 sf::Font *AssetManager::getFont(std::string fontName) {
 
     //Get font if it already exists
-    for(int i = 0; i < fontNames.size(); i++) {
+    for(unsigned int i = 0; i < fontNames.size(); i++) {
         if(fontNames[i] == fontName) {
             return fonts[i];
         }

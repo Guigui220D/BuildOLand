@@ -13,6 +13,70 @@ World::World(StateGame& stateGame, std::string name)
 	worldName = name;
 }
 
+void World::loadChunk(sf::Vector2i chunk)
+{
+    if (!isChunkLoaded(chunk))
+    {
+        std::cout << "Loaded chunk " << chunk.x << ", " << chunk.y << ".\n";
+        for (auto i = chunkCache.begin(); i != chunkCache.end(); i++)
+        {
+            if ((*i).getPosition() == chunk)
+            {
+                loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i)));
+                return;
+            }
+        }
+        //TODO: Try to load from disk
+        //
+        //
+        //
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk)));
+    }
+}
+
+void World::unloadChunk(sf::Vector2i chunk, bool erase)
+{
+    //When chunks are unloaded, they are not directly written on disk to avoid freezes, but instead are put in a cache that is ready to be saved
+    if (isChunkLoaded(chunk))
+    {
+        chunkCache.push_back(*getChunk(chunk));
+        if (erase)
+            loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
+        std::cout << "Unloaded chunk " << chunk.x << ", " << chunk.y << ".\n";
+        return;
+    }
+    std::cout << "Tried to unload a chunk that wasn't loaded.\n";
+}
+
+void World::flushChunkCache()
+{
+    //TODO: Save chunks to disk
+    //Iterate through chunks cache and save chunks one by one
+    //
+    //
+    std::cout << "Saved chunk cache, " << chunkCache.size() << " chunks!\n";
+    chunkCache.clear();
+}
+
+void World::updateChunks()
+{
+    std::vector<sf::Vector2i> toUnload;
+    for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
+    {
+        sf::Vector2i pos = (*i).second.getPosition();
+        //Get center of chunk
+        sf::Vector2f center(pos.x + (Chunk::CHUNK_SIZE / 2), pos.y + (Chunk::CHUNK_SIZE / 2));
+        //calculate player's distance to chunk
+        sf::Vector2f delta = center - stateGame->getPlayer()->getWorldPos();
+        if (delta.x > UNLOAD_DISTANCE || delta.y > UNLOAD_DISTANCE)
+        {
+            toUnload.push_back(pos);
+        }
+    }
+    for (int i = 0; i < toUnload.size(); i++)
+        unloadChunk(toUnload.at(i), true);
+}
+
 unsigned short World::getBlockId(sf::Vector2i pos)
 {
 	//Temporary
@@ -20,7 +84,7 @@ unsigned short World::getBlockId(sf::Vector2i pos)
 	//Check if chunk is loaded and load it
 	if (!isChunkLoaded(chunkPos))
     {
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+        loadChunk(chunkPos);
     }
     //Get the position of the block in the chunk
     sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
@@ -34,7 +98,7 @@ unsigned short World::getGroundId(sf::Vector2i pos)
 	//Check if chunk is loaded and load it
 	if (!isChunkLoaded(chunkPos))
     {
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+        loadChunk(chunkPos);
     }
     //Get the position of the block in the chunk
     sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
@@ -46,7 +110,6 @@ Block* World::getBlockAt(sf::Vector2i pos)
 	return stateGame->getTileset()->getBlockById(getBlockId(pos));
 }
 
-
 void World::setGroundId(sf::Vector2i pos, unsigned short ground)
 {
 	//Temporary
@@ -54,7 +117,7 @@ void World::setGroundId(sf::Vector2i pos, unsigned short ground)
 	//Check if chunk is loaded and load it
 	if (!isChunkLoaded(chunkPos))
     {
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+        loadChunk(chunkPos);
     }
     //Get the position of the block in the chunk
     sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
@@ -68,28 +131,32 @@ void World::setBlockId(sf::Vector2i pos, unsigned short block)
 	//Check if chunk is loaded and load it
 	if (!isChunkLoaded(chunkPos))
     {
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+        loadChunk(chunkPos);
     }
     //Get the position of the block in the chunk
     sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     getChunk(chunkPos)->setBlock(blockPos, block);
-    sf::Vector2i rpos = getChunk(chunkPos)->getPosition();
 }
 
 World::~World()
 {
-    for (int i = 0; i < entities.size(); i++)
+    for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
+        unloadChunk((*i).second.getPosition(), false);
+    loadedChunks.clear();
+    flushChunkCache();
+    for (unsigned int i = 0; i < entities.size(); i++)
         delete(entities.at(i));
 }
 
-const std::vector<Entities *> &World::getEntities() const {
+const std::vector<Entities *> &World::getEntities() const
+{
     return entities;
 }
 
 void World::removeEntitiesThatNeedToBeRemoved()
 {
     int j = 0;
-    for (int i = 0; i < entities.size(); i++)
+    for (unsigned int i = 0; i < entities.size(); i++)
     {
         if (entities.at(i - j)->mustBeRemoved)
         {
@@ -118,7 +185,7 @@ void World::addEntity(Entities* entity)
 Entities* World::getEntityById(unsigned int id)
 {
     Entities* rep = nullptr;
-    for (int i = 0; i < entities.size(); i++)
+    for (unsigned int i = 0; i < entities.size(); i++)
     {
         if (entities.at(i)->getID() == id)
         {

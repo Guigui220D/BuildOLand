@@ -27,7 +27,8 @@ double FpsCounter::getFPS()
 
 void FpsCounter::update(float dt) {
     std::stringstream s;
-    s << "FPS : " << getFPS();
+    //s << "FPS : " << getFPS();
+    s << stateGame->getPlayer()->getWorldPos().x << ", " << stateGame->getPlayer()->getWorldPos().y;
     text.setString(s.str());
 
 }

@@ -25,5 +25,6 @@ class Chunk
         std::vector<unsigned short> blocks;
         std::vector<unsigned short> grounds;
 
+
 };
 

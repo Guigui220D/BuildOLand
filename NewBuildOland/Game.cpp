@@ -84,6 +84,7 @@ void Game::run()
 	}
 
 	currentState->onStop();
+	//delete currentState;
 }
 
 void Game::updateView()
