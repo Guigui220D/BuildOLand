@@ -1,20 +1,28 @@
 # BuildOLand TODO
 
-### Main functionalities :
+### Engine :
 
 - [ ] Path finding for AI entities
 - [ ] User interface and pause
-- [ ] Online mode
+- [ ] Server-side anti-cheat
+- [ ] Authentification
+- [ ] Tile-entities
+- [ ] Chat and command-line
+- [ ] Character personnalization
+- [ ] Proper resource management (sound, textures, fonts)
 
-### Less important things to implement :
-- [ ] Maze generator
+### Content :
+
+- [ ] More blocks
+- [ ] More entities
+- [ ] Items and tools
 
 ### Completed :
 - [x] Create proper todo list
 - [x] Events system
 - [x] Animations
 - [x] Interactive blocks
-- [x] Give entites a pointer to their StateGame (through world)
 - [x] Sound manager
 - [x] Inventory
-- [x] Add an interactBlockEvent
+- [x] Online mode
+- [x] Main menu
