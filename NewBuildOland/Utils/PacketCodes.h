@@ -20,6 +20,7 @@ enum MainCodes
     addEntity = 9,
     removeEntity = 10,
     entityAction = 11,
+    tpPlayer = 12
 };
 
 enum RefuseCodes

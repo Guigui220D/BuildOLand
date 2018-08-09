@@ -211,7 +211,15 @@ void NetworkManager::receive()
                 //TODO: Proper kick
                 std::cout << "Got kicked!\n";
                 disconnect();
-                std::cout << "Got kicked!\n";
+                break;
+
+            case MainCodes::tpPlayer:
+                {
+                    float x, y;
+                    rec >> x >> y;
+                    game->getPlayer()->setPosition(x, y);
+                    std::cout << "Got teleportaled: " << x << ", " << y << ".\n";
+                }
                 break;
 
             case MainCodes::ping:
