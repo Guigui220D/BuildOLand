@@ -29,9 +29,9 @@ int PhysicEntity::touchesBlock()
 		for (int yy = -1; yy <= 1; yy++)
 		{
 			ny = (y + yy);
-			if (currentWorld->getBlockAt(nx, ny)->hasHitbox())
+			if (currentWorld->getBlockAt(sf::Vector2i(nx, ny))->hasHitbox())
 			{
-				if (currentWorld->getBlockAt(nx, ny)->hasVolume())
+				if (currentWorld->getBlockAt(sf::Vector2i(nx, ny))->hasVolume())
 				{
 
 					sf::Vector2f ppos = getPosition();

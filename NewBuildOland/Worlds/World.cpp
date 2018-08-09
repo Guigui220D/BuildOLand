@@ -13,195 +13,67 @@ World::World(StateGame& stateGame, std::string name)
 	worldName = name;
 }
 
-//Loads the world file and saves it in an array
-//Returns true if sucess
-bool World::loadWorld()
+unsigned short World::getBlockId(sf::Vector2i pos)
 {
-	//Check if file exists
-	std::string const worldFileName("./gamedata/worlds/" + worldName + ".bol");
-
-	std::ifstream worldFile(worldFileName.c_str(), std::ios::binary | std::ios::in);
-	if(worldFile.is_open()) {
-		//The file exists, we can read it now
-
-		//Get the worldSize from file
-		unsigned int worldSizeX;
-		unsigned int worldSizeY;
-		worldFile.read((char*)(&worldSizeX), sizeof(worldSize.x));
-		worldFile.read((char*)(&worldSizeY), sizeof(worldSize.y));
-		worldSize = sf::Vector2u(worldSizeX, worldSizeY);
-
-		unsigned short idBuffer;
-		//Read the groundId array from the file
-		for (unsigned int i = 0; i < worldSize.x * worldSize.y; i++) {
-			worldFile.read((char*)(&idBuffer), sizeof(idBuffer));
-			groundIds.push_back(idBuffer);
-		}
-		//Read the blockId array from the file
-		for (unsigned int i = 0; i < worldSize.x * worldSize.y; i++) {
-			worldFile.read((char*)(&idBuffer), sizeof(idBuffer));
-			blockIds.push_back(idBuffer);
-		}
-
-		//We can close the file, all the data has been loaded
-		worldFile.close();
-		return true;
-	} else {
-		//The file doesn't exist, create one
-
-		//Create the folder (for windows only)
-		std::string const worldFolderName("./gamedata/worlds/");
-		FileManager::createFolder(worldFolderName);
-
-		//Create the file
-		std::ofstream worldFileFlux(worldFileName.c_str(), std::ios::binary | std::ios::out);
-		if(worldFileFlux) {
-			//Everything okay, ready to write
-
-			//Call the child classes to generate a world
-			this->generateWorld();
-
-			saveWorldToFile(worldFileFlux);
-
-			worldFileFlux.close();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	return true;
+	//Temporary
+	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
+	//Check if chunk is loaded and load it
+	if (!isChunkLoaded(chunkPos))
+    {
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+    }
+    //Get the position of the block in the chunk
+    sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
+    return getChunk(chunkPos)->getBlock(blockPos);
 }
 
-bool World::saveWorld()
+unsigned short World::getGroundId(sf::Vector2i pos)
 {
-	std::string const worldFileName("./gamedata/worlds/" + worldName + ".bol");
-
-	//Recreate the file
-	std::ofstream worldFileFlux(worldFileName.c_str(), std::ios::binary | std::ios::out);
-	if (worldFileFlux) {
-		//Everything okay, ready to write
-
-		saveWorldToFile(worldFileFlux);
-
-		worldFileFlux.close();
-		return true;
-	}
-	else {
-		return false;
-	}
+	//Temporary
+	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
+	//Check if chunk is loaded and load it
+	if (!isChunkLoaded(chunkPos))
+    {
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+    }
+    //Get the position of the block in the chunk
+    sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
+    return getChunk(chunkPos)->getGround(groundPos);
 }
 
-void World::saveWorldToFile(std::ofstream &worldFileFlux) {
-
-	//First save the size of the world
-	worldFileFlux.write((char*)(&worldSize.x), sizeof(worldSize.x));
-	worldFileFlux.write((char*)(&worldSize.y), sizeof(worldSize.y));
-
-	//Save the groundIds array that were generated
-	for (unsigned int i = 0; i < groundIds.size(); i++) {
-		worldFileFlux.write((char*)(&groundIds[i]), sizeof(unsigned short));
-	}
-	//And save the blockIds array
-	for (unsigned int i = 0; i < blockIds.size(); i++) {
-		worldFileFlux.write((char*)(&blockIds[i]), sizeof(unsigned short));
-	}
-}
-
-unsigned short World::getGroundId(unsigned short x, unsigned short y)
+Block* World::getBlockAt(sf::Vector2i pos)
 {
-	//If pos is out of map
-	if (x < 0 || x >= worldSize.x ||
-		y < 0 || y >= worldSize.y) {
-		return 0;
-	}
-	return groundIds[y + x * worldSize.x];
+	return stateGame->getTileset()->getBlockById(getBlockId(pos));
 }
 
-unsigned short World::getGroundId(sf::Vector2u pos)
+
+void World::setGroundId(sf::Vector2i pos, unsigned short ground)
 {
-	return getGroundId(pos.x, pos.y);
+	//Temporary
+	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
+	//Check if chunk is loaded and load it
+	if (!isChunkLoaded(chunkPos))
+    {
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+    }
+    //Get the position of the block in the chunk
+    sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
+    getChunk(chunkPos)->setGround(groundPos, ground);
 }
 
-unsigned short World::getBlockId(unsigned short x, unsigned short y)
+void World::setBlockId(sf::Vector2i pos, unsigned short block)
 {
-	//If pos is out of map
-	if (x < 0 || x >= worldSize.x ||
-		y < 0 || y >= worldSize.y || isBeingDeleted) {
-		return 0;
-	}
-	return blockIds[y + x * worldSize.x];
-}
-
-unsigned short World::getBlockId(sf::Vector2u pos)
-{
-	return getBlockId(pos.x, pos.y);
-}
-
-Block* World::getBlockAt(sf::Vector2u pos) {
-	getBlockAt(pos.x, pos.y);
-}
-
-Block* World::getBlockAt(unsigned short x, unsigned short y) {
-	unsigned short blockId = getBlockId(x, y);
-	return stateGame->getTileset()->getBlockById(blockId);
-}
-
-void World::setGroundId(unsigned short x, unsigned short y, unsigned short value)
-{
-	//If pos is out of map
-	if (x < 0 || x >= worldSize.x ||
-		y < 0 || y >= worldSize.y) {
-		return;
-	}
-
-	groundIds[y + x * worldSize.x] = value;
-}
-
-
-void World::setGroundId(sf::Vector2u pos, unsigned short value)
-{
-	setGroundId(pos.x, pos.y, value);
-}
-
-void World::setBlockId(unsigned short x, unsigned short y, unsigned short value)
-{
-	//If pos is out of map
-	if (x < 0 || x >= worldSize.x ||
-		y < 0 || y >= worldSize.y) {
-		return;
-	}
-
-	blockIds[y + x * worldSize.x] = value;
-}
-
-void World::setBlockId(sf::Vector2u pos, unsigned short value)
-{
-	setBlockId(pos.x, pos.y, value);
-}
-
-sf::Vector2u World::getWorldSize()
-{
-	return worldSize;
-}
-
-sf::Vector2u World::getInitialPlayerPos()
-{
-	return playerPos;
-}
-
-std::string World::getName()
-{
-	return worldName;
-}
-
-StateGame* World::getStateGame()
-{
-	return stateGame;
-}
-
-void World::setDeleted() {
-	isBeingDeleted = true;
+	//Temporary
+	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
+	//Check if chunk is loaded and load it
+	if (!isChunkLoaded(chunkPos))
+    {
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos)));
+    }
+    //Get the position of the block in the chunk
+    sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
+    getChunk(chunkPos)->setBlock(blockPos, block);
+    sf::Vector2i rpos = getChunk(chunkPos)->getPosition();
 }
 
 World::~World()

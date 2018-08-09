@@ -10,11 +10,6 @@ class NetworkWorld : public World
         NetworkWorld(StateGame& stateGame);
         virtual ~NetworkWorld();
 
-        void generateWorld(sf::Packet p = sf::Packet()) override;
-
-        bool loadWorld() override;
-        bool saveWorld() override;
-
         inline NetworkManager* getNetworkManager() { return stateGame->getNetworkManager(); };
 
     protected:

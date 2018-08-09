@@ -1,7 +1,7 @@
 #include "TNTEntity.h"
 #include "../Events/EventManager.h"
 
-TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2u pos)
+TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2i pos)
     : Entities(world, id)
 {
     worldPos = pos;
@@ -39,19 +39,16 @@ void TNTEntity::update(double delta)
             {
                 for (int y = -2; y <= 2; y++)
                 {
-                    if ((int)xpos + x >= 0 && (int)ypos + y >= 0)
+                    if (x * x + y * y <= 6)
                     {
-                        if (x * x + y * y <= 6)
-                        {
-                            unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2u(xpos + x, ypos + y));
-                            currentWorld->setBlockId(sf::Vector2u(xpos + x, ypos + y), 0);
-                            EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
-                        }
-                        if (x * x + y * y <= 4) {
-                            unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(xpos + x, ypos + y));
-                            currentWorld->setGroundId(sf::Vector2u(xpos + x, ypos + y), 4);
-                            EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
-                        }
+                        unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2i(xpos + x, ypos + y));
+                        currentWorld->setBlockId(sf::Vector2i(xpos + x, ypos + y), 0);
+                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2i(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
+                    }
+                    if (x * x + y * y <= 4) {
+                        unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2i(xpos + x, ypos + y));
+                        currentWorld->setGroundId(sf::Vector2i(xpos + x, ypos + y), 4);
+                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2i(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
                     }
                 }
             }

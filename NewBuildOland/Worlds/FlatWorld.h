@@ -7,8 +7,6 @@ public:
 	FlatWorld(StateGame& stateGame);
 	~FlatWorld();
 
-	void generateWorld(sf::Packet p = sf::Packet()) override;
-
 private:
 };
 

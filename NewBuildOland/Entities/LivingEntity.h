@@ -33,7 +33,7 @@ protected:
     virtual void updateMovement(double dt) = 0;
 
 protected:
-    int EntitySpeed = 300;
+    int EntitySpeed = 1000;
 private:
     void initAnimations();
     void selectAnimation();

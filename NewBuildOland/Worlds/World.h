@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML\system.hpp>
 #include <SFML\Network.hpp>
-#include <vector>
+#include <unordered_map>
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
-
+#include "Chunk.h"
+#include <math.h>
 
 class Entities;
 
@@ -13,62 +14,52 @@ class StateGame;
 class World
 {
 public:
-	World(StateGame& stateGame, std::string name = "world1");
+	World(StateGame& stateGame, std::string name = "world");
 
-	//Loads the world with the WorldManager class ?
-	//And returns true if success
-	virtual bool loadWorld();
-	virtual bool saveWorld();
+	unsigned short getGroundId(sf::Vector2i pos);
+	unsigned short getBlockId(sf::Vector2i pos);
+	Block* getBlockAt(sf::Vector2i pos);
+	void setGroundId(sf::Vector2i pos, unsigned short ground);
+	void setBlockId(sf::Vector2i pos, unsigned short block);
 
-	//Method that generates the world procedurally
-	virtual void generateWorld(sf::Packet p = sf::Packet()) = 0;
+	inline std::string getName() { return worldName; };
 
-	unsigned short getGroundId(unsigned short x, unsigned short y);
-	unsigned short getGroundId(sf::Vector2u pos);
-	unsigned short getBlockId(unsigned short x, unsigned short y);
-	unsigned short getBlockId(sf::Vector2u pos);
-	Block* getBlockAt(sf::Vector2u pos);
-	Block* getBlockAt(unsigned short x, unsigned short y);
-	void setGroundId(unsigned short x, unsigned short y, unsigned short value);
-	void setGroundId(sf::Vector2u pos, unsigned short value);
-	void setBlockId(unsigned short x, unsigned short y, unsigned short value);
-	void setBlockId(sf::Vector2u pos, unsigned short value);
-
-	sf::Vector2u getWorldSize();
-	sf::Vector2u getInitialPlayerPos();
-	std::string getName();
-	StateGame* getStateGame();
+	inline StateGame* getStateGame() { return stateGame; };
 
 	const std::vector<Entities*> &getEntities() const;
     virtual void addEntity(Entities* entity);
 	virtual void removeEntitiesThatNeedToBeRemoved();
 	virtual void removeEntityNowById(unsigned int id);
-	inline unsigned int getNextEntityId()
-    {
-        nextEntityId++;
-        return nextEntityId;
-    }
+	inline unsigned int getNextEntityId() { return ++nextEntityId; };
     Entities* getEntityById(unsigned int id);
 
+    //Chunk functions
+    inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
+        { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };
+    inline bool isChunkLoaded(sf::Vector2i chunkPos) { return loadedChunks.find(vector2iToInt64(chunkPos)) != loadedChunks.end(); };
+    inline Chunk* getChunk(sf::Vector2i chunkPos) { return &((*loadedChunks.find(vector2iToInt64(chunkPos))).second); };
+    inline uint64_t vector2iToInt64(sf::Vector2i vec)
+        {
+            uint64_t lon = vec.x;
+            lon <<= 32;
+            lon |= 0xFFFFFFFF & vec.y;
+            return lon;
+        };
+
 	//Call for telling the other methods that the world is deleted
-	void setDeleted();
+	inline void setDeleted() { isBeingDeleted = true; };
 	~World();
 protected:
 	StateGame* stateGame = nullptr;
 
 	long worldSeed;
 	std::string worldName;
-	sf::Vector2u worldSize;
-
-	sf::Vector2u playerPos;
-
-	std::vector<unsigned short> groundIds;
-	std::vector<unsigned short> blockIds;
 
 	std::vector<Entities*> entities;
 
+	std::map<uint64_t, Chunk> loadedChunks;
+
 private:
-	void saveWorldToFile(std::ofstream &worldFileFlux);
 	bool isBeingDeleted = false;
 
 	unsigned int nextEntityId = 0;

@@ -17,7 +17,7 @@ public:
 	inline sf::String getDisplayName() { return nameText.getString(); };
 
 private:
-	sf::Vector2u lastPos;
+	sf::Vector2i lastPos;
 
 	void initInventory(World* currentWorld);
 

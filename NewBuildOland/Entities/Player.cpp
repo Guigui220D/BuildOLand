@@ -68,15 +68,13 @@ void Player::updateMovement(double dt) {
 
     //Block enter and leave event
     sf::Vector2i blockOn = sf::Vector2i(roundf(getPosition().x / StateGame::TILE_SIZE), roundf(getPosition().y / StateGame::TILE_SIZE));
-    sf::Vector2u uBlockOn = sf::Vector2u(blockOn.x, blockOn.y);
-    if (lastPos != uBlockOn)
+    if (lastPos != blockOn)
     {
-        unsigned short blockId = currentWorld->getBlockId(blockOn.x, blockOn.y);
-        unsigned short groundId = currentWorld->getGroundId(blockOn.x, blockOn.y);
+        unsigned short blockId = currentWorld->getBlockId(sf::Vector2i(blockOn.x, blockOn.y));
+        unsigned short groundId = currentWorld->getGroundId(sf::Vector2i(blockOn.x, blockOn.y));
         EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
-        if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
-            EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
-        lastPos = uBlockOn;
+        EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
+        lastPos = blockOn;
     }
 }
 

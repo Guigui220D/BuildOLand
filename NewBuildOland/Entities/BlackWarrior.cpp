@@ -17,10 +17,10 @@ void BlackWarrior::updateMovement(double dt) {
     //Direction : 0 EAST, 1 SOUTH, 2 WEST, 3 NORTH
 
     sf::Vector2f position = getWorldPos();
-    Block *eastBlock = currentWorld->getBlockAt(round(position.x - 0.5) + 1, round(position.y));
-    Block *southBlock = currentWorld->getBlockAt(round(position.x), round(position.y - 0.5) + 1);
-    Block *westBlock = currentWorld->getBlockAt(round(position.x + 0.5) - 1, round(position.y));
-    Block *northBlock = currentWorld->getBlockAt(round(position.x), round(position.y + 0.5) - 1);
+    Block *eastBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x - 0.5) + 1, round(position.y)));
+    Block *southBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y - 0.5) + 1));
+    Block *westBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x + 0.5) - 1, round(position.y)));
+    Block *northBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y + 0.5) - 1));
 
     if (direction == 0 && !eastBlock->hasHitbox()) {
         moveEast(dt);

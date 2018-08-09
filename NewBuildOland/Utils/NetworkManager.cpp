@@ -119,11 +119,11 @@ void NetworkManager::receive()
                     switch (editionCode)
                     {
                     case EditionCodes::setBlock:
-                        game->getWorld()->setBlockId(sf::Vector2u(x, y), id);
+                        game->getWorld()->setBlockId(sf::Vector2i(x, y), id);
                         break;
 
                     case EditionCodes::setGround:
-                        game->getWorld()->setGroundId(sf::Vector2u(x, y), id);
+                        game->getWorld()->setGroundId(sf::Vector2i(x, y), id);
                         break;
                     }
                 }
@@ -131,7 +131,7 @@ void NetworkManager::receive()
 
             case MainCodes::sendWorld:
                 {
-                    game->getWorld()->generateWorld(rec);
+                    //game->getWorld()->generateWorld(rec);
                 }
                 break;
 
@@ -164,7 +164,7 @@ void NetworkManager::receive()
                             {
                                 unsigned int x, y;
                                 rec >> x >> y;
-                                TNTEntity* tnt = new TNTEntity(game->getWorld(), id, sf::Vector2u(x, y));
+                                TNTEntity* tnt = new TNTEntity(game->getWorld(), id, sf::Vector2i(x, y));
                                 game->getWorld()->addEntity(tnt);
                             }
                             break;

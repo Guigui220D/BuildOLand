@@ -21,8 +21,8 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
         //Send event to the block
         tileset->getBlockById(e.getOldBlock())->onBlockBreak(e);
     }
-    else    //To server
-        state->getNetworkManager()->sendBlockBreak(e.getPosition());
+    //else    //To server
+        //state->getNetworkManager()->sendBlockBreak(e.getPosition());
 }
 
 void EventManager::OnBlockBuild(BlockBuildEvent e)
@@ -32,8 +32,8 @@ void EventManager::OnBlockBuild(BlockBuildEvent e)
         //Send event to the block
         tileset->getBlockById(e.getBlock())->onBlockBuild(e);
     }
-    else    //To server
-        state->getNetworkManager()->sendBlockBuild(e.getPosition(), e.getBlock());
+    //else    //To server
+        //state->getNetworkManager()->sendBlockBuild(e.getPosition(), e.getBlock());
 }
 
 void EventManager::OnGroundPlace(GroundPlaceEvent e)
@@ -42,8 +42,8 @@ void EventManager::OnGroundPlace(GroundPlaceEvent e)
 //    tileset->getGroundById(e.getNewGround())->OnGroundPlaced(e);
 //    tileset->getGroundById(e.getNewGround())->OnGroundRePlaced(e);
 
-    if (state->isOnlineAndAvailible())  //Send event to server
-        state->getNetworkManager()->sendGroundChange(e.getPosition(), e.getNewGround());
+    //if (state->isOnlineAndAvailible())  //Send event to server
+        //state->getNetworkManager()->sendGroundChange(e.getPosition(), e.getNewGround());
 }
 
 void EventManager::OnPlaceableEnter(PlaceableEnterEvent e)
@@ -69,6 +69,6 @@ void EventManager::OnBlockInteract(BlockInteractEvent e)
         //Send event to block
         tileset->getBlockById(e.getBlock())->onBlockInteract(e);
     }
-    else    //To server
-        state->getNetworkManager()->sendInteractEvent(e.getPosition());
+    //else    //To server
+        //state->getNetworkManager()->sendInteractEvent(e.getPosition());
 }

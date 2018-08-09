@@ -5,13 +5,13 @@
 class BlockInteractEvent : public GameEvent
 {
     public:
-        BlockInteractEvent(sf::Vector2u pos, unsigned int block, Entities* entity, StateGame* state);
+        BlockInteractEvent(sf::Vector2i pos, unsigned int block, Entities* entity, StateGame* state);
         virtual ~BlockInteractEvent();
-        inline sf::Vector2u getPosition() { return position; };
+        inline sf::Vector2i getPosition() { return position; };
         inline unsigned int getBlock() { return blockId; };
         inline Entities* getEntity() { return entit; };
     protected:
-        sf::Vector2u position;
+        sf::Vector2i position;
         unsigned int blockId;
         Entities* entit;
 };
