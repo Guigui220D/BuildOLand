@@ -4,12 +4,14 @@
 
 #include <codecvt>
 #include "Gui.h"
+#include "../States/StateBase.h"
+
 class StateMenu;
 
 class TextInput : public Gui{
 
 public:
-    TextInput(StateMenu *stateMenu, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0);
+    TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0);
 
     void update(float dt) override;
 
@@ -24,7 +26,7 @@ public:
     const std::string &getInputText() const;
 
 private:
-    StateMenu* stateMenu;
+    StateBase* stateBase;
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>,wchar_t> unicodeConvert;
 
     const float margin = 15.0f;

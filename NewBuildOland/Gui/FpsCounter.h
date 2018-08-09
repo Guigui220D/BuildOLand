@@ -16,7 +16,6 @@ protected:
 
     private:
         double getFPS();
-        sf::Font font;
         sf::Text text;
 };
 

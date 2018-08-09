@@ -55,6 +55,8 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	EventManager::tileset = &tileset;
 	EventManager::state = this;
 
+    //Init the asset manager
+    assetManager;
 	//Init the sound manager
 	soundManager;
 	sf::Music* backgroundMusic = soundManager.getMusic("fantasymusic.ogg");
@@ -104,10 +106,12 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 
 	//Setup the gui
 	inventoryGui = new InventoryGui(this, player->getInventory(), &inventoryCursorId);
+	chatGui = new ChatGui(this);
 
 	gui = std::vector<std::unique_ptr<Gui>>();
 	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
 	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
+	gui.push_back(std::unique_ptr<Gui>(chatGui));
 
 }
 
@@ -241,6 +245,19 @@ void StateGame::handleInput() {
 	} else {
 		isPlaceKeyPressed = false;
 	}
+
+
+	//For showing the tchat writing bar
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+		if(!chatGui->isActive()) {
+			chatGui->setIsActive(true);
+		}
+	} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		if(chatGui->isActive()) {
+			chatGui->setIsActive(false);
+		}
+	}
+
 }
 
 void StateGame::update(float dt, bool focused) {
@@ -435,6 +452,10 @@ void StateGame::handleEvent(sf::Event &event) {
             }
 
             break;
+
+		case sf::Event::TextEntered:
+			chatGui->eventInput(event.text.unicode);
+			break;
     }
 
 }
