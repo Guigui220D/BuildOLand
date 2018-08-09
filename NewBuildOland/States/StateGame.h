@@ -32,15 +32,14 @@ public:
 	sf::View& getGuiView();
 	void setWorld(World &world);
 
-	inline TileSet* getTileset() { return &tileset; };
-
 	Entities* cameraFollow;
 
 	inline void setClicks() { leftClicking = rightClicking = true; };
 
 	inline World* getWorld() { return currentWorld; };
-
+	inline TileSet* getTileset() { return &tileset; };
 	inline SoundManager* getSoundManager() { return &soundManager; };
+	inline Player* getPlayer() { return player; };
 
     void handleEvent(sf::Event &event) override;
 

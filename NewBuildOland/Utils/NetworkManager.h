@@ -42,6 +42,8 @@ class NetworkManager
             if (sender != server || port != PORT)
             {
                 std::cout << "Warning : it was not from the server\n";
+                std::cout << "Server : " << server << ":" << PORT << "\n";
+                std::cout << "Sender : " << sender << ":" << port << "\n";
             }
             return p;
         };
