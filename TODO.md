@@ -10,12 +10,17 @@
 - [ ] Chat and command-line
 - [ ] Character personnalization
 - [ ] Proper resource management (sound, textures, fonts)
+- [ ] Better sound
+- [ ] Personalizable setting (controls, sound, etc)
 
 ### Content :
 
 - [ ] More blocks
 - [ ] More entities
 - [ ] Items and tools
+- [ ] A gameplay
+- [ ] Cool world generation
+- [ ] Better interface
 
 ### Completed :
 - [x] Create proper todo list
