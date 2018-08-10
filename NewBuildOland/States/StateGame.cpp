@@ -70,7 +70,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
 	mapView.setSize(game.getWorldView().getSize());
-	mapView.zoom(3);
+	mapView.zoom(16);    //Should be 3
 
 	worldDraw = sf::RectangleShape();
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
@@ -368,7 +368,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
-	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 24; x < (int)(player->getPosition().x / TILE_SIZE) + 24; x++)
+	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
 	{
 		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
 		{
@@ -376,6 +376,24 @@ void StateGame::draw(sf::RenderWindow &window) {
 			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			window.draw(mapDraw);
 		}
+	}
+	//Draw chunks info (temporary)
+	{
+	    sf::RectangleShape chunkDraw;
+        chunkDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT * 16, TILE_SIZE_FLOAT * 16));
+
+        chunkDraw.setFillColor(sf::Color(0, 255, 0, 127));
+        for (auto i = currentWorld->loadedChunks.begin(); i != currentWorld->loadedChunks.end(); i++)
+        {
+            chunkDraw.setPosition(sf::Vector2f((*i).second.getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).second.getPosition().y * 16.f * TILE_SIZE_FLOAT));
+            window.draw(chunkDraw);
+        }
+        chunkDraw.setFillColor(sf::Color(255, 255, 0, 127));
+        for (auto i = currentWorld->chunkCache.begin(); i < currentWorld->chunkCache.end(); i++)
+        {
+            chunkDraw.setPosition(sf::Vector2f((*i).getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).getPosition().y * 16.f * TILE_SIZE_FLOAT));
+            window.draw(chunkDraw);
+        }
 	}
 	//Draw entities on map
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)

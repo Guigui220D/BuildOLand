@@ -14,7 +14,7 @@ class StateGame;
 class World
 {
 public:
-    static const int UNLOAD_DISTANCE = 64;
+    static const int UNLOAD_DISTANCE = 32;
 
 	World(StateGame& stateGame, std::string name = "world");
 	virtual ~World();
@@ -41,6 +41,10 @@ public:
     virtual void unloadChunk(sf::Vector2i chunk, bool erase);
     virtual void flushChunkCache();
 
+    //Chunks (Should be private, temporary public for chunk map
+	std::map<uint64_t, Chunk> loadedChunks;
+	std::vector<Chunk> chunkCache;
+
 	//Call for telling the other methods that the world is deleted
 	inline void setDeleted() { isBeingDeleted = true; };
 
@@ -52,9 +56,7 @@ protected:
 
 	std::vector<Entities*> entities;
 
-	//Chunks
-	std::map<uint64_t, Chunk> loadedChunks;
-	std::vector<Chunk> chunkCache;
+
 
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
         { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };

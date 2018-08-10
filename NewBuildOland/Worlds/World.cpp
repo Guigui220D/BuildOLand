@@ -23,6 +23,7 @@ void World::loadChunk(sf::Vector2i chunk)
             if ((*i).getPosition() == chunk)
             {
                 loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i)));
+                i = chunkCache.erase(i);
                 return;
             }
         }
@@ -65,9 +66,10 @@ void World::updateChunks()
     {
         sf::Vector2i pos = (*i).second.getPosition();
         //Get center of chunk
-        sf::Vector2f center(pos.x + (Chunk::CHUNK_SIZE / 2), pos.y + (Chunk::CHUNK_SIZE / 2));
+        sf::Vector2f center(pos.x * Chunk::CHUNK_SIZE + Chunk::CHUNK_SIZE / 2, pos.y * Chunk::CHUNK_SIZE + Chunk::CHUNK_SIZE / 2);
         //calculate player's distance to chunk
         sf::Vector2f delta = center - stateGame->getPlayer()->getWorldPos();
+        delta = sf::Vector2f(abs(delta.x), abs(delta.y));
         if (delta.x > UNLOAD_DISTANCE || delta.y > UNLOAD_DISTANCE)
         {
             toUnload.push_back(pos);
