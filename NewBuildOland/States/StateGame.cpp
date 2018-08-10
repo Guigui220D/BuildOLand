@@ -381,7 +381,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 	{
 	    sf::RectangleShape chunkDraw;
         chunkDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT * 16, TILE_SIZE_FLOAT * 16));
-
+        chunkDraw.setOutlineThickness(100);
+        chunkDraw.setOutlineColor(sf::Color(0, 0, 0, 64));
         chunkDraw.setFillColor(sf::Color(0, 255, 0, 127));
         for (auto i = currentWorld->loadedChunks.begin(); i != currentWorld->loadedChunks.end(); i++)
         {
