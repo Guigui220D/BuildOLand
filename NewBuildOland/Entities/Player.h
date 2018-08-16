@@ -16,6 +16,8 @@ public:
 
 	inline sf::String getDisplayName() { return nameText.getString(); };
 
+	virtual Player* clone() const { return nullptr; };
+
 private:
 	sf::Vector2i lastPos;
 

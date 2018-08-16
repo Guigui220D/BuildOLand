@@ -20,9 +20,18 @@ void World::loadChunk(sf::Vector2i chunk)
         std::cout << "Loaded chunk " << chunk.x << ", " << chunk.y << ".\n";
         for (auto i = chunkCache.begin(); i != chunkCache.end(); i++)
         {
-            if ((*i).getPosition() == chunk)
+            if ((*i).chunk.getPosition() == chunk)
             {
-                loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i)));
+                loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i).chunk));
+                for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
+                {
+                    Entities* e = (*j)->clone();
+                    std::cout << "Added one entity: " << typeid(*e).name() << "\n";
+                    entities.push_back(e);
+                }
+                for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
+                    delete (*j);
+                (*i).entities.clear();
                 i = chunkCache.erase(i);
                 return;
             }
@@ -40,7 +49,23 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
     //When chunks are unloaded, they are not directly written on disk to avoid freezes, but instead are put in a cache that is ready to be saved
     if (isChunkLoaded(chunk))
     {
-        chunkCache.push_back(*getChunk(chunk));
+        CachedChunk cc;
+        cc.chunk = *getChunk(chunk);
+        sf::Vector2f chunkTopLeft(cc.chunk.getPosition().x * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, cc.chunk.getPosition().y * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
+        sf::Vector2f chunkBottomRight((cc.chunk.getPosition().x + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, (cc.chunk.getPosition().y + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
+        for (auto i = entities.begin(); i < entities.end(); i++)
+        {
+            if ((*i)->getPosition().x >= chunkTopLeft.x && (*i)->getPosition().x <= chunkBottomRight.x
+                && (*i)->getPosition().y >= chunkTopLeft.y && (*i)->getPosition().y <= chunkBottomRight.y)
+            {
+                Entities* e = (*i)->clone();
+                std::cout << "Removed one entity: " << typeid(*e).name() << "\n";
+                cc.entities.push_back(e);
+                delete (*i);
+                i = entities.erase(i);
+            }
+        }
+        chunkCache.push_back(cc);
         if (erase)
             loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
         std::cout << "Unloaded chunk " << chunk.x << ", " << chunk.y << ".\n";
@@ -75,7 +100,7 @@ void World::updateChunks()
             toUnload.push_back(pos);
         }
     }
-    for (int i = 0; i < toUnload.size(); i++)
+    for (unsigned int i = 0; i < toUnload.size(); i++)
         unloadChunk(toUnload.at(i), true);
 }
 
@@ -150,20 +175,19 @@ World::~World()
         delete(entities.at(i));
 }
 
-const std::vector<Entities *> &World::getEntities() const
+const std::vector<Entities*> &World::getEntities() const
 {
     return entities;
 }
 
 void World::removeEntitiesThatNeedToBeRemoved()
 {
-    int j = 0;
-    for (unsigned int i = 0; i < entities.size(); i++)
+    for (auto i = entities.begin(); i < entities.end(); i++)
     {
-        if (entities.at(i - j)->mustBeRemoved)
+        if ((*i)->mustBeRemoved)
         {
-            entities.erase(entities.begin() + (i - j));
-            j++;
+            delete (*i);
+            i = entities.erase(i);
         }
     }
 }
@@ -174,6 +198,7 @@ void World::removeEntityNowById(unsigned int id)
     {
         if ((*i)->getID() == id)
         {
+            delete (*i);
             i = entities.erase(i);
         }
     }

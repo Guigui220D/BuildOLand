@@ -94,7 +94,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	mouse.setTexture(t);
 
     player = new Player(currentWorld, nick, nManager.getPlayerID());    //Player id should be 0 if it's offline
-	player->init(0, 0);
+    player->init(0, 0);
 	cameraFollow = player;
 
 	//Setup the gui
@@ -392,7 +392,7 @@ void StateGame::draw(sf::RenderWindow &window) {
         chunkDraw.setFillColor(sf::Color(255, 255, 0, 127));
         for (auto i = currentWorld->chunkCache.begin(); i < currentWorld->chunkCache.end(); i++)
         {
-            chunkDraw.setPosition(sf::Vector2f((*i).getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).getPosition().y * 16.f * TILE_SIZE_FLOAT));
+            chunkDraw.setPosition(sf::Vector2f((*i).chunk.getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).chunk.getPosition().y * 16.f * TILE_SIZE_FLOAT));
             window.draw(chunkDraw);
         }
 	}

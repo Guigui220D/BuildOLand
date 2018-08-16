@@ -6,13 +6,13 @@
 MazeWorld::MazeWorld(StateGame& stateGame)
 	: World(stateGame, "mazeworld")
 {
-    /*
+
 	{
 	    BlackWarrior* blackWarrior = new BlackWarrior(this, getNextEntityId());
-        blackWarrior->init(4.0f, 0.0f);
+	    blackWarrior->init(4, 4);
         entities.push_back(blackWarrior);
 	}
-	*/
+
 }
 
 

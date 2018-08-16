@@ -17,6 +17,8 @@ Chunk::Chunk(sf::Vector2i chunkPos)
     }
 }
 
+Chunk::Chunk() {}
+
 Chunk::~Chunk()
 {
     //dtor

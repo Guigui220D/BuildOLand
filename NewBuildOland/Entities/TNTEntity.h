@@ -8,6 +8,8 @@ class TNTEntity : public Entities
         virtual ~TNTEntity();
         void update(double delta) override;
 
+        virtual TNTEntity* clone() const { return new TNTEntity(*this); };
+
     private:
         sf::Clock fuse;
         sf::Texture texture;

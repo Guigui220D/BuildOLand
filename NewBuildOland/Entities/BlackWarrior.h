@@ -17,6 +17,8 @@ protected:
 
     void updateMovement(double dt) override;
 
+    virtual BlackWarrior* clone() const { return new BlackWarrior(*this); };
+
 private:
     unsigned short direction = 0;
     unsigned short prevDir = 100;

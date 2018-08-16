@@ -5,6 +5,7 @@
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
 #include "Chunk.h"
+#include "CachedChunk.h"
 #include <math.h>
 
 class Entities;
@@ -43,7 +44,7 @@ public:
 
     //Chunks (Should be private, temporary public for chunk map
 	std::map<uint64_t, Chunk> loadedChunks;
-	std::vector<Chunk> chunkCache;
+	std::vector<CachedChunk> chunkCache;
 
 	//Call for telling the other methods that the world is deleted
 	inline void setDeleted() { isBeingDeleted = true; };

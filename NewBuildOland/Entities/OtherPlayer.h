@@ -18,6 +18,8 @@ class OtherPlayer : public LivingEntity
 
         virtual void takePacket(sf::Packet p) override;
 
+        virtual OtherPlayer* clone() const { return new OtherPlayer(*this); };
+
     protected:
 
         std::string getTextureName() override;

@@ -9,6 +9,7 @@ class Chunk
         static const int CHUNK_SIZE = 16;
 
         Chunk(sf::Vector2i chunkPos);
+        Chunk();
         virtual ~Chunk();
 
         void setBlock(sf::Vector2i pos, unsigned short block);
