@@ -10,6 +10,8 @@ class TNTEntity : public Entities
 
         virtual TNTEntity* clone() const { return new TNTEntity(*this); };
 
+        std::vector<unsigned char> getBytes() override;
+
     private:
         sf::Clock fuse;
         sf::Texture texture;

@@ -19,6 +19,8 @@ class Chunk
 
         inline sf::Vector2i getPosition() { return position; };
 
+        char* getBytes();
+
     private:
         //The position of the chunk, not to confuse with the position of the blocks
         sf::Vector2i position;

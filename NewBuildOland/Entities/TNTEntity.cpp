@@ -19,6 +19,11 @@ TNTEntity::~TNTEntity()
     //dtor
 }
 
+std::vector<unsigned char> TNTEntity::getBytes()
+{
+    return getBeginningBytes(EntityCodes::tnt);
+}
+
 void TNTEntity::update(double delta)
 {
     int demiSeconds = (int)(fuse.getElapsedTime().asSeconds() * 2);

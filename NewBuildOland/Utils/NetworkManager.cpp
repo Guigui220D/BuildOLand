@@ -5,6 +5,8 @@
 #include "../Entities/OtherPlayer.h"
 #include "../Entities/TNTEntity.h"
 
+#include "../Entities/EntityCodes.h"
+
 
 NetworkManager::NetworkManager(StateGame* stategame)
     : receiveThread(&receive, this)

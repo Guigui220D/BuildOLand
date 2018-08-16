@@ -20,6 +20,8 @@ class OtherPlayer : public LivingEntity
 
         virtual OtherPlayer* clone() const { return new OtherPlayer(*this); };
 
+        std::vector<unsigned char> getBytes() override;
+
     protected:
 
         std::string getTextureName() override;

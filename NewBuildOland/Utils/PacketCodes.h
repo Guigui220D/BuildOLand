@@ -55,10 +55,3 @@ enum EditionCodes
     setBlock = 3,
     setGround = 4
 };
-
-enum EntityCodes
-{
-    player = 0,
-    blackWarrior = 1,
-    tnt = 2
-};
