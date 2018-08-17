@@ -10,6 +10,8 @@ class Chunk
 
         Chunk(sf::Vector2i chunkPos);
         Chunk();
+        //Load a chunk
+        //Chunk(&std::vector<unsigned char> data);
         virtual ~Chunk();
 
         void setBlock(sf::Vector2i pos, unsigned short block);
@@ -19,7 +21,6 @@ class Chunk
 
         inline sf::Vector2i getPosition() { return position; };
 
-        char* getBytes();
 
     private:
         //The position of the chunk, not to confuse with the position of the blocks

@@ -3,9 +3,10 @@
 Chunk::Chunk(sf::Vector2i chunkPos)
 {
     position = chunkPos;
-    for (int i = 0; i < (16 * 16); i++)
+    //Temporary generation
+    for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
     {
-        if (i == 0 || i == (16 * 16 - 1))
+        if (i == 0 || i == (CHUNK_SIZE * CHUNK_SIZE - 1))
         {
             blocks.push_back((unsigned short)6);
         }

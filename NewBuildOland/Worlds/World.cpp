@@ -80,6 +80,11 @@ void World::flushChunkCache()
     //Iterate through chunks cache and save chunks one by one
     //
     //
+    //Test
+    for (int i = 0; i < chunkCache.size(); i++)
+    {
+        chunkCache.at(i).getData();
+    }
     std::cout << "Saved chunk cache, " << chunkCache.size() << " chunks!\n";
     chunkCache.clear();
 }
