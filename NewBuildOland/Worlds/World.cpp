@@ -120,9 +120,14 @@ void World::flushChunkCache()
         std::vector<unsigned char> data = chunkCache.at(i).getData();
         std::string const chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunkCache.at(i).chunk.getPosition().x) + "_" + std::to_string(chunkCache.at(i).chunk.getPosition().y) + ".chunk");
         //Save the chunk
-        std::ofstream chunkFileFlux(chunkFileName.c_str(), std::ios::binary | std::ios::out);
-        if (!chunkFileFlux.is_open())
+        std::ofstream chunkFileFluxTest(chunkFileName.c_str(), std::ios::binary | std::ios::out);
+        if (!chunkFileFluxTest.is_open())
+        {
             FileManager::createFolder("./gamedata/worlds/" + worldName + "/");
+        }
+        chunkFileFluxTest.close();
+
+        std::ofstream chunkFileFlux(chunkFileName.c_str(), std::ios::binary | std::ios::out);
 
         if (chunkFileFlux) {
             //Everything okay, writing
@@ -243,12 +248,16 @@ void World::setBlockId(sf::Vector2i pos, unsigned short block)
 
 World::~World()
 {
+    for (unsigned int i = 0; i < entities.size(); i++)
+        delete(entities.at(i));
+}
+
+void World::preDelete()
+{
     for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
         unloadChunk((*i).second.getPosition(), false);
     loadedChunks.clear();
     flushChunkCache();
-    for (unsigned int i = 0; i < entities.size(); i++)
-        delete(entities.at(i));
 }
 
 const std::vector<Entities*> &World::getEntities() const

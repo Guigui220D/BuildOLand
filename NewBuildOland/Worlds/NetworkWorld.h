@@ -9,13 +9,13 @@ class NetworkWorld : public World
     public:
         NetworkWorld(StateGame& stateGame);
         virtual ~NetworkWorld();
+        void preDelete() override;
 
         inline NetworkManager* getNetworkManager() { return stateGame->getNetworkManager(); };
 
-        //void updateChunks() override;
-        //void loadChunk(sf::Vector2i chunk) override;
-        //void unloadChunk(sf::Vector2i chunk, bool erase) override;
-        //void flushChunkCache() override;
+        void loadChunk(sf::Vector2i chunk) override;
+        void unloadChunk(sf::Vector2i chunk, bool erase) override;
+        void flushChunkCache() override;
 
     protected:
 

@@ -8,7 +8,7 @@ class Chunk
         //One chunk is 16 blocks
         static const int CHUNK_SIZE = 16;
 
-        Chunk(sf::Vector2i chunkPos);
+        Chunk(sf::Vector2i chunkPos, bool rdy = true);
         Chunk();
         //Load a chunk
         Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos);
@@ -29,6 +29,6 @@ class Chunk
         std::vector<unsigned short> blocks;
         std::vector<unsigned short> grounds;
 
-
+        bool ready;
 };
 

@@ -21,6 +21,7 @@ public:
 
 	World(StateGame& stateGame, std::string name = "world");
 	virtual ~World();
+	virtual void preDelete();
 
 	unsigned short getGroundId(sf::Vector2i pos);
 	unsigned short getBlockId(sf::Vector2i pos);
@@ -39,7 +40,7 @@ public:
 	inline unsigned int getNextEntityId() { return ++nextEntityId; };
     Entities* getEntityById(unsigned int id);
 
-    virtual void updateChunks();
+    void updateChunks();
     virtual void loadChunk(sf::Vector2i chunk);
     virtual void unloadChunk(sf::Vector2i chunk, bool erase);
     virtual void flushChunkCache();
@@ -48,9 +49,6 @@ public:
 	std::map<uint64_t, Chunk> loadedChunks;
 	std::vector<CachedChunk> chunkCache;
 	void generateChunk(Chunk& chunk, Generators gen);
-
-	//Call for telling the other methods that the world is deleted
-	inline void setDeleted() { isBeingDeleted = true; };
 
 protected:
 	StateGame* stateGame = nullptr;
@@ -73,7 +71,6 @@ protected:
         };
 
 private:
-	bool isBeingDeleted = false;
 
 	unsigned int nextEntityId = 0;
 

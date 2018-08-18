@@ -419,7 +419,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 void StateGame::setWorld(World &world) {
 	//We delete the old world
 	//as we will be changing the pointer's adress
-	currentWorld->setDeleted();
+    currentWorld->preDelete();
 	delete currentWorld;
 
 	//And load the new world
@@ -430,7 +430,8 @@ void StateGame::setWorld(World &world) {
 }
 
 StateGame::~StateGame() {
-	//We delete pointers to prevent memory leaks
+	//We delete the world to prevent memory leaks
+	currentWorld->preDelete();
 	delete currentWorld;
 	std::cout << "Stategame delete\n";
 }

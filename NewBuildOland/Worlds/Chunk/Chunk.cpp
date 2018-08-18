@@ -1,9 +1,10 @@
 #include "Chunk.h"
 #include <iostream>
 
-Chunk::Chunk(sf::Vector2i chunkPos)
+Chunk::Chunk(sf::Vector2i chunkPos, bool rdy)
 {
     position = chunkPos;
+    ready = rdy;
     //Fill array
     for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
     {
@@ -12,10 +13,11 @@ Chunk::Chunk(sf::Vector2i chunkPos)
     }
 }
 
-Chunk::Chunk() {}
+Chunk::Chunk() { ready = false; }
 
 Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
 {
+    ready = true;
     //We remove all block data, the rest, entities data, is kept for the world
     int posX, posY;
     //Get pos x and pos y
@@ -59,6 +61,9 @@ Chunk::~Chunk()
 
 void Chunk::setBlock(sf::Vector2i pos, unsigned short block)
 {
+    if (!ready)
+        return;
+
     if (pos.x < 0 || pos.y < 0 ||
         pos.x >= CHUNK_SIZE || pos.y >= CHUNK_SIZE)
     return;
@@ -68,6 +73,9 @@ void Chunk::setBlock(sf::Vector2i pos, unsigned short block)
 
 void Chunk::setGround(sf::Vector2i pos, unsigned short ground)
 {
+    if (!ready)
+        return;
+
     if (pos.x < 0 || pos.y < 0 ||
         pos.x >= CHUNK_SIZE || pos.y >= CHUNK_SIZE)
     return;
@@ -77,6 +85,9 @@ void Chunk::setGround(sf::Vector2i pos, unsigned short ground)
 
 unsigned short Chunk::getBlock(sf::Vector2i pos)
 {
+    if (!ready)
+        return 0;
+
     if (pos.x < 0 || pos.y < 0 ||
         pos.x >= CHUNK_SIZE || pos.y >= CHUNK_SIZE)
     return 0;
@@ -86,6 +97,9 @@ unsigned short Chunk::getBlock(sf::Vector2i pos)
 
 unsigned short Chunk::getGround(sf::Vector2i pos)
 {
+    if (!ready)
+        return 0;
+
     if (pos.x < 0 || pos.y < 0 ||
         pos.x >= CHUNK_SIZE || pos.y >= CHUNK_SIZE)
     return 0;
