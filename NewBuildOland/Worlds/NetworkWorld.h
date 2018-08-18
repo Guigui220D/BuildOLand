@@ -12,6 +12,11 @@ class NetworkWorld : public World
 
         inline NetworkManager* getNetworkManager() { return stateGame->getNetworkManager(); };
 
+        //void updateChunks() override;
+        //void loadChunk(sf::Vector2i chunk) override;
+        //void unloadChunk(sf::Vector2i chunk, bool erase) override;
+        //void flushChunkCache() override;
+
     protected:
 
     private:

@@ -4,18 +4,11 @@
 Chunk::Chunk(sf::Vector2i chunkPos)
 {
     position = chunkPos;
-    //Temporary generation
+    //Fill array
     for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
     {
-        if (i == 0 || i == (CHUNK_SIZE * CHUNK_SIZE - 1))
-        {
-            blocks.push_back((unsigned short)1);
-        }
-        else
-        {
-            blocks.push_back((unsigned short)0);
-        }
-        grounds.push_back((unsigned short)(i % 3 || i % 2));
+        grounds.push_back(0);
+        blocks.push_back(0);
     }
 }
 

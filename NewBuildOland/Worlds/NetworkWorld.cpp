@@ -14,3 +14,13 @@ NetworkWorld::~NetworkWorld()
 {
     //dtor
 }
+
+/*
+void NetworkWorld::loadChunk(sf::Vector2i chunk)
+{
+    if (!isChunkLoaded(chunk))
+    {
+
+    }
+}
+*/

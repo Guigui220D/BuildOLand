@@ -7,6 +7,7 @@
 #include "Chunk.h"
 #include "CachedChunk.h"
 #include <math.h>
+#include "GenerationModes.h"
 
 class Entities;
 
@@ -16,6 +17,7 @@ class World
 {
 public:
     static const int UNLOAD_DISTANCE = 32;
+    static const int WORLD_SEED = 546556;
 
 	World(StateGame& stateGame, std::string name = "world");
 	virtual ~World();
@@ -45,6 +47,7 @@ public:
     //Chunks (Should be private, temporary public for chunk map
 	std::map<uint64_t, Chunk> loadedChunks;
 	std::vector<CachedChunk> chunkCache;
+	void generateChunk(Chunk& chunk, Generators gen);
 
 	//Call for telling the other methods that the world is deleted
 	inline void setDeleted() { isBeingDeleted = true; };
@@ -56,8 +59,6 @@ protected:
 	std::string worldName;
 
 	std::vector<Entities*> entities;
-
-
 
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
         { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };

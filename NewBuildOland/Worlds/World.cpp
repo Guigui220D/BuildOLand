@@ -76,6 +76,7 @@ void World::loadChunk(sf::Vector2i chunk)
         }
         //The chunk doesn't exist, generate it
         loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk)));
+        generateChunk(*getChunk(chunk), Generators::SandGrassPattern1);
     }
 }
 
@@ -160,6 +161,23 @@ void World::updateChunks()
     }
     for (unsigned int i = 0; i < toUnload.size(); i++)
         unloadChunk(toUnload.at(i), true);
+}
+
+void World::generateChunk(Chunk& chunk, Generators gen)
+{
+    switch (gen)
+    {
+    case Generators::SandGrassPattern1:
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                if ((x + y) % 2 && (x + y) % 3)
+                    chunk.setGround(sf::Vector2i(x, y), 1);
+            }
+        }
+        break;
+    }
 }
 
 unsigned short World::getBlockId(sf::Vector2i pos)
