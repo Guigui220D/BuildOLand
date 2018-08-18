@@ -185,6 +185,15 @@ void World::generateChunk(Chunk& chunk, Generators gen)
     }
 }
 
+Chunk World::pgetChunk(sf::Vector2i chunk)
+{
+    if (!isChunkLoaded(chunk))
+    {
+        loadChunk(chunk);
+    }
+    return *getChunk(chunk);
+}
+
 unsigned short World::getBlockId(sf::Vector2i pos)
 {
 	//Temporary
