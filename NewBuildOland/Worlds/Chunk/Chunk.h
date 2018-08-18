@@ -11,7 +11,7 @@ class Chunk
         Chunk(sf::Vector2i chunkPos);
         Chunk();
         //Load a chunk
-        //Chunk(&std::vector<unsigned char> data);
+        Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos);
         virtual ~Chunk();
 
         void setBlock(sf::Vector2i pos, unsigned short block);

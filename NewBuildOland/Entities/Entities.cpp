@@ -41,32 +41,38 @@ std::vector<unsigned char> Entities::getBeginningBytes(int code)
 {
     std::vector<unsigned char> bytes;
     //Code
-    bytes.push_back((code & 0x000000FF) << 0);
-    bytes.push_back((code & 0x0000FF00) << 8);
-    bytes.push_back((code & 0x00FF0000) << 16);
-    bytes.push_back((code & 0xFF000000) << 24);
+    union
+    {
+        int i;
+        unsigned char bytes[4];
+    } codeu;
+    codeu.i = code;
+    bytes.push_back(codeu.bytes[0]);
+    bytes.push_back(codeu.bytes[1]);
+    bytes.push_back(codeu.bytes[2]);
+    bytes.push_back(codeu.bytes[3]);
     //Pos x
     union
     {
         float f;
-        int i;
+        unsigned char bytes[4];
     } posX;
     posX.f = getPosition().x;
-    bytes.push_back((posX.i & 0x000000FF) << 0);
-    bytes.push_back((posX.i & 0x0000FF00) << 8);
-    bytes.push_back((posX.i & 0x00FF0000) << 16);
-    bytes.push_back((posX.i & 0xFF000000) << 24);
+    bytes.push_back(posX.bytes[0]);
+    bytes.push_back(posX.bytes[1]);
+    bytes.push_back(posX.bytes[2]);
+    bytes.push_back(posX.bytes[3]);
     //Pos y
     union
     {
         float f;
-        int i;
+        unsigned char bytes[4];
     } posY;
     posY.f = getPosition().y;
-    bytes.push_back((posY.i & 0x000000FF) << 0);
-    bytes.push_back((posY.i & 0x0000FF00) << 8);
-    bytes.push_back((posY.i & 0x00FF0000) << 16);
-    bytes.push_back((posY.i & 0xFF000000) << 24);
+    bytes.push_back(posY.bytes[0]);
+    bytes.push_back(posY.bytes[1]);
+    bytes.push_back(posY.bytes[2]);
+    bytes.push_back(posY.bytes[3]);
     return bytes;
 }
 
