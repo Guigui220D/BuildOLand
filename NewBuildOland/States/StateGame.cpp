@@ -1,6 +1,5 @@
 #include "StateGame.h"
-#include "../Worlds/FlatWorld.h"
-#include "../Worlds/MazeWorld.h"
+
 #include "../Worlds/NetworkWorld.h"
 #include <iostream>
 #include "SFML/Audio/SoundBuffer.hpp"
@@ -45,7 +44,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     }
     else
     {
-        currentWorld = new MazeWorld(*this);
+        currentWorld = new World(*this);
     }
 
 	//Init the tileset to the event manager
