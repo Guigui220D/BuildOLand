@@ -2,7 +2,6 @@
 #include "States/StateMenu.h"
 #include <iostream>
 
-
 Game::Game()
 	: window(sf::VideoMode(800, 600), "BuildOLand")
 	, currentState(0)
@@ -11,7 +10,7 @@ Game::Game()
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256,256,icon.getPixelsPtr());
 
-	window.setFramerateLimit(60);
+	//window.setFramerateLimit(60);
 
 	//Setting the current state to a Game State
 	//The worldView sizing is automated
@@ -84,7 +83,6 @@ void Game::run()
 	}
 
 	currentState->onStop();
-	//delete currentState;
 }
 
 void Game::updateView()

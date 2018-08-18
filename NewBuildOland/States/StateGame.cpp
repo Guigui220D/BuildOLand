@@ -69,7 +69,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	mapFrame.setPosition(mapView.getViewport().left, mapView.getViewport().top);
 	mapFrame.setSize(sf::Vector2f(mapView.getViewport().width, mapView.getViewport().height));
 	mapView.setSize(game.getWorldView().getSize());
-	mapView.zoom(16);    //Should be 3
+	mapView.zoom(3);
 
 	worldDraw = sf::RectangleShape();
 	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
@@ -302,6 +302,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 		{
 			//Draw the block front
 			unsigned short blockId = currentWorld->getBlockId(sf::Vector2i(x, y));
+			if (!blockId)
+                continue;
 			if (tileset.getBlockById(blockId)->hasVolume())
 			{
 				worldDraw.setTextureRect(tileset.getBlockSideRect(blockId));
@@ -325,6 +327,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 		{
 			//Draw the block
 			unsigned short blockId = currentWorld->getBlockId(sf::Vector2i(x, y));
+			if (!blockId)
+                continue;
 			if (tileset.getBlockById(blockId)->hasVolume())
 			{
 				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
@@ -375,25 +379,6 @@ void StateGame::draw(sf::RenderWindow &window) {
 			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
 			window.draw(mapDraw);
 		}
-	}
-	//Draw chunks info (temporary)
-	{
-	    sf::RectangleShape chunkDraw;
-        chunkDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT * 16, TILE_SIZE_FLOAT * 16));
-        chunkDraw.setOutlineThickness(100);
-        chunkDraw.setOutlineColor(sf::Color(0, 0, 0, 64));
-        chunkDraw.setFillColor(sf::Color(0, 255, 0, 127));
-        for (auto i = currentWorld->loadedChunks.begin(); i != currentWorld->loadedChunks.end(); i++)
-        {
-            chunkDraw.setPosition(sf::Vector2f((*i).second.getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).second.getPosition().y * 16.f * TILE_SIZE_FLOAT));
-            window.draw(chunkDraw);
-        }
-        chunkDraw.setFillColor(sf::Color(255, 255, 0, 127));
-        for (auto i = currentWorld->chunkCache.begin(); i < currentWorld->chunkCache.end(); i++)
-        {
-            chunkDraw.setPosition(sf::Vector2f((*i).chunk.getPosition().x * 16.f * TILE_SIZE_FLOAT, (*i).chunk.getPosition().y * 16.f * TILE_SIZE_FLOAT));
-            window.draw(chunkDraw);
-        }
 	}
 	//Draw entities on map
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)

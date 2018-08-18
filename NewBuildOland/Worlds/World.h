@@ -28,6 +28,7 @@ public:
 	Block* getBlockAt(sf::Vector2i pos);
 	void setGroundId(sf::Vector2i pos, unsigned short ground);
 	void setBlockId(sf::Vector2i pos, unsigned short block);
+    inline Chunk* getChunk(sf::Vector2i chunkPos) { return &((*loadedChunks.find(vector2iToInt64(chunkPos))).second); };
 
 	inline std::string getName() { return worldName; };
 
@@ -40,15 +41,12 @@ public:
 	inline unsigned int getNextEntityId() { return ++nextEntityId; };
     Entities* getEntityById(unsigned int id);
 
+    //Chunks
+	void generateChunk(Chunk& chunk, Generators gen);
     void updateChunks();
     virtual void loadChunk(sf::Vector2i chunk);
     virtual void unloadChunk(sf::Vector2i chunk, bool erase);
     virtual void flushChunkCache();
-
-    //Chunks (Should be private, temporary public for chunk map
-	std::map<uint64_t, Chunk> loadedChunks;
-	std::vector<CachedChunk> chunkCache;
-	void generateChunk(Chunk& chunk, Generators gen);
 
 protected:
 	StateGame* stateGame = nullptr;
@@ -58,10 +56,13 @@ protected:
 
 	std::vector<Entities*> entities;
 
+	//Chunks
+    std::map<uint64_t, Chunk> loadedChunks;
+	std::vector<CachedChunk> chunkCache;
+
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
         { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };
     inline bool isChunkLoaded(sf::Vector2i chunkPos) { return loadedChunks.find(vector2iToInt64(chunkPos)) != loadedChunks.end(); };
-    inline Chunk* getChunk(sf::Vector2i chunkPos) { return &((*loadedChunks.find(vector2iToInt64(chunkPos))).second); };
     inline uint64_t vector2iToInt64(sf::Vector2i vec)
         {
             uint64_t lon = vec.x;
