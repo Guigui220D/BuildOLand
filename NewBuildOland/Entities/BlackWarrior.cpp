@@ -13,7 +13,7 @@ std::vector<unsigned char> BlackWarrior::getBytes()
 {
     std::vector<unsigned char> bytes;
     std::vector<unsigned char> beginningBytes = getBeginningBytes(EntityCodes::blackWarrior);
-    for (int i = 0; i < beginningBytes.size(); i++)
+    for (unsigned int i = 0; i < beginningBytes.size(); i++)
         bytes.push_back(beginningBytes.at(i));
     bytes.push_back(direction);
     return bytes;

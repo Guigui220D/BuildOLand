@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/System.hpp>
+#include <SFML/Network.hpp>
 #include <vector>
 
 class Chunk
@@ -13,6 +14,8 @@ class Chunk
         //Load a chunk
         Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos);
         virtual ~Chunk();
+
+        void handlePacket(sf::Packet p, sf::Vector2i pos);
 
         void setBlock(sf::Vector2i pos, unsigned short block);
         void setGround(sf::Vector2i pos, unsigned short ground);

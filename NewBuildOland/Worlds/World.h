@@ -23,6 +23,8 @@ public:
 	virtual ~World();
 	virtual void preDelete();
 
+	virtual void handlePacket(sf::Packet p);
+
 	unsigned short getGroundId(sf::Vector2i pos);
 	unsigned short getBlockId(sf::Vector2i pos);
 	Block* getBlockAt(sf::Vector2i pos);

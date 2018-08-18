@@ -11,6 +11,8 @@ class NetworkWorld : public World
         virtual ~NetworkWorld();
         void preDelete() override;
 
+        void handlePacket(sf::Packet p) override;
+
         inline NetworkManager* getNetworkManager() { return stateGame->getNetworkManager(); };
 
         void loadChunk(sf::Vector2i chunk) override;

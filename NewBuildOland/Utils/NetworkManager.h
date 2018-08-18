@@ -23,10 +23,7 @@ class NetworkManager
                 return socket.send(p, server, PORT) == sf::Socket::Done;
             return false;
         }
-        inline bool askForWorld()
-        {
-            return oneCodeSend(MainCodes::requestWorld);
-        };
+        bool askForChunk(sf::Vector2i chunk);
         bool sendBlockBuild(sf::Vector2u pos, unsigned short block);
         bool sendBlockBreak(sf::Vector2u pos);
         bool sendGroundChange(sf::Vector2u pos, unsigned short ground);

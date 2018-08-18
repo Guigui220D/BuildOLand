@@ -131,9 +131,9 @@ void NetworkManager::receive()
                 }
                 break;
 
-            case MainCodes::sendWorld:
+            case MainCodes::sendChunk:
                 {
-                    //game->getWorld()->generateWorld(rec);
+                    game->getWorld()->handlePacket(rec);
                 }
                 break;
 
@@ -243,6 +243,15 @@ bool NetworkManager::oneCodeSend(int code)
         return false;
     sf::Packet p;
     p << code;
+    return sendPacket(p);
+}
+
+bool NetworkManager::askForChunk(sf::Vector2i chunk)
+{
+    sf::Packet p;
+    p << MainCodes::requestChunk;
+    p << chunk.x;
+    p << chunk.y;
     return sendPacket(p);
 }
 

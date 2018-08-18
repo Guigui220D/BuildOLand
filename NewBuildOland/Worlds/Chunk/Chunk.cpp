@@ -17,7 +17,13 @@ Chunk::Chunk() { ready = false; }
 
 Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
 {
-    ready = true;
+    ready = false;
+    //Check the size of the data
+    if (data.size() < CHUNK_SIZE * CHUNK_SIZE * 2)
+    {
+        std::cout << "Could not load chunk " << chunkPos.x << ", " << chunkPos.y << " (invalid data size).\n";
+        return;
+    }
     //We remove all block data, the rest, entities data, is kept for the world
     int posX, posY;
     //Get pos x and pos y
@@ -26,17 +32,7 @@ Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
     posY = (int)(data.at(0) | data.at(1) << 8 | data.at(2) << 16 | data.at(3) << 24);
     data.erase(data.begin(), data.begin() + 4);
     position = sf::Vector2i(posX, posY);
-    if (chunkPos != position)   //As a security
-    {
-        std::cout << "Failed to load chunk from disk. Got chunk " << position.x << ", " << position.y << ".\n";
-        position = chunkPos;
-        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
-        {
-            blocks.push_back((unsigned short)0);
-            grounds.push_back((unsigned short)0);
-        }
-    }
-    else
+    if (chunkPos == position)   //Check the position
     {
         //Get grounds
         for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE * 2); i += 2)
@@ -51,7 +47,31 @@ Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
         }
         data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
         std::cout << "Loaded chunk " << position.x << ", " << position.y << " successfully from disk.\n";
+        ready = true;
     }
+    else
+    {
+        std::cout << "Could not load chunk " << chunkPos.x << ", " << chunkPos.y << " (invalid position).\n";
+    }
+}
+
+void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
+{
+    grounds.clear();
+    blocks.clear();
+    position = pos;
+    unsigned short ground, block;
+    for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
+    {
+        p >> ground;
+        grounds.push_back(ground);
+    }
+    for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
+    {
+        p >> block;
+        blocks.push_back(block);
+    }
+    ready = true;
 }
 
 Chunk::~Chunk()

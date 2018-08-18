@@ -317,3 +317,5 @@ Entities* World::getEntityById(unsigned int id)
     return rep;
 }
 
+void World::handlePacket(sf::Packet p) {}
+
