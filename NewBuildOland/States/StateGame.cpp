@@ -292,7 +292,6 @@ void StateGame::draw(sf::RenderWindow &window) {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
                 unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
 
                 groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
                 groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
@@ -334,30 +333,46 @@ void StateGame::draw(sf::RenderWindow &window) {
             }
         }
     }
-
-	//Draw the block's front sides
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT / 2));
-    for (int i = 0; i < chunksToDraw.size(); i++)
+	//Draw the blocks front side
+	for (int i = 0; i < chunksToDraw.size(); i++)
     {
+        sf::VertexArray blockQuads(sf::Quads, 0);
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                //Draw the block front
                 unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
-                if (!blockId)
+
+                if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
                     continue;
-                if (tileset.getBlockById(blockId)->hasVolume())
+
+                sf::Vertex thisBlockQuads[4];
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+
+                sf::IntRect rect = tileset.getBlockSideRect(blockId);
+                thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
+                thisBlockQuads[1].texCoords = sf::Vector2f(rect.left + rect.width, rect.top);
+                thisBlockQuads[2].texCoords = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
+                thisBlockQuads[3].texCoords = sf::Vector2f(rect.left, rect.top + rect.height);
+
+                for (int j = 0; j < 4; j++)
                 {
-                    worldDraw.setTextureRect(tileset.getBlockSideRect(blockId));
-                    worldDraw.setFillColor(tileset.getSideTint(blockId));
-                    worldDraw.setPosition(TILE_SIZE_FLOAT * (x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE)
-                                      , TILE_SIZE_FLOAT * (y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE) + TILE_SIZE_FLOAT / 2);
-                    window.draw(worldDraw);
+                    thisBlockQuads[j].color = tileset.getSideTint(blockId);
+                    blockQuads.append(thisBlockQuads[j]);
                 }
             }
-		}
-	}
+        }
+        sf::Transform tr;
+        tr.scale(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+        sf::RenderStates states;
+        states.transform = tr;
+        states.texture = tileset.getTexture();
+        window.draw(blockQuads, states);
+    }
+
 	//Draw all entities
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
         window.draw(*(currentWorld->getEntities()[i]));
