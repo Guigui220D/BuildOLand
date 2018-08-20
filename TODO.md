@@ -4,7 +4,6 @@
 
 - [ ] Path finding for AI entities
 - [ ] User interface and pause
-- [ ] Server-side anti-cheat
 - [ ] Authentification
 - [ ] Tile-entities
 - [ ] Chat and command-line
@@ -12,6 +11,18 @@
 - [ ] Proper resource management (sound, textures, fonts)
 - [ ] Better sound
 - [ ] Personalizable setting (controls, sound, etc)
+- [ ] Versionning
+
+- [x] Create proper todo list
+- [x] Events system
+- [x] Animations
+- [x] Interactive blocks
+- [x] Sound manager
+- [x] Inventory
+- [x] Multiplayer mode
+- [x] Main menu
+- [x] Infinite world
+- [x] Per-chunk vertex-array rendering
 
 ### Content :
 
@@ -22,12 +33,7 @@
 - [ ] Cool world generation
 - [ ] Better interface
 
-### Completed :
-- [x] Create proper todo list
-- [x] Events system
-- [x] Animations
-- [x] Interactive blocks
-- [x] Sound manager
-- [x] Inventory
-- [x] Online mode
-- [x] Main menu
+### Bug fixes, corrections, minor things :
+
+- Proper kick (Online mode)
+- Flush chunk cache sometimes
