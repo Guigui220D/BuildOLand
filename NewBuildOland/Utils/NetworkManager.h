@@ -24,10 +24,10 @@ class NetworkManager
             return false;
         }
         bool askForChunk(sf::Vector2i chunk);
-        bool sendBlockBuild(sf::Vector2u pos, unsigned short block);
-        bool sendBlockBreak(sf::Vector2u pos);
-        bool sendGroundChange(sf::Vector2u pos, unsigned short ground);
-        bool sendInteractEvent(sf::Vector2u pos);
+        bool sendBlockBuild(sf::Vector2i pos, unsigned short block);
+        bool sendBlockBreak(sf::Vector2i pos);
+        bool sendGroundChange(sf::Vector2i pos, unsigned short ground);
+        bool sendInteractEvent(sf::Vector2i pos);
         //Receive functions
         inline sf::Packet syncReceive()
         {
@@ -59,7 +59,7 @@ class NetworkManager
 
         StateGame* game;
 
-        unsigned int playerID;
+        unsigned int playerID = 0;
 
 
 };

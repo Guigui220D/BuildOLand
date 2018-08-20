@@ -196,13 +196,10 @@ Chunk World::pgetChunk(sf::Vector2i chunk)
 
 unsigned short World::getBlockId(sf::Vector2i pos)
 {
-	//Temporary
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
-	if (!isChunkLoaded(chunkPos))
-    {
-        loadChunk(chunkPos);
-    }
+    if (!isChunkLoaded(chunkPos))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos, false)));
     //Get the position of the block in the chunk
     sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     return getChunk(chunkPos)->getBlock(blockPos);
@@ -210,13 +207,10 @@ unsigned short World::getBlockId(sf::Vector2i pos)
 
 unsigned short World::getGroundId(sf::Vector2i pos)
 {
-	//Temporary
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
-	if (!isChunkLoaded(chunkPos))
-    {
-        loadChunk(chunkPos);
-    }
+    if (!isChunkLoaded(chunkPos))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos, false)));
     //Get the position of the block in the chunk
     sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     return getChunk(chunkPos)->getGround(groundPos);
@@ -229,13 +223,10 @@ Block* World::getBlockAt(sf::Vector2i pos)
 
 void World::setGroundId(sf::Vector2i pos, unsigned short ground)
 {
-	//Temporary
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
-	if (!isChunkLoaded(chunkPos))
-    {
-        loadChunk(chunkPos);
-    }
+    if (!isChunkLoaded(chunkPos))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos, false)));
     //Get the position of the block in the chunk
     sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     getChunk(chunkPos)->setGround(groundPos, ground);
@@ -243,13 +234,10 @@ void World::setGroundId(sf::Vector2i pos, unsigned short ground)
 
 void World::setBlockId(sf::Vector2i pos, unsigned short block)
 {
-	//Temporary
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
-	if (!isChunkLoaded(chunkPos))
-    {
-        loadChunk(chunkPos);
-    }
+    if (!isChunkLoaded(chunkPos))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunkPos), Chunk(chunkPos, false)));
     //Get the position of the block in the chunk
     sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     getChunk(chunkPos)->setBlock(blockPos, block);
@@ -317,5 +305,5 @@ Entities* World::getEntityById(unsigned int id)
     return rep;
 }
 
-void World::handlePacket(sf::Packet p) {}
+void World::handlePacket(sf::Packet p) { }
 

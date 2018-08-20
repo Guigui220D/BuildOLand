@@ -1,6 +1,7 @@
 #include "PhysicEntity.h"
 #include "iostream"
 #include "../States/StateGame.h"
+#include "math.h"
 
 PhysicEntity::PhysicEntity(World *world, unsigned id)
 	: Entities(world, id)
@@ -18,6 +19,8 @@ void PhysicEntity::update(double delta)
 
 int PhysicEntity::touchesBlock()
 {
+    if (abs(getWorldPos().x - currentWorld->getStateGame()->getPlayer()->getWorldPos().x) >= 54 || abs(getWorldPos().y - currentWorld->getStateGame()->getPlayer()->getWorldPos().y) >= 54)
+        return 0;
 	//Checks near blocks to entity
 	int x = (int)(getPosition().x / StateGame::TILE_SIZE);
 	int y = (int)(getPosition().y / StateGame::TILE_SIZE);

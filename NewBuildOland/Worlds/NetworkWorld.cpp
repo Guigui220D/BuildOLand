@@ -24,8 +24,7 @@ void NetworkWorld::loadChunk(sf::Vector2i chunk)
 {
     if (!isChunkLoaded(chunk))
         loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk, false)));
-    //TODO: Request the chunk's data
-    std::cout << "TODO : Request chunk data.\n";
+    stateGame->getNetworkManager()->askForChunk(chunk);
 }
 
 void NetworkWorld::unloadChunk(sf::Vector2i chunk, bool erase)

@@ -71,6 +71,7 @@ void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
         p >> block;
         blocks.push_back(block);
     }
+    std::cout << "Got chunk " << pos.x << ", " << pos.y << " from server.\n";
     ready = true;
 }
 
