@@ -17,9 +17,13 @@ protected:
 
     void updateMovement(double dt) override;
 
+    virtual BlackWarrior* clone() const { return new BlackWarrior(*this); };
+
+    virtual std::vector<unsigned char> getBytes() override;
+
 private:
-    unsigned short direction = 0;
-    unsigned short prevDir = 100;
+    unsigned char direction = 0;
+    unsigned char prevDir = 100;
     bool isInverse = false;
 };
 

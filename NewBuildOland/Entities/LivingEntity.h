@@ -9,9 +9,10 @@ class LivingEntity : public PhysicEntity {
 
 public:
     LivingEntity(World *world, unsigned id, unsigned short maxHealth, unsigned short inventorySize);
-    void init(float posX, float posY);
 
     void update(double dt) override;
+
+    void init(float posX, float posY);
 
     Inventory* getInventory();
 

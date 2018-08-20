@@ -19,6 +19,8 @@ Player::Player(World *world, sf::String displayName, unsigned int id)
 	nameText.setCharacterSize(25);
 }
 
+std::vector<unsigned char> Player::getBytes() { return std::vector<unsigned char>(); };
+
 void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
@@ -27,8 +29,8 @@ void Player::initInventory(World* currentWorld) {
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
+    inventory->addItem(ItemStack(tileset->getGroundById(2), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(10), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(0), 120));
     inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
 }
@@ -68,15 +70,13 @@ void Player::updateMovement(double dt) {
 
     //Block enter and leave event
     sf::Vector2i blockOn = sf::Vector2i(roundf(getPosition().x / StateGame::TILE_SIZE), roundf(getPosition().y / StateGame::TILE_SIZE));
-    sf::Vector2u uBlockOn = sf::Vector2u(blockOn.x, blockOn.y);
-    if (lastPos != uBlockOn)
+    if (lastPos != blockOn)
     {
-        unsigned short blockId = currentWorld->getBlockId(blockOn.x, blockOn.y);
-        unsigned short groundId = currentWorld->getGroundId(blockOn.x, blockOn.y);
+        unsigned short blockId = currentWorld->getBlockId(sf::Vector2i(blockOn.x, blockOn.y));
+        unsigned short groundId = currentWorld->getGroundId(sf::Vector2i(blockOn.x, blockOn.y));
         EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
-        if (blockOn.x >= 0 && blockOn.y >= 0 && blockOn.x < currentWorld->getWorldSize().x && blockOn.y < currentWorld->getWorldSize().y)
-            EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
-        lastPos = uBlockOn;
+        EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
+        lastPos = blockOn;
     }
 }
 

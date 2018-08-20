@@ -5,6 +5,8 @@
 #include "../Entities/OtherPlayer.h"
 #include "../Entities/TNTEntity.h"
 
+#include "../Entities/EntityCodes.h"
+
 
 NetworkManager::NetworkManager(StateGame* stategame)
     : receiveThread(&receive, this)
@@ -113,25 +115,25 @@ void NetworkManager::receive()
                 {
                     int editionCode = 0;
                     rec >> editionCode;
-                    unsigned int x, y;
+                    int x, y;
                     unsigned short id = 0;
                     rec >> x >> y >> id;
                     switch (editionCode)
                     {
                     case EditionCodes::setBlock:
-                        game->getWorld()->setBlockId(sf::Vector2u(x, y), id);
+                        game->getWorld()->setBlockId(sf::Vector2i(x, y), id);
                         break;
 
                     case EditionCodes::setGround:
-                        game->getWorld()->setGroundId(sf::Vector2u(x, y), id);
+                        game->getWorld()->setGroundId(sf::Vector2i(x, y), id);
                         break;
                     }
                 }
                 break;
 
-            case MainCodes::sendWorld:
+            case MainCodes::sendChunk:
                 {
-                    game->getWorld()->generateWorld(rec);
+                    game->getWorld()->handlePacket(rec);
                 }
                 break;
 
@@ -162,9 +164,9 @@ void NetworkManager::receive()
 
                         case EntityCodes::tnt:
                             {
-                                unsigned int x, y;
+                                int x, y;
                                 rec >> x >> y;
-                                TNTEntity* tnt = new TNTEntity(game->getWorld(), id, sf::Vector2u(x, y));
+                                TNTEntity* tnt = new TNTEntity(game->getWorld(), id, sf::Vector2i(x, y));
                                 game->getWorld()->addEntity(tnt);
                             }
                             break;
@@ -244,7 +246,16 @@ bool NetworkManager::oneCodeSend(int code)
     return sendPacket(p);
 }
 
-bool NetworkManager::sendBlockBreak(sf::Vector2u pos)
+bool NetworkManager::askForChunk(sf::Vector2i chunk)
+{
+    sf::Packet p;
+    p << MainCodes::requestChunk;
+    p << chunk.x;
+    p << chunk.y;
+    return sendPacket(p);
+}
+
+bool NetworkManager::sendBlockBreak(sf::Vector2i pos)
 {
     sf::Packet p;
     p << MainCodes::edition; //Edition code
@@ -254,7 +265,7 @@ bool NetworkManager::sendBlockBreak(sf::Vector2u pos)
     return sendPacket(p);
 }
 
-bool NetworkManager::sendBlockBuild(sf::Vector2u pos, unsigned short block)
+bool NetworkManager::sendBlockBuild(sf::Vector2i pos, unsigned short block)
 {
     sf::Packet p;
     p << MainCodes::edition; //Edition code
@@ -265,7 +276,7 @@ bool NetworkManager::sendBlockBuild(sf::Vector2u pos, unsigned short block)
     return sendPacket(p);
 }
 
-bool NetworkManager::sendGroundChange(sf::Vector2u pos, unsigned short ground)
+bool NetworkManager::sendGroundChange(sf::Vector2i pos, unsigned short ground)
 {
     sf::Packet p;
     p << MainCodes::edition; //Edition code
@@ -276,7 +287,7 @@ bool NetworkManager::sendGroundChange(sf::Vector2u pos, unsigned short ground)
     return sendPacket(p);
 }
 
-bool NetworkManager::sendInteractEvent(sf::Vector2u pos)
+bool NetworkManager::sendInteractEvent(sf::Vector2i pos)
 {
     sf::Packet p;
     p << MainCodes::blockInteract;

@@ -75,7 +75,7 @@ void InventoryGui::draw(sf::RenderWindow &window) {
     window.draw(inventorySprite);
 
     //Draw all items of the bar
-    for(int i = 0; i < inventorySlots; i++) {
+    for(unsigned int i = 0; i < inventorySlots; i++) {
         //Draw the sprites
         window.draw(*itemSprites[i]);
 
@@ -97,7 +97,7 @@ void InventoryGui::updateInventory() {
 
     //Update the items of the inventory
 
-    for(int i = 0; i < inventorySlots; i++) {
+    for(unsigned int i = 0; i < inventorySlots; i++) {
         ItemStack *itemStack = inventory->getItem(i);
         Item *item = itemStack->getItem();
         sf::IntRect textureRect;

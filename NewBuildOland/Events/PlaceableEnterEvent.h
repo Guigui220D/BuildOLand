@@ -6,15 +6,15 @@
 class PlaceableEnterEvent : public GameEvent
 {
 public:
-	PlaceableEnterEvent(sf::Vector2u pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame* state);
+	PlaceableEnterEvent(sf::Vector2i pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame* state);
 	~PlaceableEnterEvent();
-	inline sf::Vector2u getTilePos() { return tilePos; };
+	inline sf::Vector2i getTilePos() { return tilePos; };
 	inline Player* getPlayer() { return entit; };
 	inline unsigned short getBlockId() { return blockId; };
 	inline unsigned short getGroundId() { return groundId; };
 protected:
 	Player* entit;
-	sf::Vector2u tilePos;
+	sf::Vector2i tilePos;
 	unsigned short blockId;
 	unsigned short groundId;
 };

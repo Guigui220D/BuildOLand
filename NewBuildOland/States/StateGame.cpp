@@ -1,6 +1,5 @@
 #include "StateGame.h"
-#include "../Worlds/FlatWorld.h"
-#include "../Worlds/MazeWorld.h"
+
 #include "../Worlds/NetworkWorld.h"
 #include <iostream>
 #include "SFML/Audio/SoundBuffer.hpp"
@@ -45,20 +44,13 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     }
     else
     {
-        currentWorld = new MazeWorld(*this);
+        currentWorld = new World(*this);
     }
-
-
-	tileset;
 
 	//Init the tileset to the event manager
 	EventManager::tileset = &tileset;
 	EventManager::state = this;
 
-    //Init the asset manager
-    assetManager;
-	//Init the sound manager
-	soundManager;
 	sf::Music* backgroundMusic = soundManager.getMusic("fantasymusic.ogg");
 	backgroundMusic->setVolume(20);
 	backgroundMusic->play();
@@ -101,7 +93,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	mouse.setTexture(t);
 
     player = new Player(currentWorld, nick, nManager.getPlayerID());    //Player id should be 0 if it's offline
-	player->init((float)currentWorld->getInitialPlayerPos().x * StateGame::TILE_SIZE, (float)currentWorld->getInitialPlayerPos().y * StateGame::TILE_SIZE);
+    player->init(0, 0);
 	cameraFollow = player;
 
 	//Setup the gui
@@ -133,52 +125,50 @@ void StateGame::handleInput() {
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
-					if (clickX >= 0 && clickY >= 0)
+
+                    if (currentWorld->getBlockId(sf::Vector2i(clickX, clickY)) == 0)
                     {
-                        if (currentWorld->getBlockId(sf::Vector2u(clickX, clickY)) == 0)
-                        {
-                            //Remove block from player Inventory
-                            Inventory *inventory = player->getInventory();
-                            ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
-                            Item *selectedItem = selectedItemStack->getItem();
+                        //Remove block from player Inventory
+                        Inventory *inventory = player->getInventory();
+                        ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
+                        Item *selectedItem = selectedItemStack->getItem();
 
-                                //If it isn't empty, and is a placeable
-                            if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable())
+                            //If it isn't empty, and is a placeable
+                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable())
+                        {
+                            bool isGround = selectedItem->isGround();
+                            //We remove an item (that was placed)
+                            selectedItemStack->remove();
+                            //Get the id from the tileset
+                            unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
+                                                                    : tileset.getBlockIdByName(selectedItem->getName());
+                            if(isGround)
                             {
-                                bool isGround = selectedItem->isGround();
-                                //We remove an item (that was placed)
-                                selectedItemStack->remove();
-                                //Get the id from the tileset
-                                unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
-                                                                        : tileset.getBlockIdByName(selectedItem->getName());
-                                if(isGround)
-                                {
-                                    //Get the old ground
-                                    unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2u(clickX, clickY));
-                                    //Send an event that the ground was placed
-                                    EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2u(clickX, clickY), oldGroundId, placeableId, player, this));
-                                    //Place the ground
-                                    currentWorld->setGroundId(sf::Vector2u(clickX, clickY), placeableId);
-                                    //Add the old ground to the inventory (the one that you should get when you break it)
-                                    player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)->getGroundOnBreak(this)));
+                                //Get the old ground
+                                unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2i(clickX, clickY));
+                                //Send an event that the ground was placed
+                                EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2i(clickX, clickY), oldGroundId, placeableId, player, this));
+                                //Place the ground
+                                currentWorld->setGroundId(sf::Vector2i(clickX, clickY), placeableId);
+                                //Add the old ground to the inventory (the one that you should get when you break it)
+                                player->getInventory()->addItem(ItemStack(tileset.getGroundById(oldGroundId)->getGroundOnBreak(this)));
 
-                                }
-                                else
-                                {
-                                    //Send an event that the block was placed
-                                    EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2u(clickX, clickY), placeableId, player, this));
-                                    //Place the block
-                                    currentWorld->setBlockId(sf::Vector2u(clickX, clickY), placeableId);
-                                }
-                                //And finally we update the inventory gui
-                                inventoryGui->updateInventory();
                             }
+                            else
+                            {
+                                //Send an event that the block was placed
+                                EventManager::OnBlockBuild(BlockBuildEvent(sf::Vector2i(clickX, clickY), placeableId, player, this));
+                                //Place the block
+                                currentWorld->setBlockId(sf::Vector2i(clickX, clickY), placeableId);
+                            }
+                            //And finally we update the inventory gui
+                            inventoryGui->updateInventory();
                         }
-                        else
-                        {
-                            EventManager::OnBlockInteract(BlockInteractEvent(sf::Vector2u(clickX, clickY), currentWorld->getBlockId(sf::Vector2u(clickX, clickY)), player, this));
-                        }
-					}
+                    }
+                    else
+                    {
+                        EventManager::OnBlockInteract(BlockInteractEvent(sf::Vector2i(clickX, clickY), currentWorld->getBlockId(sf::Vector2i(clickX, clickY)), player, this));
+                    }
 				}
 			}
 		}
@@ -204,22 +194,19 @@ void StateGame::handleInput() {
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
 					int clickY = (int)roundf(posInView.y / TILE_SIZE);
                     //Get the block that was released on
-                    unsigned short selectedBlockId = currentWorld->getBlockId(sf::Vector2u(clickX, clickY));
+                    unsigned short selectedBlockId = currentWorld->getBlockId(sf::Vector2i(clickX, clickY));
 
-                    if (clickX >= 0 && clickY >= 0)
+                    if (selectedBlockId  != 0)
                     {
-                        if (selectedBlockId  != 0)
-                        {
-                            currentWorld->setBlockId(sf::Vector2u(clickX, clickY), 0);
-                            EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2u(clickX, clickY), selectedBlockId, player, this));
+                        currentWorld->setBlockId(sf::Vector2i(clickX, clickY), 0);
+                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2i(clickX, clickY), selectedBlockId, player, this));
 
-                            //Add the block to the inventory that you should get when you break it
-                            player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)->getBlockOnBreak(this)));
-                            //And update the inventoryGui
-                            inventoryGui->updateInventory();
-                            //currentWorld->saveWorld();
-                        }
-					}
+                        //Add the block to the inventory that you should get when you break it
+                        player->getInventory()->addItem(ItemStack(tileset.getBlockById(selectedBlockId)->getBlockOnBreak(this)));
+                        //And update the inventoryGui
+                        inventoryGui->updateInventory();
+                        //currentWorld->saveWorld();
+                    }
 				}
 			}
 		}
@@ -261,6 +248,8 @@ void StateGame::handleInput() {
 }
 
 void StateGame::update(float dt, bool focused) {
+    currentWorld->updateChunks();
+
     if (focused)
         player->update(dt);
 
@@ -283,47 +272,107 @@ void StateGame::update(float dt, bool focused) {
 void StateGame::draw(sf::RenderWindow &window) {
 	//Set the right view for world drawing
 	window.setView(game->getWorldView());
-	//Get world size
-	sf::Vector2u size = currentWorld->getWorldSize();
-	//Create a rectangle for drawing
 
-	//Iterate through the world to draw each tile
+	//Get chunks to draw
+	std::vector<Chunk> chunksToDraw;
+	sf::Vector2i playerChunk(floor(player->getWorldPos().x / Chunk::CHUNK_SIZE), floor(player->getWorldPos().y / Chunk::CHUNK_SIZE));
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            chunksToDraw.push_back(currentWorld->pgetChunk(playerChunk + sf::Vector2i(i, j)));
+        }
+    }
 	//Draw the ground
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
-	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
-	{
-		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
-		{
-			//Draw the ground
-			unsigned short groundId = currentWorld->getGroundId(sf::Vector2u(x, y));
-			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
-			worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			worldDraw.setTextureRect(tileset.getGroundRect(groundId));
-			window.draw(worldDraw);
-			if (!tileset.getBlockById(blockId)->hasVolume())
-			{
-				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
-				window.draw(worldDraw);
-			}
-		}
-	}
-	//Draw the block's front sides
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT /2));
-	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
-	{
-		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
-		{
-			//Draw the block front
-			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
-			if (tileset.getBlockById(blockId)->hasVolume())
-			{
-				worldDraw.setTextureRect(tileset.getBlockSideRect(blockId));
-				worldDraw.setFillColor(tileset.getSideTint(blockId));
-				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y + TILE_SIZE_FLOAT / 2);
-				window.draw(worldDraw);
-			}
-		}
-	}
+	for (int i = 0; i < chunksToDraw.size(); i++)
+    {
+        sf::VertexArray groundQuads(sf::Quads, 4 * Chunk::CHUNK_SIZE * Chunk::CHUNK_SIZE);
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+
+                sf::IntRect rect = tileset.getGroundRect(groundId);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].texCoords = sf::Vector2f(rect.left, rect.top);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].texCoords = sf::Vector2f(rect.left + rect.width, rect.top);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].texCoords = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].texCoords = sf::Vector2f(rect.left, rect.top + rect.height);
+            }
+        }
+        sf::Transform tr;
+        tr.scale(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+        sf::RenderStates states;
+        states.transform = tr;
+        states.texture = tileset.getTexture();
+        window.draw(groundQuads, states);
+    }
+    //Draw the blocks on the ground
+    worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
+    for (int i = 0; i < chunksToDraw.size(); i++)
+    {
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                if (!blockId)
+                    continue;
+                if (!tileset.getBlockById(blockId)->hasVolume())
+                {
+                    worldDraw.setTextureRect(tileset.getBlockRect(blockId));
+                    worldDraw.setPosition(sf::Vector2f((chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE + x) * TILE_SIZE_FLOAT
+                                                    , (chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE + y) * TILE_SIZE_FLOAT));
+                    window.draw(worldDraw);
+                }
+            }
+        }
+    }
+	//Draw the blocks front side
+	for (int i = 0; i < chunksToDraw.size(); i++)
+    {
+        sf::VertexArray blockQuads(sf::Quads, 0);
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+
+                if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
+                    continue;
+
+                sf::Vertex thisBlockQuads[4];
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+
+                sf::IntRect rect = tileset.getBlockSideRect(blockId);
+                thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
+                thisBlockQuads[1].texCoords = sf::Vector2f(rect.left + rect.width, rect.top);
+                thisBlockQuads[2].texCoords = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
+                thisBlockQuads[3].texCoords = sf::Vector2f(rect.left, rect.top + rect.height);
+
+                for (int j = 0; j < 4; j++)
+                {
+                    thisBlockQuads[j].color = tileset.getSideTint(blockId);
+                    blockQuads.append(thisBlockQuads[j]);
+                }
+            }
+        }
+        sf::Transform tr;
+        tr.scale(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+        sf::RenderStates states;
+        states.transform = tr;
+        states.texture = tileset.getTexture();
+        window.draw(blockQuads, states);
+    }
+
 	//Draw all entities
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
         window.draw(*(currentWorld->getEntities()[i]));
@@ -331,22 +380,41 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(*player);
 
 	//Draw the actual blocks
-	worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
-	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 14; x < (int)(player->getPosition().x / TILE_SIZE) + 14; x++)
-	{
-		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
-		{
-			//Draw the block
-			unsigned short blockId = currentWorld->getBlockId(sf::Vector2u(x, y));
-			if (tileset.getBlockById(blockId)->hasVolume())
-			{
-				worldDraw.setTextureRect(tileset.getBlockRect(blockId));
-				worldDraw.setFillColor(sf::Color::White);
-				worldDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y - TILE_SIZE_FLOAT / 2);
-				window.draw(worldDraw);
-			}
-		}
-	}
+	for (int i = 0; i < chunksToDraw.size(); i++)
+    {
+        sf::VertexArray blockQuads(sf::Quads, 0);
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+
+                if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
+                    continue;
+
+                sf::Vertex thisBlockQuads[4];
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+
+                sf::IntRect rect = tileset.getBlockRect(blockId);
+                thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
+                thisBlockQuads[1].texCoords = sf::Vector2f(rect.left + rect.width, rect.top);
+                thisBlockQuads[2].texCoords = sf::Vector2f(rect.left + rect.width, rect.top + rect.height);
+                thisBlockQuads[3].texCoords = sf::Vector2f(rect.left, rect.top + rect.height);
+
+                for (int j = 0; j < 4; j++)
+                    blockQuads.append(thisBlockQuads[j]);
+            }
+        }
+        sf::Transform tr;
+        tr.scale(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+        sf::RenderStates states;
+        states.transform = tr;
+        states.texture = tileset.getTexture();
+        window.draw(blockQuads, states);
+    }
 
 	//Draw block highlighter
 	if (game->getWindow().hasFocus())
@@ -380,15 +448,34 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
-	for (int x = (int)(player->getPosition().x / TILE_SIZE) - 24; x < (int)(player->getPosition().x / TILE_SIZE) + 24; x++)
-	{
-		for (int y = (int)(player->getPosition().y / TILE_SIZE) - 14; y < (int)(player->getPosition().y / TILE_SIZE) + 14; y++)
-		{
-			mapDraw.setFillColor(tileset.getMapPixel(currentWorld->getGroundId(sf::Vector2u(x, y)), currentWorld->getBlockId(sf::Vector2u(x, y))));
-			mapDraw.setPosition(TILE_SIZE_FLOAT * x, TILE_SIZE_FLOAT * y);
-			window.draw(mapDraw);
-		}
-	}
+	for (int i = 0; i < chunksToDraw.size(); i++)
+    {
+        sf::VertexArray pixelQuads(sf::Quads, 0);
+        for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
+        {
+            for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
+            {
+                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+
+                sf::Vertex thisPixelQuads[4];
+                thisPixelQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisPixelQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+
+                for (int j = 0; j < 4; j++)
+                {
+                    thisPixelQuads[j].color = tileset.getMapPixel(groundId, blockId);
+                    pixelQuads.append(thisPixelQuads[j]);
+                }
+            }
+        }
+        sf::Transform tr;
+        tr.scale(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+        window.draw(pixelQuads, tr);
+    }
+
 	//Draw entities on map
 	for (int i = 0; i < currentWorld->getEntities().size(); i++)
 		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
@@ -411,11 +498,9 @@ void StateGame::draw(sf::RenderWindow &window) {
 }
 
 void StateGame::setWorld(World &world) {
-	//Save the old world
-	currentWorld->saveWorld();
 	//We delete the old world
 	//as we will be changing the pointer's adress
-	currentWorld->setDeleted();
+    currentWorld->preDelete();
 	delete currentWorld;
 
 	//And load the new world
@@ -426,8 +511,10 @@ void StateGame::setWorld(World &world) {
 }
 
 StateGame::~StateGame() {
-	//We delete pointers to prevent memory leaks
+	//We delete the world to prevent memory leaks
+	currentWorld->preDelete();
 	delete currentWorld;
+	std::cout << "Stategame delete\n";
 }
 
 void StateGame::handleEvent(sf::Event &event) {
@@ -436,7 +523,7 @@ void StateGame::handleEvent(sf::Event &event) {
         //RESIZE EVENT
         case sf::Event::Resized:
             //Send the event to all gui elements
-            for (int i = 0; i < gui.size(); i++)
+            for (unsigned int i = 0; i < gui.size(); i++)
             {
                 gui[i]->eventResize();
             }

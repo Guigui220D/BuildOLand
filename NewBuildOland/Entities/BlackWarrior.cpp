@@ -9,6 +9,16 @@ BlackWarrior::BlackWarrior(World *world, unsigned id)
     EntitySpeed = 150;
 }
 
+std::vector<unsigned char> BlackWarrior::getBytes()
+{
+    std::vector<unsigned char> bytes;
+    std::vector<unsigned char> beginningBytes = getBeginningBytes(EntityCodes::blackWarrior);
+    for (unsigned int i = 0; i < beginningBytes.size(); i++)
+        bytes.push_back(beginningBytes.at(i));
+    bytes.push_back(direction);
+    return bytes;
+}
+
 
 void BlackWarrior::updateMovement(double dt) {
     //Simple AI where the entity moves towards a direction until it finds a block
@@ -17,10 +27,10 @@ void BlackWarrior::updateMovement(double dt) {
     //Direction : 0 EAST, 1 SOUTH, 2 WEST, 3 NORTH
 
     sf::Vector2f position = getWorldPos();
-    Block *eastBlock = currentWorld->getBlockAt(round(position.x - 0.5) + 1, round(position.y));
-    Block *southBlock = currentWorld->getBlockAt(round(position.x), round(position.y - 0.5) + 1);
-    Block *westBlock = currentWorld->getBlockAt(round(position.x + 0.5) - 1, round(position.y));
-    Block *northBlock = currentWorld->getBlockAt(round(position.x), round(position.y + 0.5) - 1);
+    Block *eastBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x - 0.5) + 1, round(position.y)));
+    Block *southBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y - 0.5) + 1));
+    Block *westBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x + 0.5) - 1, round(position.y)));
+    Block *northBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y + 0.5) - 1));
 
     if (direction == 0 && !eastBlock->hasHitbox()) {
         moveEast(dt);

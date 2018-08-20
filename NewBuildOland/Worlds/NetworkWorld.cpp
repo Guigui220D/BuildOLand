@@ -7,7 +7,7 @@
 NetworkWorld::NetworkWorld(StateGame& stateGame)
     : World(stateGame, "networkworld")
 {
-    generateWorld();
+
 }
 
 NetworkWorld::~NetworkWorld()
@@ -15,50 +15,41 @@ NetworkWorld::~NetworkWorld()
     //dtor
 }
 
-void NetworkWorld::generateWorld(sf::Packet p)
+void NetworkWorld::preDelete()
 {
-    //Clear the world
-    groundIds.clear();
-    blockIds.clear();
-    //If packet is empty (default generation) create empty world
-    if (p.getDataSize() == 0)
-    {
-        worldSize = sf::Vector2u(1, 1);
-        playerPos = sf::Vector2u();
-        groundIds.push_back(0);
-        blockIds.push_back(0);
-        //Ask for the world
-        std::cout << "Sending a request to get world data" << std::endl;
-        if (!getNetworkManager()->askForWorld())
-        {
-            std::cout << "Failed to ask for the world" << std::endl;
-        }
-        return;
-    }
-    else    //Else load from the packet
-    {
-        unsigned xsize, ysize;
-        p >> xsize >> ysize;
-        std::cout << "Received the world, size : " << xsize << " by " << ysize << std::endl;
-        worldSize = sf::Vector2u(xsize, ysize);
-        playerPos = sf::Vector2u();
-
-        for (int g = 0; g < xsize * ysize; g++) //Grounds
-        {
-            unsigned short val;
-            p >> val; //Get next short
-            groundIds.push_back(val);
-        }
-        for (int b = 0; b < xsize * ysize; b++) //Blocks
-        {
-            unsigned short val;
-            p >> val; //Get next short
-            blockIds.push_back(val);
-        }
-        return;
-    }
+    loadedChunks.clear();
 }
 
-//We don't want to save or load worlds because it's already stored on the server
-bool NetworkWorld::loadWorld() {}
-bool NetworkWorld::saveWorld() {}
+void NetworkWorld::loadChunk(sf::Vector2i chunk)
+{
+    if (!isChunkLoaded(chunk))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk, false)));
+    stateGame->getNetworkManager()->askForChunk(chunk);
+}
+
+void NetworkWorld::unloadChunk(sf::Vector2i chunk, bool erase)
+{
+    //TODO: Manage entities on load and unload
+    if (isChunkLoaded(chunk))
+    {
+        if (erase)
+            loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
+        std::cout << "Unloaded chunk " << chunk.x << ", " << chunk.y << ".\n";
+        return;
+    }
+    std::cout << "Tried to unload a chunk that wasn't loaded.\n";
+}
+
+void NetworkWorld::handlePacket(sf::Packet p)
+{
+    int posX, posY;
+    p >> posX >> posY;
+    if (!isChunkLoaded(sf::Vector2i(posX, posY)))
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(sf::Vector2i(posX, posY)), Chunk(sf::Vector2i(posX, posY), false)));
+    getChunk(sf::Vector2i(posX, posY))->handlePacket(p, sf::Vector2i(posX, posY));
+}
+
+void NetworkWorld::flushChunkCache() {};
+
+
+

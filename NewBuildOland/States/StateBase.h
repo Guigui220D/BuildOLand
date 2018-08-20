@@ -9,6 +9,7 @@ class StateBase
 {
 public:
 	StateBase(Game& game);
+	virtual ~StateBase();
 
 	virtual void handleInput() = 0;
 	virtual void update(float dt, bool focused) = 0;

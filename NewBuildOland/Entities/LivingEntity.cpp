@@ -8,6 +8,7 @@ LivingEntity::LivingEntity(World *world, unsigned id, unsigned short maxHealth, 
     , inventory(inventorySize)
     , health(maxHealth)
 {
+
 }
 void LivingEntity::init(float posX, float posY) {
     setSize(sf::Vector2f(80, 80));

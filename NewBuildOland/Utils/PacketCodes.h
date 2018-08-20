@@ -6,7 +6,7 @@ enum MainCodes
     //Client -> Server
     disconnect = 0,
     requestConnection = 1,
-    requestWorld = 2,
+    requestChunk = 2,
     playerMovement = 3,
     blockInteract = 4,
     //Both directions
@@ -16,7 +16,7 @@ enum MainCodes
     //Server -> Client
     kick = 6,
     notConnected = 7,
-    sendWorld = 8,
+    sendChunk = 8,
     addEntity = 9,
     removeEntity = 10,
     entityAction = 11,
@@ -54,11 +54,4 @@ enum EditionCodes
     //Server ->Client
     setBlock = 3,
     setGround = 4
-};
-
-enum EntityCodes
-{
-    player = 0,
-    blackWarrior = 1,
-    tnt = 2
 };

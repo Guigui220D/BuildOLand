@@ -1,6 +1,6 @@
 #include "PlaceableLeaveEvent.h"
 
-PlaceableLeaveEvent::PlaceableLeaveEvent(sf::Vector2u pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame * state) : GameEvent(state)
+PlaceableLeaveEvent::PlaceableLeaveEvent(sf::Vector2i pos, Player* player, unsigned short blockId, unsigned short groundId, StateGame * state) : GameEvent(state)
 {
 	tilePos = pos;
 	entit = player;

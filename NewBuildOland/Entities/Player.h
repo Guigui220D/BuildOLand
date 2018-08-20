@@ -16,8 +16,12 @@ public:
 
 	inline sf::String getDisplayName() { return nameText.getString(); };
 
+	virtual Player* clone() const { return nullptr; };
+
+	std::vector<unsigned char> getBytes() override;
+
 private:
-	sf::Vector2u lastPos;
+	sf::Vector2i lastPos;
 
 	void initInventory(World* currentWorld);
 

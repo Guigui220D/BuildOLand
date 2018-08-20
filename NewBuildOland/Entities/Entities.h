@@ -3,6 +3,8 @@
 #include "SFML\Graphics.hpp"
 #include "../Worlds/World.h"
 
+#include "EntityCodes.h"
+
 class Entities : public sf::RectangleShape
 {
 public:
@@ -24,6 +26,10 @@ public:
 	inline unsigned int getID() { return id; };
 
 	inline virtual void takePacket(sf::Packet p) {}
+
+	virtual Entities* clone() const = 0;
+	virtual std::vector<unsigned char> getBytes() = 0;
+	std::vector<unsigned char> getBeginningBytes(int code);
 
 protected:
 	World *currentWorld = nullptr;
