@@ -35,7 +35,7 @@ void OtherPlayer::takePacket(sf::Packet p)
     setPosition(x, y);
 }
 
-void OtherPlayer::updateMovement(double dt)
+void OtherPlayer::updateMovement(float dt)
 {
     if (movement & 0b0001)
     {

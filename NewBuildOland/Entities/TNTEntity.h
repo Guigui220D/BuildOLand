@@ -6,7 +6,7 @@ class TNTEntity : public Entities
     public:
         TNTEntity(World* world, unsigned id, sf::Vector2i pos);
         virtual ~TNTEntity();
-        void update(double delta) override;
+        void update(float delta) override;
 
         virtual TNTEntity* clone() const { return new TNTEntity(*this); };
 

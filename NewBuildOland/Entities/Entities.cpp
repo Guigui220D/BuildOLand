@@ -18,7 +18,7 @@ Entities::~Entities()
 {
 }
 
-void Entities::update(double delta)
+void Entities::update(float delta)
 {
 }
 

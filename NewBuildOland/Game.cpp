@@ -73,9 +73,9 @@ void Game::run()
 		count++;
 		if (count >= 1000)
 		{
-			double time = fpsClk.restart().asSeconds();
+			float time = fpsClk.restart().asSeconds();
 			time /= count;
-			double fps = 1 / time;
+			float fps = 1 / time;
 			std::cout << "FPS : " << fps << std::endl;
 			count = 0;
 			lastFps = fps;
@@ -131,7 +131,7 @@ sf::View& Game::getGuiView() {
 	return guiView;
 }
 
-double Game::getFPS()
+float Game::getFPS()
 {
     return lastFps;
 }

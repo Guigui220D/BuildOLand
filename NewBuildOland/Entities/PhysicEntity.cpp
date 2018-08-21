@@ -13,7 +13,7 @@ PhysicEntity::~PhysicEntity()
 {
 }
 
-void PhysicEntity::update(double delta)
+void PhysicEntity::update(float delta)
 {
 }
 

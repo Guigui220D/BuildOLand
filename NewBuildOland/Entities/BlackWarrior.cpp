@@ -20,7 +20,7 @@ std::vector<unsigned char> BlackWarrior::getBytes()
 }
 
 
-void BlackWarrior::updateMovement(double dt) {
+void BlackWarrior::updateMovement(float dt) {
     //Simple AI where the entity moves towards a direction until it finds a block
     //where it changes the direction again
 

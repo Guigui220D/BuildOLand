@@ -6,7 +6,7 @@ class PhysicEntity : public Entities
 public:
 	PhysicEntity(World *world, unsigned id);
 	~PhysicEntity();
-	void update(double delta) override;
+	void update(float delta) override;
 	int touchesBlock();
 protected:
 	//The height of the hitbox (1 means equals to the rectangleshape size)

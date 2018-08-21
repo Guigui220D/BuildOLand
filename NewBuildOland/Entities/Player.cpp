@@ -35,7 +35,7 @@ void Player::initInventory(World* currentWorld) {
     inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
 }
 
-void Player::updateMovement(double dt) {
+void Player::updateMovement(float dt) {
     //HANDLE INPUT
     unsigned char lastKeysState = keysState;
     keysState = 0;

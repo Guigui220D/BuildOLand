@@ -29,7 +29,7 @@ void LivingEntity::init(float posX, float posY) {
     initAnimations();
 }
 
-double LivingEntity::animInterval() {
+float LivingEntity::animInterval() {
     return 0.12;
 }
 void LivingEntity::initAnimations() {
@@ -44,7 +44,7 @@ void LivingEntity::initAnimations() {
     animations.addAnimation(getWestWalkAnim());
 }
 
-void LivingEntity::update(double dt) {
+void LivingEntity::update(float dt) {
     //The movement byte is used as a flag to choose the right animation
     movement = 0;
 
@@ -85,7 +85,7 @@ void LivingEntity::selectAnimation() {
     }
 }
 
-void LivingEntity::moveNorth(double dt) {
+void LivingEntity::moveNorth(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x, oldpos.y - EntitySpeed * dt));
 
@@ -95,7 +95,7 @@ void LivingEntity::moveNorth(double dt) {
     if (touchesBlock())
         setPosition(oldpos);
 }
-void LivingEntity::moveSouth(double dt) {
+void LivingEntity::moveSouth(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x, oldpos.y + EntitySpeed * dt));
 
@@ -105,7 +105,7 @@ void LivingEntity::moveSouth(double dt) {
     if (touchesBlock())
         setPosition(oldpos);
 }
-void LivingEntity::moveEast(double dt) {
+void LivingEntity::moveEast(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x + EntitySpeed * dt, oldpos.y));
 
@@ -115,7 +115,7 @@ void LivingEntity::moveEast(double dt) {
     if (touchesBlock())
         setPosition(oldpos);
 }
-void LivingEntity::moveWest(double dt) {
+void LivingEntity::moveWest(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x - EntitySpeed * dt, oldpos.y));
 

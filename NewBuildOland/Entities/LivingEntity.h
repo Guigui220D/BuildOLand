@@ -10,7 +10,7 @@ class LivingEntity : public PhysicEntity {
 public:
     LivingEntity(World *world, unsigned id, unsigned short maxHealth, unsigned short inventorySize);
 
-    void update(double dt) override;
+    void update(float dt) override;
 
     void init(float posX, float posY);
 
@@ -24,14 +24,14 @@ protected:
     virtual std::vector<sf::IntRect> getSouthWalkAnim() = 0;
     virtual std::vector<sf::IntRect> getEastWalkAnim() = 0;
     virtual std::vector<sf::IntRect> getWestWalkAnim() = 0;
-    virtual double animInterval();
+    virtual float animInterval();
 
-    void moveNorth(double dt);
-    void moveSouth(double dt);
-    void moveEast(double dt);
-    void moveWest(double dt);
+    void moveNorth(float dt);
+    void moveSouth(float dt);
+    void moveEast(float dt);
+    void moveWest(float dt);
 
-    virtual void updateMovement(double dt) = 0;
+    virtual void updateMovement(float dt) = 0;
 
 protected:
     int EntitySpeed = 300;

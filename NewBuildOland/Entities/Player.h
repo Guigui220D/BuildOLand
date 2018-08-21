@@ -35,7 +35,7 @@ protected:
 	std::vector<IntRect> getEastWalkAnim() override;
 	std::vector<IntRect> getWestWalkAnim() override;
 
-	void updateMovement(double dt) override;
+	void updateMovement(float dt) override;
 
 	sf::Text nameText; //Display name
 

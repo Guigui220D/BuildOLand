@@ -22,13 +22,13 @@ sf::IntRect Animation::getRect()
 	return animations[selectedAnim][at];
 }
 
-void Animation::setInterval(double t)
+void Animation::setInterval(float t)
 {
 	if (t > 0)
 		interval = t;
 }
 
-double Animation::getInterval()
+float Animation::getInterval()
 {
 	return interval;
 }

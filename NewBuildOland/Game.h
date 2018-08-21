@@ -23,7 +23,7 @@ public:
 
 	~Game();
 
-	double getFPS();
+	float getFPS();
 
 private:
 	sf::RenderWindow window;
@@ -35,6 +35,6 @@ private:
 	sf::View guiView;
 	sf::View worldView;
 
-	double lastFps;
+	float lastFps;
 	bool focused;
 };

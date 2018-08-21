@@ -8,7 +8,7 @@ public:
     virtual bool isPlaceable() = 0;
     virtual bool isGround() = 0;
 
-    std::string getName();
+    inline std::string getName() { return name; };
 
 protected:
     std::string name;

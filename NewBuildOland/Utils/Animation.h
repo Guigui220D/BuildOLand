@@ -8,15 +8,15 @@ public:
 	Animation();
 	~Animation();
 	sf::IntRect getRect();
-	void setInterval(double t);
-	double getInterval();
+	void setInterval(float t);
+	float getInterval();
 	bool selectAnimation(unsigned int anim);
 	unsigned int getSelectedAnim();
 	void resetClock();
 	void addAnimation(std::vector<sf::IntRect> anim);
 protected:
 	sf::Clock animClk;
-	double interval;
+	float interval;
 	unsigned int selectedAnim;
 	std::vector<std::vector<sf::IntRect>> animations;
 };

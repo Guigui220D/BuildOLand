@@ -64,7 +64,7 @@ protected:
 
     inline Chunk* getChunk(sf::Vector2i chunkPos) { return &((*loadedChunks.find(vector2iToInt64(chunkPos))).second); };
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
-        { return sf::Vector2i((int)floor((double)block.x / Chunk::CHUNK_SIZE), (int)floor((double)block.y / Chunk::CHUNK_SIZE)); };
+        { return sf::Vector2i((int)floor((float)block.x / Chunk::CHUNK_SIZE), (int)floor((float)block.y / Chunk::CHUNK_SIZE)); };
     inline bool isChunkLoaded(sf::Vector2i chunkPos) { return loadedChunks.find(vector2iToInt64(chunkPos)) != loadedChunks.end(); };
     inline uint64_t vector2iToInt64(sf::Vector2i vec)
         {

@@ -20,7 +20,7 @@ void FpsCounter::draw(sf::RenderWindow &window)
     window.draw(text);
 }
 
-double FpsCounter::getFPS()
+float FpsCounter::getFPS()
 {
     return round(stateGame->getGame()->getFPS());
 }

@@ -15,7 +15,7 @@ class FpsCounter : public Gui
 protected:
 
     private:
-        double getFPS();
+        float getFPS();
         sf::Text text;
 };
 

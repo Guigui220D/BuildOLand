@@ -10,7 +10,7 @@ class Entities : public sf::RectangleShape
 public:
 	Entities(World *world, unsigned int id);
 	~Entities();
-	virtual void update(double delta);
+	virtual void update(float delta);
 
 	sf::CircleShape* getOnMap();
 	inline void setOnMapColor(sf::Color color) { onMap.setFillColor(color); };
