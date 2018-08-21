@@ -20,6 +20,20 @@ void NetworkWorld::preDelete()
     loadedChunks.clear();
 }
 
+void NetworkWorld::updateChunks()
+{
+    World::updateChunks();
+    if (clk.getElapsedTime().asSeconds() >= 1.f)
+    {
+        clk.restart();
+        for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
+        {
+            if (!(*i).second.isReady())
+                stateGame->getNetworkManager()->askForChunk((*i).second.getPosition());
+        }
+    }
+}
+
 void NetworkWorld::loadChunk(sf::Vector2i chunk)
 {
     if (!isChunkLoaded(chunk))

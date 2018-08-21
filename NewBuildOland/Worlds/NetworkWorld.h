@@ -18,9 +18,9 @@ class NetworkWorld : public World
         void loadChunk(sf::Vector2i chunk) override;
         void unloadChunk(sf::Vector2i chunk, bool erase) override;
         void flushChunkCache() override;
-
-    protected:
+        void updateChunks() override;
 
     private:
+        sf::Clock clk;
 };
 

@@ -23,7 +23,7 @@ class Chunk
         unsigned short getGround(sf::Vector2i pos);
 
         inline sf::Vector2i getPosition() { return position; };
-
+        inline bool isReady() { return ready; };
 
     private:
         //The position of the chunk, not to confuse with the position of the blocks
