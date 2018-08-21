@@ -10,28 +10,6 @@ Block::~Block()
 {
 }
 
-bool Block::hasHitbox() {
-	return mHasHitbox;
-}
-
-bool Block::hasVolume()
-{
-	return mHasVolume;
-}
-
-sf::IntRect Block::getSideRect()
-{
-	return sideRect;
-}
-
-sf::Color Block::getSideTint()
-{
-	if (sideRect == sf::IntRect())
-		return sf::Color(127, 127, 127);
-	return sf::Color::White;
-}
-
-
 //Event methods
 void Block::onBlockBuild(BlockBuildEvent e)
 {

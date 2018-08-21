@@ -13,10 +13,15 @@ class Block : public Placeable
 public:
 	Block(sf::IntRect textureRect, std::string name = "", sf::Color mapColor = sf::Color(255, 255, 255), bool hasHitbox = true, bool hasVolume = true, sf::IntRect side = sf::IntRect());
 	~Block();
-	bool hasHitbox();
-	bool hasVolume();
-	sf::IntRect getSideRect();
-	sf::Color getSideTint();
+	inline bool hasHitbox() { return mHasHitbox; };
+	inline bool hasVolume() { return mHasVolume; };
+	inline sf::IntRect getSideRect() { return sideRect; };
+	inline sf::Color getSideTint()
+	{
+        if (sideRect == sf::IntRect())
+            return sf::Color(127, 127, 127);
+        return sf::Color::White;
+	};
 
 	virtual Block* getBlockOnBreak(StateGame* stateGame);
 
