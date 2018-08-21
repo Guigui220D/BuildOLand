@@ -19,7 +19,6 @@ void World::loadChunk(sf::Vector2i chunk)
 {
     if (!isChunkLoaded(chunk))
     {
-        std::cout << "Load chunk " << chunk.x << ", " << chunk.y << ".\n";
         //Looking in cached chunks to see if it's already there
         for (auto i = chunkCache.begin(); i != chunkCache.end(); i++)
         {
@@ -37,6 +36,7 @@ void World::loadChunk(sf::Vector2i chunk)
                     delete (*j);
                 (*i).entities.clear();
                 i = chunkCache.erase(i);
+                std::cout << "Loaded chunk " << chunk.x << ", " << chunk.y << " from cache.\n";
                 return;
             }
         }
@@ -65,7 +65,6 @@ void World::loadChunk(sf::Vector2i chunk)
                 if (chunkFile)
                 {
                     loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(data, chunk)));
-                    std::cout << "Loaded chunk from disk.\n";
                     chunkFile.close();
                     return;
                 }
@@ -77,6 +76,7 @@ void World::loadChunk(sf::Vector2i chunk)
         //The chunk doesn't exist, generate it
         loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk)));
         generateChunk(*getChunk(chunk), Generators::SandGrassPattern1);
+        std::cout << "Generated chunk " << chunk.x << ", " << chunk.y << ".\n";
     }
 }
 
@@ -166,6 +166,8 @@ void World::updateChunks()
     }
     for (unsigned int i = 0; i < toUnload.size(); i++)
         unloadChunk(toUnload.at(i), true);
+    if (chunkCache.size() >= 32)
+        flushChunkCache();
 }
 
 void World::generateChunk(Chunk& chunk, Generators gen)

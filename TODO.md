@@ -36,4 +36,3 @@
 ### Bug fixes, corrections, minor things :
 
 - Proper kick (Online mode)
-- Flush chunk cache sometimes
