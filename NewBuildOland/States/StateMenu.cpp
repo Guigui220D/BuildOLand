@@ -42,6 +42,9 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
                             game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
 }
 
+void StateMenu::initAssets()
+{}
+
 void StateMenu::handleInput() {
     Vector2i mousePos = sf::Mouse::getPosition(game->getWindow());
 

@@ -11,20 +11,12 @@ BlockTeleporter::~BlockTeleporter()
 {
 }
 
-void BlockTeleporter::onPlaceableEnter(PlaceableEnterEvent e) {
-
-    World* oldWorld = e.getState()->getWorld();
-    World* newWorld = nullptr;
-
-    //Set the world according to the world the stateGame is in
-
-
-    //Send it to the stateGame to change the world
-    e.getState()->setWorld(*newWorld);
-
+void BlockTeleporter::onPlaceableEnter(PlaceableEnterEvent e)
+{
 	//Play a teleportation sound
-	sf::Sound* teleportSound = e.getState()->getSoundManager()->getSound("teleport.ogg");
-	teleportSound->setVolume(20);
-	teleportSound->play();
+	sf::Sound teleportSound;
+	teleportSound.setBuffer(*e.getState()->getAssetManager()->getSound("TELEPORT"));
+	teleportSound.setVolume(20);
+	teleportSound.play();
 }
 

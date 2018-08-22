@@ -13,9 +13,10 @@ Block::~Block()
 //Event methods
 void Block::onBlockBuild(BlockBuildEvent e)
 {
-	Sound* blockPlaceSound = e.getState()->getSoundManager()->getSound("blockPlace.ogg");
-	blockPlaceSound->setVolume(30);
-	blockPlaceSound->play();
+	sf::Sound blockPlaceSound;
+	blockPlaceSound.setBuffer(*e.getState()->getAssetManager()->getSound("BLOCK_PLACEMENT"));
+	blockPlaceSound.setVolume(30);
+	blockPlaceSound.play();
 
 }
 void Block::onBlockBreak(BlockBreakEvent e)

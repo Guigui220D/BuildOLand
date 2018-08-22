@@ -39,7 +39,6 @@ class OtherPlayer : public LivingEntity
     private:
 
         sf::Vector2u lastPos;
-        sf::Font font;
 
         unsigned char movement;
 };

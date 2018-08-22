@@ -11,6 +11,8 @@ class StateMenu : public StateBase {
 public:
     StateMenu(Game &game);
 
+    void initAssets() override;
+
     void handleInput()                  override;
     void update(float dt, bool focused) override;
     void draw(sf::RenderWindow &window) override;

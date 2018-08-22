@@ -25,8 +25,6 @@ private:
 
 	void initInventory(World* currentWorld);
 
-	sf::Font font;
-
 protected:
 	std::string getTextureName() override;
 	std::vector<IntRect> getIdleAnim() override;

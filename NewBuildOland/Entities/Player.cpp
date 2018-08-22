@@ -10,9 +10,7 @@ Player::Player(World *world, sf::String displayName, unsigned int id)
 	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
-
-	font.loadFromFile("Res/font/lucon.ttf");
-	nameText.setFont(font);
+	nameText.setFont(*currentWorld->getStateGame()->getAssetManager()->getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);
@@ -28,9 +26,9 @@ void Player::initInventory(World* currentWorld) {
     inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(2), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(10), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(0), 120));
     inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
 }

@@ -6,7 +6,7 @@ ChatGui::ChatGui(StateGame *stateGame) : Gui(stateGame) {
     //Chatwidth = width from left to beggining of inventory (-10px)
     float chatwidth = stateGame->getGuiView().getSize().x / 2.0f - 292 - 10;
 
-    text.setFont(*stateGame->getAssetManager()->getFont("lucon"));
+    text.setFont(*stateGame->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::White);
     text.setString("Type your command here - Available soon");
     text.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,

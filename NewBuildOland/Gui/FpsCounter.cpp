@@ -6,7 +6,7 @@
 
 FpsCounter::FpsCounter(StateGame* stateGame) : Gui(stateGame)
 {
-    text.setFont(*stateGame->getAssetManager()->getFont("lucon"));
+    text.setFont(*stateGame->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(32);
     text.setPosition(-stateGame->getGuiView().getSize().x / 2, -stateGame->getGuiView().getSize().y / 2);

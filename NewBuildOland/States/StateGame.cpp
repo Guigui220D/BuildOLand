@@ -51,10 +51,13 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	EventManager::tileset = &tileset;
 	EventManager::state = this;
 
-	sf::Music* backgroundMusic = soundManager.getMusic("fantasymusic.ogg");
+	//Init assets
+	initAssets();
+
+	sf::Music* backgroundMusic = assetManager.getMusic("FANTASY_MUSIC");
 	backgroundMusic->setVolume(20);
 	backgroundMusic->play();
-	sf::Music* backgroundAmbiance = soundManager.getMusic("forest-ambiance.ogg");
+	sf::Music* backgroundAmbiance = assetManager.getMusic("BIRDS_CHIPPING");
 	backgroundAmbiance->setVolume(30);
 	backgroundAmbiance->setLoop(true);
 	backgroundAmbiance->play();
@@ -105,6 +108,14 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
 	gui.push_back(std::unique_ptr<Gui>(chatGui));
 
+}
+
+void StateGame::initAssets()
+{
+    assetManager.loadMusicFromFile("fantasymusic.ogg", "FANTASY_MUSIC");
+    assetManager.loadMusicFromFile("forest-ambiance.ogg", "BIRDS_CHIPPING");
+
+    assetManager.loadFontFromFile("lucon.ttf", "LUCON");
 }
 
 void StateGame::handleInput() {
@@ -250,19 +261,18 @@ void StateGame::handleInput() {
 void StateGame::update(float dt, bool focused) {
     currentWorld->updateChunks();
 
-    if (focused)
-        player->update(dt);
+    if (focused) { player->update(dt); }
 
 	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world
 
-	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+	for (unsigned int i = 0; i < currentWorld->getEntities().size(); i++)
 		currentWorld->getEntities()[i]->update(dt);
 
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 
 	//Update the GUI
-	for (int i = 0; i < gui.size(); i++)
+	for (unsigned int i = 0; i < gui.size(); i++)
 	{
 		gui[i]->update(dt);
 	}
@@ -284,7 +294,7 @@ void StateGame::draw(sf::RenderWindow &window) {
         }
     }
 	//Draw the ground
-	for (int i = 0; i < chunksToDraw.size(); i++)
+	for (unsigned int i = 0; i < chunksToDraw.size(); i++)
     {
         sf::VertexArray groundQuads(sf::Quads, 4 * Chunk::CHUNK_SIZE * Chunk::CHUNK_SIZE);
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
@@ -314,7 +324,7 @@ void StateGame::draw(sf::RenderWindow &window) {
     }
     //Draw the blocks on the ground
     worldDraw.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
-    for (int i = 0; i < chunksToDraw.size(); i++)
+    for (unsigned int i = 0; i < chunksToDraw.size(); i++)
     {
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
         {
@@ -334,7 +344,7 @@ void StateGame::draw(sf::RenderWindow &window) {
         }
     }
 	//Draw the blocks front side
-	for (int i = 0; i < chunksToDraw.size(); i++)
+	for (unsigned int i = 0; i < chunksToDraw.size(); i++)
     {
         sf::VertexArray blockQuads(sf::Quads, 0);
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
@@ -374,13 +384,13 @@ void StateGame::draw(sf::RenderWindow &window) {
     }
 
 	//Draw all entities
-	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+	for (unsigned int i = 0; i < currentWorld->getEntities().size(); i++)
         window.draw(*(currentWorld->getEntities()[i]));
 	//And draw the player
 	window.draw(*player);
 
 	//Draw the actual blocks
-	for (int i = 0; i < chunksToDraw.size(); i++)
+	for (unsigned int i = 0; i < chunksToDraw.size(); i++)
     {
         sf::VertexArray blockQuads(sf::Quads, 0);
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
@@ -440,7 +450,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	}
 
 	//Draw more for entities
-	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+	for (unsigned int i = 0; i < currentWorld->getEntities().size(); i++)
         (*currentWorld->getEntities()[i]).drawMore(window);
     player->drawMore(window);
 
@@ -448,7 +458,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	mapView.setCenter(game->getWorldView().getCenter());
 	window.setView(mapView);
 	//Same method
-	for (int i = 0; i < chunksToDraw.size(); i++)
+	for (unsigned int i = 0; i < chunksToDraw.size(); i++)
     {
         sf::VertexArray pixelQuads(sf::Quads, 0);
         for (int x = 0; x < Chunk::CHUNK_SIZE; x++)
@@ -477,7 +487,7 @@ void StateGame::draw(sf::RenderWindow &window) {
     }
 
 	//Draw entities on map
-	for (int i = 0; i < currentWorld->getEntities().size(); i++)
+	for (unsigned int i = 0; i < currentWorld->getEntities().size(); i++)
 		window.draw(*(currentWorld->getEntities()[i]->getOnMap()));
 	window.draw(*player->getOnMap());
 	window.draw(mapFrame);
@@ -485,7 +495,7 @@ void StateGame::draw(sf::RenderWindow &window) {
     //Draw the gui
 	window.setView(game->getGuiView());
 
-	for (int i = 0; i < gui.size(); i++)
+	for (unsigned int i = 0; i < gui.size(); i++)
     {
 		gui[i]->draw(window);
     }
@@ -543,6 +553,8 @@ void StateGame::handleEvent(sf::Event &event) {
 		case sf::Event::TextEntered:
 			chatGui->eventInput(event.text.unicode);
 			break;
+
+        default: break;
     }
 
 }

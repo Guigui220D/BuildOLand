@@ -35,9 +35,10 @@ void TNTEntity::update(float delta)
     {
         if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
         {
-            sf::Sound* boomSound = currentWorld->getStateGame()->getSoundManager()->getSound("explosion.wav");
-            boomSound->setVolume(20);
-            boomSound->play();
+            Sound boomSound;
+            boomSound.setBuffer(*currentWorld->getStateGame()->getAssetManager()->getSound("EXPLOSION"));
+            boomSound.setVolume(20);
+            boomSound.play();
             int xpos = worldPos.x;
             int ypos = worldPos.y;
             for (int x = -2; x <= 2; x++)

@@ -6,14 +6,12 @@
 #include "../Worlds/World.h"
 #include "../Utils/TileSet.h"
 #include "../Entities/Player.h"
-#include "../Utils/SoundManager.h"
 #include "../Entities/Entities.h"
 #include "../Gui/Gui.h"
 #include "../Gui/InventoryGui.h"
 #include <vector>
 #include <memory>
 #include "../Utils/NetworkManager.h"
-#include "../Utils/AssetManager.h"
 #include "../Gui/ChatGui.h"
 
 class StateGame : public StateBase
@@ -24,6 +22,8 @@ public:
 
 	StateGame(Game& game, bool online, std::string playerName = "Player", std::string adressInput = "");
 	~StateGame() override;
+
+	void initAssets() override;
 
 	void handleInput()					override;
 	void update(float dt, bool focused)	override;
@@ -40,7 +40,6 @@ public:
 
 	inline World* getWorld() { return currentWorld; };
 	inline TileSet* getTileset() { return &tileset; };
-	inline SoundManager* getSoundManager() { return &soundManager; };
 	inline Player* getPlayer() { return player; };
 
     void handleEvent(sf::Event &event) override;
@@ -48,8 +47,6 @@ public:
     inline bool isOnline() { return onlineMode; };
     inline bool isOnlineAndAvailible() { return onlineMode && nManager.isConnected(); };
     inline NetworkManager* getNetworkManager() { return &nManager; }
-
-	inline AssetManager* getAssetManager() { return &assetManager; };
 
 
 private:
@@ -77,8 +74,6 @@ private:
 	bool isPlaceKeyPressed = false;
 
 	TileSet tileset;
-	SoundManager soundManager;
-	AssetManager assetManager;
 
 	Player *player;
 
