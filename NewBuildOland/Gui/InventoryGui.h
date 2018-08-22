@@ -22,17 +22,12 @@ private:
     float inventoryScale = 2;
     unsigned int inventorySlots = 8;
 
-    sf::Texture inventoryTexture;
     sf::Sprite inventorySprite;
-
-    sf::Texture selectedTexture;
     sf::Sprite selectedSprite;
-
 
     std::vector<sf::Sprite*> itemSprites;
     std::vector<sf::Text*> itemTexts;
 
-    sf::Font font;
     Inventory *inventory;
     unsigned short *cursorId;
 };

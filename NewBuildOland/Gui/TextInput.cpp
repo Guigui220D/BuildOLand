@@ -18,8 +18,7 @@ TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHo
 
 
     //TEXT
-    font.loadFromFile("Res/Font/lucon.ttf");
-    text.setFont(font);
+    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::White);
     text.setCharacterSize(45);
     text.setString(placeHolder);

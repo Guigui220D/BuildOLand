@@ -14,7 +14,6 @@ class TNTEntity : public Entities
 
     private:
         sf::Clock fuse;
-        sf::Texture texture;
         sf::Vector2i worldPos;
 };
 

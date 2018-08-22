@@ -15,6 +15,8 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	: StateBase(game)
 	, nManager(this)
 {
+    initAssets();
+
 	game.getWindow().setMouseCursorVisible(false);
 
 	onlineMode = online;
@@ -50,9 +52,6 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	//Init the tileset to the event manager
 	EventManager::tileset = &tileset;
 	EventManager::state = this;
-
-	//Init assets
-	initAssets();
 
 	sf::Music* backgroundMusic = assetManager.getMusic("FANTASY_MUSIC");
 	backgroundMusic->setVolume(20);
@@ -91,9 +90,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 
 	mouse = sf::RectangleShape();
 	mouse.setSize(sf::Vector2f(TILE_SIZE_FLOAT / 3, TILE_SIZE_FLOAT / 3));
-	Texture* t = new Texture();
-	(*t).loadFromFile("Res/hand.png");
-	mouse.setTexture(t);
+	mouse.setTexture(assetManager.getTexture("HAND"));
 
     player = new Player(currentWorld, nick, nManager.getPlayerID());    //Player id should be 0 if it's offline
     player->init(0, 0);
@@ -115,7 +112,20 @@ void StateGame::initAssets()
     assetManager.loadMusicFromFile("fantasymusic.ogg", "FANTASY_MUSIC");
     assetManager.loadMusicFromFile("forest-ambiance.ogg", "BIRDS_CHIPPING");
 
+    assetManager.loadSoundFromFile("blockPlace.ogg", "BLOCK_PLACEMENT");
+    assetManager.loadSoundFromFile("explosion.wav", "EXPLOSION");
+    assetManager.loadSoundFromFile("save.ogg", "SAVE");
+    assetManager.loadSoundFromFile("teleport.ogg", "TELEPORT");
+
     assetManager.loadFontFromFile("lucon.ttf", "LUCON");
+    assetManager.loadFontFromFile("Akashi.ttf", "AKASHI");
+
+    assetManager.loadTextureFromFile("characters.png", "CHARACTERS_SHEET_1");
+    assetManager.loadTextureFromFile("rpgcharacters.png", "CHARACTERS_SHEET_2");
+    assetManager.loadTextureFromFile("tntentity.png", "TNT");
+    assetManager.loadTextureFromFile("hand.png", "HAND");
+    assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
+    assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
 }
 
 void StateGame::handleInput() {

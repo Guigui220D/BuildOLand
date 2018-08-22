@@ -38,7 +38,6 @@ private:
 
     sf::RectangleShape background;
     sf::RectangleShape cursor;
-    sf::Font font;
     sf::Text text;
 
     bool active = false;

@@ -19,7 +19,7 @@ void PhysicEntity::update(float delta)
 
 int PhysicEntity::touchesBlock()
 {
-    if (abs(getWorldPos().x - currentWorld->getStateGame()->getPlayer()->getWorldPos().x) >= 54 || abs(getWorldPos().y - currentWorld->getStateGame()->getPlayer()->getWorldPos().y) >= 54)
+    if (abs(getWorldPos().x - game->getPlayer()->getWorldPos().x) >= 54 || abs(getWorldPos().y - currentWorld->getStateGame()->getPlayer()->getWorldPos().y) >= 54)
         return 0;
 	//Checks near blocks to entity
 	int x = (int)(getPosition().x / StateGame::TILE_SIZE);

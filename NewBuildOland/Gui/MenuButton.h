@@ -24,7 +24,6 @@ private:
     StateMenu* stateMenu;
 
     sf::RectangleShape background;
-    sf::Font font;
     sf::Text text;
 
     sf::Vector2f pos;

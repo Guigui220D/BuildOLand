@@ -9,7 +9,7 @@
 OtherPlayer::OtherPlayer(World *world, sf::String displayName, unsigned id)
     : LivingEntity(world, id, 20, 9)
 {
-	nameText.setFont(*currentWorld->getStateGame()->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);
@@ -55,7 +55,7 @@ void OtherPlayer::updateMovement(float dt)
 }
 
 std::string OtherPlayer::getTextureName() {
-    return "characters.png";
+    return "CHARACTERS_SHEET_1";
 }
 std::vector<IntRect> OtherPlayer::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();

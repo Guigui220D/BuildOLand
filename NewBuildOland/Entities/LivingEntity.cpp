@@ -18,8 +18,7 @@ void LivingEntity::init(float posX, float posY) {
 
     setPosition(sf::Vector2f(posX, posY));
 
-    Texture* t = new Texture();
-    (*t).loadFromFile("Res/" + getTextureName());
+    Texture* t = game->getAssetManager()->getTexture(getTextureName());
     setTexture(t);
 
     hitboxWidth = 0.75f;

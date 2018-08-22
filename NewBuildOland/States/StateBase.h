@@ -17,7 +17,7 @@ public:
 	virtual void handleEvent(sf::Event &event);
 	virtual void onStop();
 	inline AssetManager* getAssetManager() { return &assetManager; };
-	virtual void initAssets() = 0;
+	virtual void initAssets();
 
     Game* getGame();
 protected:

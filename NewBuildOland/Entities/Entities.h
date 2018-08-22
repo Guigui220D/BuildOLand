@@ -33,6 +33,7 @@ public:
 
 protected:
 	World *currentWorld = nullptr;
+	StateGame *game = nullptr;
 
 private:
 	sf::CircleShape onMap;

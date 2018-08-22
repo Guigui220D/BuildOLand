@@ -4,8 +4,10 @@ const std::string AssetManager::AUDIO_REPERTORY_NAME = "Res/sound/";
 const std::string AssetManager::TEXTURE_REPERTORY_NAME = "Res/";
 const std::string AssetManager::FONT_REPERTORY_NAME = "Res/font/";
 
-AssetManager::AssetManager()
+AssetManager::AssetManager(unsigned int maxSounds)
 {
+    maxSoundsPlaying = maxSounds;
+
     sf::Image errorImage;
     errorImage.create(2, 2);
     errorImage.setPixel(0, 0, sf::Color(255, 0, 255));
@@ -27,6 +29,16 @@ AssetManager::~AssetManager()
     //Delete fonts
     for (auto i = fonts.begin(); i != fonts.end(); i++)
         delete (*i).second;
+}
+
+void AssetManager::addPlayingSound(sf::Sound* sound)
+{
+    playingSounds.push_back(sound);
+    if (playingSounds.size() > maxSoundsPlaying)
+    {
+        delete playingSounds.at(0);
+        playingSounds.erase(playingSounds.begin());
+    }
 }
 
 void AssetManager::addMusic(sf::Music* music, const std::string name)
@@ -106,7 +118,7 @@ sf::SoundBuffer* AssetManager::getSound(const std::string name)
 {
     auto i = sounds.find(name);
     if (i == sounds.end())
-
+        std::cout << "Sound \"" << name << "\" could not be found.\n";
     return (*i).second;
 }
 sf::Texture* AssetManager::getTexture(const std::string name)

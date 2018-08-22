@@ -7,8 +7,7 @@ TNTEntity::TNTEntity(World* world, unsigned id, sf::Vector2i pos)
     worldPos = pos;
     fuse.restart();
     setSize(sf::Vector2f(80, 120));
-    texture.loadFromFile("Res/tntentity.png");
-    setTexture(&texture);
+    setTexture(game->getAssetManager()->getTexture("TNT"));
     setPosition(sf::Vector2f(pos.x * StateGame::TILE_SIZE, pos.y * StateGame::TILE_SIZE));
     setOrigin(sf::Vector2f(40, 80));
     setOnMapColor(sf::Color::Red);
@@ -31,14 +30,15 @@ void TNTEntity::update(float delta)
     setFillColor((demiSeconds % 2) ? sf::Color(127, 127, 127) : sf::Color::White);
     setOnMapColor((demiSeconds % 2) ? sf::Color::Black : sf::Color::Red);
 
-    if (!currentWorld->getStateGame()->isOnlineAndAvailible())
+    if (!game->isOnlineAndAvailible())
     {
         if (!mustBeRemoved && fuse.getElapsedTime().asSeconds() >= 3.0f)
         {
-            Sound boomSound;
-            boomSound.setBuffer(*currentWorld->getStateGame()->getAssetManager()->getSound("EXPLOSION"));
-            boomSound.setVolume(20);
-            boomSound.play();
+            Sound* boomSound = new Sound();
+            game->getAssetManager()->addPlayingSound(boomSound);
+            boomSound->setBuffer(*game->getAssetManager()->getSound("EXPLOSION"));
+            boomSound->setVolume(20);
+            boomSound->play();
             int xpos = worldPos.x;
             int ypos = worldPos.y;
             for (int x = -2; x <= 2; x++)
@@ -49,12 +49,12 @@ void TNTEntity::update(float delta)
                     {
                         unsigned short oldBlockId = currentWorld->getBlockId(sf::Vector2i(xpos + x, ypos + y));
                         currentWorld->setBlockId(sf::Vector2i(xpos + x, ypos + y), 0);
-                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2i(xpos + x, ypos + y), oldBlockId, this, currentWorld->getStateGame()));
+                        EventManager::OnBlockBreak(BlockBreakEvent(sf::Vector2i(xpos + x, ypos + y), oldBlockId, this, game));
                     }
                     if (x * x + y * y <= 4) {
                         unsigned short oldGroundId = currentWorld->getGroundId(sf::Vector2i(xpos + x, ypos + y));
                         currentWorld->setGroundId(sf::Vector2i(xpos + x, ypos + y), 4);
-                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2i(xpos + x, ypos + y), oldGroundId, 4, this, currentWorld->getStateGame()));
+                        EventManager::OnGroundPlace(GroundPlaceEvent(sf::Vector2i(xpos + x, ypos + y), oldGroundId, 4, this, game));
                     }
                 }
             }

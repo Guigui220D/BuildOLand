@@ -9,8 +9,7 @@ MenuButton::MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2
         , pos(pos)
 {
     //TEXT
-    font.loadFromFile("Res/Font/lucon.ttf");
-    text.setFont(font);
+    text.setFont(*stateMenu->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(45);
     text.setString(textString);

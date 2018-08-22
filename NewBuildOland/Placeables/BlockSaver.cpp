@@ -17,8 +17,9 @@ void BlockSaver::onPlaceableEnter(PlaceableEnterEvent e) {
 	e.getState()->getWorld()->flushChunkCache();
 
 	//Play a sound
-	sf::Sound saveSound;
-	saveSound.setBuffer(*e.getState()->getAssetManager()->getSound("SAVE"));
-	saveSound.setVolume(20);
-	saveSound.play();
+	sf::Sound* saveSound = new Sound();
+	e.getState()->getAssetManager()->addPlayingSound(saveSound);
+	saveSound->setBuffer(*e.getState()->getAssetManager()->getSound("SAVE"));
+	saveSound->setVolume(20);
+	saveSound->play();
 }

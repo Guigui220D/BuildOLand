@@ -102,7 +102,7 @@ void BlackWarrior::updateMovement(float dt) {
 
 
 std::string BlackWarrior::getTextureName() {
-    return "rpgcharacters.png";
+    return "CHARACTERS_SHEET_2";
 }
 std::vector<IntRect> BlackWarrior::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();

@@ -7,11 +7,8 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
     , inventory(inventory)
     , cursorId(cursorId)
 {
-    //Load the inventory image
-    if (!inventoryTexture.loadFromFile("Res/inventoryBar.png"))
-        std::cout << "ERROR LOADING FROM 'Res/inventoryBar.png'" << std::endl;
-
-    inventorySprite.setTexture(inventoryTexture);
+    //Get the inventory image
+    inventorySprite.setTexture(*stateGame->getAssetManager()->getTexture("INVENTORY_BAR"));
     float inventoryWidth = inventorySprite.getLocalBounds().width;
     float inventoryHeight = inventorySprite.getLocalBounds().height;
     float inventoryMargin = 10.0f;
@@ -19,18 +16,11 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
     inventorySprite.setPosition(-inventoryWidth / 2 * inventoryScale,
                                 stateGame->getGuiView().getSize().y / 2 - inventoryHeight * inventoryScale - inventoryMargin);
 
-    //Load the inventory selected cursor
-    if (!selectedTexture.loadFromFile("Res/inventorySelected.png"))
-        std::cout << "ERROR LOADING FROM 'Res/inventorySelected.png'" << std::endl;
-
-    selectedSprite.setTexture(selectedTexture);
+    //Get the inventory selected cursor
+    selectedSprite.setTexture(*stateGame->getAssetManager()->getTexture("SELECTED_SLOT"));
     selectedSprite.setScale(inventoryScale, inventoryScale);
     selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36) * inventoryScale,
                                inventorySprite.getPosition().y);
-
-    //Load the font in order to show the quantity of the items
-    if (!font.loadFromFile("Res/Font/Akashi.ttf"))
-        std::cout << "ERROR LOADING FROM 'Res/Font/Akashi.ttf'" << std::endl;
 
     //Load the item images
     for(unsigned i = 0; i < inventorySlots; i++){
@@ -43,7 +33,7 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
 
         //And place the text correctly
         sf::Text* text = new Text();
-        text->setFont(font);
+        text->setFont(*stateGame->getAssetManager()->getFont("AKASHI"));
         text->setFillColor(sf::Color::White);
         text->setCharacterSize(8 * inventoryScale);
         //No need for setting the position now, as we need to change it according to the length of the text
@@ -70,7 +60,7 @@ void InventoryGui::draw(sf::RenderWindow &window) {
     inventorySprite.setPosition(inventoryPos.x + 5, inventoryPos.y + 5);
     window.draw(inventorySprite);
     //And the inventory
-    inventorySprite.setColor(sf::Color(255, 255, 255, 255));
+    inventorySprite.setColor(sf::Color(255, 255, 255));
     inventorySprite.setPosition(inventoryPos.x, inventoryPos.y);
     window.draw(inventorySprite);
 

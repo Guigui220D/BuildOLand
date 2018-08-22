@@ -10,7 +10,7 @@ Player::Player(World *world, sf::String displayName, unsigned int id)
 	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
-	nameText.setFont(*currentWorld->getStateGame()->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);
@@ -22,7 +22,7 @@ std::vector<unsigned char> Player::getBytes() { return std::vector<unsigned char
 void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
-    TileSet* tileset = currentWorld->getStateGame()->getTileset();
+    TileSet* tileset = game->getTileset();
     inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
@@ -59,11 +59,11 @@ void Player::updateMovement(float dt) {
     }
 
     //if player changed direction, send to server
-    if (currentWorld->getStateGame()->isOnlineAndAvailible() && lastKeysState != keysState)
+    if (game->isOnlineAndAvailible() && lastKeysState != keysState)
     {
         sf::Packet p;
         p << MainCodes::playerMovement << keysState << getPosition().x << getPosition().y;
-        currentWorld->getStateGame()->getNetworkManager()->sendPacket(p);
+        game->getNetworkManager()->sendPacket(p);
     }
 
     //Block enter and leave event
@@ -72,14 +72,14 @@ void Player::updateMovement(float dt) {
     {
         unsigned short blockId = currentWorld->getBlockId(sf::Vector2i(blockOn.x, blockOn.y));
         unsigned short groundId = currentWorld->getGroundId(sf::Vector2i(blockOn.x, blockOn.y));
-        EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
-        EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, currentWorld->getStateGame()));
+        EventManager::OnPlaceableLeave(PlaceableLeaveEvent(lastPos, this, blockId, groundId, game));
+        EventManager::OnPlaceableEnter(PlaceableEnterEvent(lastPos, this, blockId, groundId, game));
         lastPos = blockOn;
     }
 }
 
 std::string Player::getTextureName() {
-    return "characters.png";
+    return "CHARACTERS_SHEET_1";
 }
 std::vector<IntRect> Player::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();

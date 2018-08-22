@@ -14,11 +14,9 @@ Game* StateBase::getGame()
     return game;
 }
 
-void StateBase::handleEvent(sf::Event &event) {
+void StateBase::handleEvent(sf::Event &event) { }
 
-}
+void StateBase::onStop() { }
 
-void StateBase::onStop()
-{
+void StateBase::initAssets() { }
 
-}

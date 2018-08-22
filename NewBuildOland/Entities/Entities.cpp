@@ -6,6 +6,8 @@ Entities::Entities(World *world, unsigned int id)
 	: currentWorld(world)
 	, id(id)
 {
+    game = world->getStateGame();
+
 	onMap.setFillColor(sf::Color::Yellow);
 	onMap.setRadius(50);
 	onMap.setOrigin(sf::Vector2f(50, 50));

@@ -20,18 +20,15 @@ public:
     void handleEvent(sf::Event &event)  override;
 
 private:
-    sf::Texture tilesetTexture;
     sf::RectangleShape backgroundRect;
 
-    sf::Texture logo;
-    sf::Texture sfmlLogo;
     sf::Sprite logoSprite;
     sf::Sprite sfmlSprite;
 
-    MenuButton buttonLocal;
-    MenuButton buttonMultiplayer;
-    TextInput nickInput;
-    TextInput adressInput;
+    std::unique_ptr<MenuButton> buttonLocal;
+    std::unique_ptr<MenuButton> buttonMultiplayer;
+    std::unique_ptr<TextInput> nickInput;
+    std::unique_ptr<TextInput> adressInput;
 
     float elapsedTime = 0;
 

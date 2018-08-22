@@ -8,11 +8,11 @@
 - [ ] Tile-entities
 - [ ] Chat and command-line
 - [ ] Character personnalization
-- [ ] Proper resource management (sound, textures, fonts)
 - [ ] Better sound
 - [ ] Personalizable setting (controls, sound, etc)
 - [ ] Versionning
 
+- [x] Proper resource management (sound, textures, fonts)
 - [x] Create proper todo list
 - [x] Events system
 - [x] Animations
@@ -36,3 +36,4 @@
 ### Bug fixes, corrections, minor things :
 
 - Proper kick (Online mode)
+- Make gui pointer lists in StateMenu instead of single objects

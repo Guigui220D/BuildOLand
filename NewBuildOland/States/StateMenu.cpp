@@ -3,64 +3,63 @@
 #include "../Game.h"
 
 StateMenu::StateMenu(Game &game) : StateBase(game)
-    , buttonLocal(this, "Local", sf::Vector2f(0, -100))
-    , buttonMultiplayer(this, "Multiplayer", sf::Vector2f(0, 100))
-    , nickInput(this, sf::Vector2f(0, 200), "Username", 16)
-    , adressInput(this, sf::Vector2f(0, 300), "Address", 0)
 {
+    initAssets();
+
+    buttonLocal = std::make_unique<MenuButton>(this, "Local", sf::Vector2f(0, -100));
+    buttonMultiplayer = std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(0, 100));
+    nickInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 200), "Username", 16);
+    adressInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 300), "Address", 0);
+
     game.getWindow().setMouseCursorVisible(true);
 
-    //Load background image
-    if (!tilesetTexture.loadFromFile("Res/newTileset.png"))
-    {
-        std::cout << "ERROR LOADING FROM 'Res/newTileset.png'" << std::endl;
-    }
-    backgroundRect.setTexture(&tilesetTexture);
+    //Get background image
+    backgroundRect.setTexture(assetManager.getTexture("TILESET"));
     backgroundRect.setTextureRect(sf::IntRect(69, 1, 32, 32));
     backgroundRect.setSize(sf::Vector2f(StateGame::TILE_SIZE, StateGame::TILE_SIZE));
     backgroundRect.setPosition(0, 0);
 
-    //Loading buildoland logo
-    if (!logo.loadFromFile("Res/logo.png"))
-    {
-        std::cout << "ERROR LOADING FROM 'Res/logo.png'" << std::endl;
-    }
-    logoSprite.setTexture(logo);
+    //Get buildoland logo
+    logoSprite.setTexture(*assetManager.getTexture("LOGO"));
     float logoWidth = logoSprite.getLocalBounds().width;
     float logoScale = 0.5;
     logoSprite.scale(logoScale, logoScale);
     logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
 
-    //Loading sfml logo
-    if (!sfmlLogo.loadFromFile("Res/sfml-logo-small.png"))
-    {
-        std::cout << "ERROR LOADING FROM 'Res/sfml-logo-small.png'" << std::endl;
-    }
+    //Get sfml logo
     sfmlSprite.setScale(0.5f, 0.5f);
-    sfmlSprite.setTexture(sfmlLogo);
+    sfmlSprite.setTexture(*assetManager.getTexture("SFML"));
     sfmlSprite.setPosition(-game.getWorldView().getSize().x / 2 * 0.97f,
                             game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
 }
 
 void StateMenu::initAssets()
-{}
+{
+    assetManager.loadFontFromFile("lucon.ttf", "LUCON");
+
+    assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
+    assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
+    assetManager.loadTextureFromFile("newTileset.png", "TILESET");
+    assetManager.loadTextureFromFile("logo.png", "LOGO");
+    assetManager.loadTextureFromFile("sfml-logo-small.png", "SFML");
+}
 
 void StateMenu::handleInput() {
     Vector2i mousePos = sf::Mouse::getPosition(game->getWindow());
 
     //Handle onHover for the guiElements
-    buttonMultiplayer.isHovered(mousePos);
-    buttonLocal.isHovered(mousePos);
-    nickInput.isHovered(mousePos);
-    adressInput.isHovered(mousePos);
+    buttonMultiplayer->isHovered(mousePos);
+    buttonLocal->isHovered(mousePos);
+    nickInput->isHovered(mousePos);
+    adressInput->isHovered(mousePos);
 
     if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
         if(!isMouseLeftClicked) {
             //Just got clicked
-            buttonMultiplayer.isActive(mousePos);
-            buttonLocal.isActive(mousePos);
-            nickInput.isActive(mousePos);
-            adressInput.isActive(mousePos);
+            buttonMultiplayer->isActive(mousePos);
+            buttonLocal->isActive(mousePos);
+            nickInput->isActive(mousePos);
+            adressInput->isActive(mousePos);
         }
         isMouseLeftClicked = true;
 
@@ -70,13 +69,13 @@ void StateMenu::handleInput() {
             isMouseLeftClicked = false;
 
             //Send the event to the gui
-            if(buttonLocal.isReleased(mousePos)) {
+            if(buttonLocal->isReleased(mousePos)) {
                 //init the stategame as a local game
                 game->setCurrentState(new StateGame(*game, false));
             }
-            else if(buttonMultiplayer.isReleased(mousePos)) {
+            else if(buttonMultiplayer->isReleased(mousePos)) {
                 //init the stategame as an online game
-                game->setCurrentState(new StateGame(*game, true, nickInput.getInputText(), adressInput.getInputText()));
+                game->setCurrentState(new StateGame(*game, true, nickInput->getInputText(), adressInput->getInputText()));
             }
         }
     }
@@ -85,9 +84,9 @@ void StateMenu::handleInput() {
 }
 
 void StateMenu::update(float dt, bool focused) {
-    buttonLocal.update(dt);
-    buttonMultiplayer.update(dt);
-    nickInput.update(dt);
+    buttonLocal->update(dt);
+    buttonMultiplayer->update(dt);
+    nickInput->update(dt);
 }
 
 void StateMenu::draw(sf::RenderWindow &window) {
@@ -124,10 +123,10 @@ void StateMenu::draw(sf::RenderWindow &window) {
     window.draw(sfmlSprite);
 
     //And draw the button
-    buttonLocal.draw(window);
-    buttonMultiplayer.draw(window);
-    nickInput.draw(window);
-    adressInput.draw(window);
+    buttonLocal->draw(window);
+    buttonMultiplayer->draw(window);
+    nickInput->draw(window);
+    adressInput->draw(window);
 
 
 }
@@ -137,17 +136,17 @@ void StateMenu::handleEvent(sf::Event &event) {
         //RESIZE EVENT
         case sf::Event::Resized:
             //Send the event to all gui elements
-            buttonMultiplayer.eventResize();
-            buttonLocal.eventResize();
-            nickInput.eventResize();
-            adressInput.eventResize();
+            buttonMultiplayer->eventResize();
+            buttonLocal->eventResize();
+            nickInput->eventResize();
+            adressInput->eventResize();
             //Reposition sfml logo
             sfmlSprite.setPosition(-game->getWorldView().getSize().x / 2 * 0.97f,
                                    game->getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
             break;
         case sf::Event::TextEntered:
-            nickInput.eventInput(event.text.unicode);
-            adressInput.eventInput(event.text.unicode);
+            nickInput->eventInput(event.text.unicode);
+            adressInput->eventInput(event.text.unicode);
             break;
     }
 

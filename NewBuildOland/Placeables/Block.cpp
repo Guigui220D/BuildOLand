@@ -13,10 +13,11 @@ Block::~Block()
 //Event methods
 void Block::onBlockBuild(BlockBuildEvent e)
 {
-	sf::Sound blockPlaceSound;
-	blockPlaceSound.setBuffer(*e.getState()->getAssetManager()->getSound("BLOCK_PLACEMENT"));
-	blockPlaceSound.setVolume(30);
-	blockPlaceSound.play();
+	sf::Sound* blockPlaceSound = new sf::Sound();
+	e.getState()->getAssetManager()->addPlayingSound(blockPlaceSound);
+	blockPlaceSound->setBuffer(*e.getState()->getAssetManager()->getSound("BLOCK_PLACEMENT"));
+	blockPlaceSound->setVolume(30);
+	blockPlaceSound->play();
 
 }
 void Block::onBlockBreak(BlockBreakEvent e)
