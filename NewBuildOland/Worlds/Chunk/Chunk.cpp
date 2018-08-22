@@ -46,7 +46,6 @@ Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
             blocks.push_back(data.at(i) | data.at(i + 1) << 8);
         }
         data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
-        std::cout << "Loaded chunk " << position.x << ", " << position.y << " successfully from disk.\n";
         ready = true;
     }
     else
@@ -71,7 +70,6 @@ void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
         p >> block;
         blocks.push_back(block);
     }
-    std::cout << "Got chunk " << pos.x << ", " << pos.y << " from server.\n";
     ready = true;
 }
 

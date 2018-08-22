@@ -26,17 +26,18 @@ void World::loadChunk(sf::Vector2i chunk)
             {
                 loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i).chunk));
                 //Load entities
+                /*
                 for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
                 {
                     Entities* e = (*j)->clone();
                     std::cout << "Added one entity: " << typeid(*e).name() << "\n";
                     entities.push_back(e);
                 }
+                */
                 for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
                     delete (*j);
                 (*i).entities.clear();
                 i = chunkCache.erase(i);
-                std::cout << "Loaded chunk " << chunk.x << ", " << chunk.y << " from cache.\n";
                 return;
             }
         }
@@ -76,7 +77,6 @@ void World::loadChunk(sf::Vector2i chunk)
         //The chunk doesn't exist, generate it
         loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk)));
         generateChunk(*getChunk(chunk), Generators::SandGrassPattern1);
-        std::cout << "Generated chunk " << chunk.x << ", " << chunk.y << ".\n";
     }
 }
 
@@ -105,7 +105,6 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
         chunkCache.push_back(cc);
         if (erase)
             loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
-        std::cout << "Unloaded chunk " << chunk.x << ", " << chunk.y << ".\n";
         return;
     }
     std::cout << "Tried to unload a chunk that wasn't loaded.\n";
@@ -142,10 +141,7 @@ void World::flushChunkCache()
 
     }
     if (success)
-    {
-        std::cout << "Saved chunk cache, " << chunkCache.size() << " chunks!\n";
         chunkCache.clear();
-    }
 }
 
 void World::updateChunks()

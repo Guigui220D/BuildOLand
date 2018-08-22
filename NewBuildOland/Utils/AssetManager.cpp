@@ -64,7 +64,6 @@ bool AssetManager::loadMusicFromFile(const std::string path, const std::string n
     if (music->openFromFile(AUDIO_REPERTORY_NAME + path))
     {
         musics.emplace(std::pair<std::string, sf::Music*>(name, music));
-        std::cout << "Loaded music \"" << name << "\".\n";
         return true;
     }
     std::cout << "Music \"" << name << "\" could not be loaded.\n";
@@ -76,7 +75,6 @@ bool AssetManager::loadSoundFromFile(const std::string path, const std::string n
     if (sound->loadFromFile(AUDIO_REPERTORY_NAME + path))
     {
         sounds.emplace(std::pair<std::string, sf::SoundBuffer*>(name, sound));
-        std::cout << "Loaded sound \"" << name << "\".\n";
         return true;
     }
     std::cout << "Sound \"" << name << "\" could not be loaded.\n";
@@ -88,7 +86,6 @@ bool AssetManager::loadTextureFromFile(const std::string path, const std::string
     if (texture->loadFromFile(TEXTURE_REPERTORY_NAME + path))
     {
         textures.emplace(std::pair<std::string, sf::Texture*>(name, texture));
-        std::cout << "Loaded texture \"" << name << "\".\n";
         return true;
     }
     std::cout << "Texture \"" << name << "\" could not be loaded.\n";
@@ -100,7 +97,6 @@ bool AssetManager::loadFontFromFile(const std::string path, const std::string na
     if (font->loadFromFile(FONT_REPERTORY_NAME + path))
     {
         fonts.emplace(std::pair<std::string, sf::Font*>(name, font));
-        std::cout << "Loaded font \"" << name << "\".\n";
         return true;
     }
     std::cout << "Font \"" << name << "\" could not be loaded.\n";

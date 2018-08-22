@@ -48,7 +48,6 @@ void NetworkWorld::unloadChunk(sf::Vector2i chunk, bool erase)
     {
         if (erase)
             loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
-        std::cout << "Unloaded chunk " << chunk.x << ", " << chunk.y << ".\n";
         return;
     }
     std::cout << "Tried to unload a chunk that wasn't loaded.\n";
