@@ -21,8 +21,8 @@ int PhysicEntity::touchesBlock()
 {
     if (abs(getWorldPos().x - game->getPlayer()->getWorldPos().x) >= 54 || abs(getWorldPos().y - currentWorld->getStateGame()->getPlayer()->getWorldPos().y) >= 54)
         return 0;
-	//Checks near blocks to entity
-	int x = (int)(getPosition().x / StateGame::TILE_SIZE);
+    //Checks near blocks to entity
+    int x = (int)(getPosition().x / StateGame::TILE_SIZE);
 	int y = (int)(getPosition().y / StateGame::TILE_SIZE);
 	int nx;
 	int ny;

@@ -8,7 +8,7 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
 
     buttonLocal = std::make_unique<MenuButton>(this, "Local", sf::Vector2f(0, -100));
     buttonMultiplayer = std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(0, 100));
-    nickInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 200), "Username", 16);
+    nickInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 200), "Username", 16, true);
     adressInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 300), "Address", 0);
 
     game.getWindow().setMouseCursorVisible(true);

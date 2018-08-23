@@ -25,9 +25,9 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	if (onlineMode)
     {
         //Username from string to char array
-        for (int i = 0; i < 16; i++)
-            nick[i] = 0;
         strcpy(nick, playerName.c_str());
+        for (int i = playerName.size(); i < 16; i++)
+            nick[i] = 0;
 
         //Getting the url and port as separate variables
         std::string addressUrl;

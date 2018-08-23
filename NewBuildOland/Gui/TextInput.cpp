@@ -2,12 +2,13 @@
 #include "../States/StateBase.h"
 #include "../Game.h"
 
-TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize) : Gui(nullptr)
+TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize, bool alphaNumeric) : Gui(nullptr)
     , stateBase(stateBase)
     , pos(pos)
     , inputText(placeHolder)
     , maxSize(maxSize)
 {
+    alphaNumericOnly = alphaNumeric;
 
     //BACKGROUND
     background = sf::RectangleShape();
@@ -87,8 +88,15 @@ void TextInput::eventInput(short unicode) {
                 inputText = inputText.substr(0, inputText.length() - 1);
             }
         } else if(maxSize == 0 || inputText.length() < maxSize){
-            std::string input = unicodeConvert.to_bytes(unicode);
-            inputText+= input;
+            if (!alphaNumericOnly
+                || unicode == 45 || unicode == 95     //- and _
+                || (unicode >= 97 && unicode <= 122)  //letters
+                || (unicode >= 65 && unicode <= 90)   //LETTERS
+                || (unicode >= 48 && unicode <= 57))
+            {
+                std::string input = unicodeConvert.to_bytes(unicode);
+                inputText += input;
+            }
         }
 
         text.setString(inputText);

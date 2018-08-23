@@ -11,7 +11,7 @@ class StateMenu;
 class TextInput : public Gui{
 
 public:
-    TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0);
+    TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0, bool alphaNumeric = false);
 
     void update(float dt) override;
 
@@ -42,6 +42,8 @@ private:
 
     bool active = false;
     bool wasActive = false;
+
+    bool alphaNumericOnly;
 };
 
 

@@ -65,7 +65,7 @@ std::vector<unsigned char> CachedChunk::getData()
     for (auto i = entities.begin(); i < entities.end(); i++)
     {
         std::vector<unsigned char> entityData = (*i)->getBytes();
-        for (int j = 0; j < entityData.size(); j++)
+        for (unsigned int j = 0; j < entityData.size(); j++)
             data.push_back(entityData.at(j));
     }
     return data;
