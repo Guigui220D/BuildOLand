@@ -1,7 +1,10 @@
 #include "Chunk.h"
 #include <iostream>
+#include "../Entities/EntityCodes.h"
+#include "../Worlds/World.h"
+#include "../../States/StateGame.h"
 
-Chunk::Chunk(sf::Vector2i chunkPos, bool rdy)
+Chunk::Chunk(World* world, sf::Vector2i chunkPos, bool rdy) : world(world)
 {
     position = chunkPos;
     ready = rdy;
@@ -10,12 +13,15 @@ Chunk::Chunk(sf::Vector2i chunkPos, bool rdy)
     {
         grounds.push_back(0);
         blocks.push_back(0);
+        blockEntities.push_back(nullptr);
     }
 }
 
-Chunk::Chunk() { ready = false; }
+Chunk::Chunk(World* world) : world(world) { ready = false; }
 
-Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
+Chunk::Chunk() {}
+
+Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkPos) : world(world)
 {
     ready = false;
     //Check the size of the data
@@ -34,6 +40,8 @@ Chunk::Chunk(std::vector<unsigned char>& data, sf::Vector2i chunkPos)
     position = sf::Vector2i(posX, posY);
     if (chunkPos == position)   //Check the position
     {
+        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
+            blockEntities.push_back(nullptr);
         //Get grounds
         for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE * 2); i += 2)
         {
@@ -64,6 +72,7 @@ void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
     {
         p >> ground;
         grounds.push_back(ground);
+        blockEntities.push_back(nullptr);
     }
     for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
     {
@@ -75,7 +84,10 @@ void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
 
 Chunk::~Chunk()
 {
-    //dtor
+    /*
+    for (auto i = blockEntities.begin(); i < blockEntities.end(); i++)
+        delete (blockEntities);
+        */
 }
 
 void Chunk::setBlock(sf::Vector2i pos, unsigned short block)
@@ -87,7 +99,18 @@ void Chunk::setBlock(sf::Vector2i pos, unsigned short block)
         pos.x >= CHUNK_SIZE || pos.y >= CHUNK_SIZE)
     return;
 
+    delete blockEntities[pos.x + pos.y * CHUNK_SIZE];
+    blockEntities[pos.x + pos.y * CHUNK_SIZE] = nullptr;
     blocks[pos.x + pos.y * CHUNK_SIZE] = block;
+    switch (world->getStateGame()->getTileset()->getBlockById(block)->getTileEntity())
+    {
+    case TileEntityCodes::blinker:
+        //Summon blinker
+        break;
+    case TileEntityCodes::none:
+    default:
+        break;
+    }
 }
 
 void Chunk::setGround(sf::Vector2i pos, unsigned short ground)
@@ -124,4 +147,13 @@ unsigned short Chunk::getGround(sf::Vector2i pos)
     return 0;
 
     return grounds.at(pos.x + pos.y * CHUNK_SIZE);
+}
+
+void Chunk::updateTileEntities(float delta)
+{
+    for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
+    {
+        if (blockEntities.at(i) != nullptr)
+            blockEntities.at(i)->update(delta);
+    }
 }

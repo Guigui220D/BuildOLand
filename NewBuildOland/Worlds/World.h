@@ -45,7 +45,7 @@ public:
 
     //Chunks
 	void generateChunk(Chunk& chunk, Generators gen);
-    virtual void updateChunks();
+    virtual void updateChunks(float delta);
     virtual void loadChunk(sf::Vector2i chunk);
     virtual void unloadChunk(sf::Vector2i chunk, bool erase);
     virtual void flushChunkCache();

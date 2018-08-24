@@ -1,5 +1,6 @@
 #pragma once
 #include "Placeable.h"
+#include "../Entities/EntityCodes.h"
 
 class BlockBuildEvent;
 class BlockBreakEvent;
@@ -24,6 +25,8 @@ public:
 	};
 
 	virtual Block* getBlockOnBreak(StateGame* stateGame);
+
+	virtual inline TileEntityCodes getTileEntity() { return TileEntityCodes::none; }
 
 	//Event methods
 	virtual void onBlockBuild(BlockBuildEvent e);

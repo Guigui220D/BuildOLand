@@ -20,9 +20,9 @@ void NetworkWorld::preDelete()
     loadedChunks.clear();
 }
 
-void NetworkWorld::updateChunks()
+void NetworkWorld::updateChunks(float delta)
 {
-    World::updateChunks();
+    World::updateChunks(delta);
     if (clk.getElapsedTime().asSeconds() >= 1.f)
     {
         clk.restart();
@@ -37,7 +37,7 @@ void NetworkWorld::updateChunks()
 void NetworkWorld::loadChunk(sf::Vector2i chunk)
 {
     if (!isChunkLoaded(chunk))
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(chunk, false)));
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(this, chunk, false)));
     stateGame->getNetworkManager()->askForChunk(chunk);
 }
 
@@ -58,7 +58,7 @@ void NetworkWorld::handlePacket(sf::Packet p)
     int posX, posY;
     p >> posX >> posY;
     if (!isChunkLoaded(sf::Vector2i(posX, posY)))
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(sf::Vector2i(posX, posY)), Chunk(sf::Vector2i(posX, posY), false)));
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(sf::Vector2i(posX, posY)), Chunk(this, sf::Vector2i(posX, posY), false)));
     getChunk(sf::Vector2i(posX, posY))->handlePacket(p, sf::Vector2i(posX, posY));
 }
 

@@ -269,7 +269,7 @@ void StateGame::handleInput() {
 }
 
 void StateGame::update(float dt, bool focused) {
-    currentWorld->updateChunks();
+    currentWorld->updateChunks(dt);
 
     if (focused) { player->update(dt); }
 

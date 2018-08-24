@@ -3,6 +3,13 @@
 enum EntityCodes
 {
     player = 0,
-    blackWarrior = 1,
-    tnt = 2
+    blackWarrior,
+    tnt
+};
+
+enum TileEntityCodes
+{
+    none = -1,
+    blinker
+
 };
