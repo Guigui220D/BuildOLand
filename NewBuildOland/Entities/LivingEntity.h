@@ -41,8 +41,8 @@ private:
 
     Animation animations;
 
-    short health;
     Inventory inventory;
+    short health;
 
     //The movement byte is used as a flag to choose the right animation
     char movement;

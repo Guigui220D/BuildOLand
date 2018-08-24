@@ -13,6 +13,9 @@ class TileEntities
         virtual void update(float delta) = 0;
         virtual void draw(sf::RenderWindow& window) = 0;
 
+        inline World* getWorld() { return world; };
+        sf::Vector2i getPosition() { return pos; };
+
     protected:
 
     private:

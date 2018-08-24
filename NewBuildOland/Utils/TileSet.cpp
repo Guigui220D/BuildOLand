@@ -6,6 +6,7 @@
 #include "../Placeables/WornConcrete.h"
 #include "../Placeables/OpenDoorBlock.h"
 #include "../Placeables/ClosedDoorBlock.h"
+#include "../Placeables/BlinkerBlock.h"
 #include <iostream>
 #include <math.h>
 //This is the tileset class that allows to get textures from a block id
@@ -34,6 +35,7 @@ void TileSet::generateBlocks()
 	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));                 //9
 	blocks.push_back(new BlockSaver(rectById(10)));                                                                     //10
 	blocks.push_back(new BlockTeleporter(rectById(11)));                                                                //11
+	blocks.push_back(new BlinkerBlock(rectById(17), rectById(12)));                                                     //12
 
 }
 

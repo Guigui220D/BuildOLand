@@ -4,6 +4,8 @@
 #include "../Worlds/World.h"
 #include "../../States/StateGame.h"
 
+#include "../../TileEntities/BlinkerTileE.h"
+
 Chunk::Chunk(World* world, sf::Vector2i chunkPos, bool rdy) : world(world)
 {
     position = chunkPos;
@@ -105,7 +107,7 @@ void Chunk::setBlock(sf::Vector2i pos, unsigned short block)
     switch (world->getStateGame()->getTileset()->getBlockById(block)->getTileEntity())
     {
     case TileEntityCodes::blinker:
-        //Summon blinker
+        blockEntities[pos.x + pos.y * CHUNK_SIZE] = new BlinkerTileE(world, sf::Vector2i(position.x * CHUNK_SIZE + pos.x, position.y * CHUNK_SIZE + pos.y));
         break;
     case TileEntityCodes::none:
     default:
