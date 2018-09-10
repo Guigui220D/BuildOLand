@@ -16,7 +16,7 @@ void LivingEntity::init(float posX, float posY) {
     setOrigin(getSize().x / 2, getSize().y / 2);
     setOnMapColor(sf::Color(0, 255, 0));
 
-    setPosition(sf::Vector2f(posX, posY));
+    setPosition(sf::Vector2f(posX * StateGame::TILE_SIZE, posY * StateGame::TILE_SIZE));
 
     Texture* t = game->getAssetManager()->getTexture(getTextureName());
     setTexture(t);

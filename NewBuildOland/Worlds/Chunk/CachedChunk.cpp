@@ -68,7 +68,7 @@ std::vector<unsigned char> CachedChunk::getData()
             unsigned char bytes[4];
         } ecount;
         ecount.i = entities.size();
-        data.push_back(ecount.bytes[3]);
+        data.push_back(ecount.bytes[0]);
         data.push_back(ecount.bytes[1]);
         data.push_back(ecount.bytes[2]);
         data.push_back(ecount.bytes[3]);

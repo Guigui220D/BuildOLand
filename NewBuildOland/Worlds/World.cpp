@@ -15,10 +15,16 @@ World::World(StateGame& stateGame, std::string name)
 {
 	worldName = name;
 
-	BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
-	warrior->init(1, 1);
-	addEntity(warrior);
-
+	{
+	    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
+        warrior->init(1, 1);
+        addEntity(warrior);
+	}
+	{
+	    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
+        warrior->init(2, -1);
+        addEntity(warrior);
+	}
 }
 
 void World::loadChunk(sf::Vector2i chunk)
@@ -65,7 +71,6 @@ void World::loadChunk(sf::Vector2i chunk)
                 {
                     loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(this, data, chunk)));
                     //Process entities data on the remaining bytes
-                    /*
                     {
                         union
                         {
@@ -79,7 +84,6 @@ void World::loadChunk(sf::Vector2i chunk)
                         }
                         std::cout << "Entity count : " << ecount.i << '\n';
                     }
-                    */
                     chunkFile.close();
                     return;
                 }
