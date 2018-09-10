@@ -14,7 +14,7 @@ class Chunk
 
         Chunk(World* world, sf::Vector2i chunkPos, bool rdy = true);
         Chunk(World* world);
-        Chunk();
+        Chunk();    //Should not be called (only for CachedChunk's empty constructor
         //Load a chunk
         Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkPos);
         virtual ~Chunk();

@@ -21,7 +21,7 @@ Chunk::Chunk(World* world, sf::Vector2i chunkPos, bool rdy) : world(world)
 
 Chunk::Chunk(World* world) : world(world) { ready = false; }
 
-Chunk::Chunk() {}
+Chunk::Chunk() { }
 
 Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkPos) : world(world)
 {

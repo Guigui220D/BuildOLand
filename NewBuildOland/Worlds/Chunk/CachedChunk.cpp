@@ -6,26 +6,30 @@ std::vector<unsigned char> CachedChunk::getData()
 {
     std::vector<unsigned char> data;
     //Add position
-    union
     {
-        int i;
-        unsigned char bytes[4];
-    } posX;
-    posX.i = chunk.getPosition().x;
-    data.push_back(posX.bytes[0]);
-    data.push_back(posX.bytes[1]);
-    data.push_back(posX.bytes[2]);
-    data.push_back(posX.bytes[3]);
-    union
+        union
+        {
+            int i;
+            unsigned char bytes[4];
+        } posX;
+        posX.i = chunk.getPosition().x;
+        data.push_back(posX.bytes[0]);
+        data.push_back(posX.bytes[1]);
+        data.push_back(posX.bytes[2]);
+        data.push_back(posX.bytes[3]);
+    }
     {
-        int i;
-        unsigned char bytes[4];
-    } posY;
-    posY.i = chunk.getPosition().y;
-    data.push_back(posY.bytes[0]);
-    data.push_back(posY.bytes[1]);
-    data.push_back(posY.bytes[2]);
-    data.push_back(posY.bytes[3]);
+        union
+        {
+            int i;
+            unsigned char bytes[4];
+        } posY;
+        posY.i = chunk.getPosition().y;
+        data.push_back(posY.bytes[0]);
+        data.push_back(posY.bytes[1]);
+        data.push_back(posY.bytes[2]);
+        data.push_back(posY.bytes[3]);
+    }
     //Add grounds
     for (int i = 0; i < Chunk::CHUNK_SIZE; i++)
     {
@@ -57,10 +61,18 @@ std::vector<unsigned char> CachedChunk::getData()
         }
     }
     //Add entity count
-    data.push_back(((unsigned char)(entities.size()) & 0x000000FF) >> 0);
-    data.push_back(((unsigned char)(entities.size()) & 0x0000FF00) >> 8);
-    data.push_back(((unsigned char)(entities.size()) & 0x00FF0000) >> 16);
-    data.push_back(((unsigned char)(entities.size()) & 0xFF000000) >> 24);
+    {
+        union
+        {
+            int i;
+            unsigned char bytes[4];
+        } ecount;
+        ecount.i = entities.size();
+        data.push_back(ecount.bytes[3]);
+        data.push_back(ecount.bytes[1]);
+        data.push_back(ecount.bytes[2]);
+        data.push_back(ecount.bytes[3]);
+    }
     //Add entities
     for (auto i = entities.begin(); i < entities.end(); i++)
     {
