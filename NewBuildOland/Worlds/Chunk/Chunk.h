@@ -2,7 +2,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 #include <vector>
-#include "../TileEntities/TileEntities.h"
+#include "../../TileEntities/TileEntities.h"
 
 class World;
 

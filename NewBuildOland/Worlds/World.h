@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
-#include "Chunk.h"
-#include "CachedChunk.h"
+#include "Chunk/Chunk.h"
+#include "Chunk/CachedChunk.h"
 #include <math.h>
 #include "GenerationModes.h"
 

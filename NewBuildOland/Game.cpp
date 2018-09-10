@@ -10,7 +10,7 @@ Game::Game()
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256, 256, icon.getPixelsPtr());
 
-	//window.setVerticalSyncEnabled(true);
+	window.setVerticalSyncEnabled(true);
 
 	//Setting the current state to a Game State
 	//The worldView sizing is automated

@@ -1,7 +1,7 @@
 #include "Chunk.h"
 #include <iostream>
-#include "../Entities/EntityCodes.h"
-#include "../Worlds/World.h"
+#include "../../Entities/EntityCodes.h"
+#include "../World.h"
 #include "../../States/StateGame.h"
 
 #include "../../TileEntities/BlinkerTileE.h"
