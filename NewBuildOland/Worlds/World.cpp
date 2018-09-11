@@ -22,7 +22,7 @@ World::World(StateGame& stateGame, std::string name)
 	}
 	{
 	    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
-        warrior->init(2, -1);
+        warrior->init(2, 1);
         addEntity(warrior);
 	}
 }
@@ -33,7 +33,7 @@ void World::loadChunk(sf::Vector2i chunk)
     if (!isChunkLoaded(chunk))
     {
         //Looking in cached chunks to see if it's already there
-        for (auto i = chunkCache.begin(); i != chunkCache.end(); i++)
+        for (auto i = chunkCache.begin(); i != chunkCache.end(); )
         {
             if ((*i).chunk.getPosition() == chunk)
             {
@@ -44,6 +44,8 @@ void World::loadChunk(sf::Vector2i chunk)
                 i = chunkCache.erase(i);
                 return;
             }
+            else
+                i++;
         }
         //If it's not, load from disk
         std::string const chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunk.x) + "_" + std::to_string(chunk.y) + ".chunk");
@@ -108,7 +110,7 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
         sf::Vector2f chunkTopLeft(cc.chunk.getPosition().x * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, cc.chunk.getPosition().y * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
         sf::Vector2f chunkBottomRight((cc.chunk.getPosition().x + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, (cc.chunk.getPosition().y + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
         //Store entities
-        for (auto i = entities.begin(); i < entities.end(); i++)
+        for (auto i = entities.begin(); i < entities.end(); )
         {
             if ((*i)->getPosition().x >= chunkTopLeft.x && (*i)->getPosition().x <= chunkBottomRight.x
                 && (*i)->getPosition().y >= chunkTopLeft.y && (*i)->getPosition().y <= chunkBottomRight.y)
@@ -119,6 +121,8 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
                 delete (*i);
                 i = entities.erase(i);
             }
+            else
+                i++;
         }
         chunkCache.push_back(cc);
         if (erase)
@@ -286,13 +290,15 @@ void World::removeEntitiesThatNeedToBeRemoved()
 
 void World::removeEntityNowById(unsigned int id)
 {
-    for (auto i = entities.begin(); i < entities.end(); i++)
+    for (auto i = entities.begin(); i < entities.end(); )
     {
         if ((*i)->getID() == id)
         {
             delete (*i);
             i = entities.erase(i);
         }
+        else
+            i++;
     }
 }
 

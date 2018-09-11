@@ -72,6 +72,8 @@ std::vector<unsigned char> CachedChunk::getData()
         data.push_back(ecount.bytes[1]);
         data.push_back(ecount.bytes[2]);
         data.push_back(ecount.bytes[3]);
+        if (entities.size() != 0)
+            std::cout << "Chunk " << chunk.getPosition().x << ", " << chunk.getPosition().y << " has " << ecount.i << " entities\n";
     }
     //Add entities
     for (auto i = entities.begin(); i < entities.end(); i++)
