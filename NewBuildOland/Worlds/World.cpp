@@ -74,6 +74,7 @@ void World::loadChunk(sf::Vector2i chunk)
                     loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(this, data, chunk)));
                     //Process entities data on the remaining bytes
                     {
+                        //Get entity count
                         union
                         {
                             int i;
@@ -85,6 +86,56 @@ void World::loadChunk(sf::Vector2i chunk)
                             data.erase(data.begin());
                         }
                         std::cout << "Entity count : " << ecount.i << '\n';
+                        //Get all entities
+                        for (int i = 0; i < ecount.i; i++)
+                        {
+                            //Get the code
+                            union
+                            {
+                                int i;
+                                unsigned char bytes[4];
+                            } codeu;
+                            for (int i = 0; i < 4; i++)
+                            {
+                                codeu.bytes[i] = data.at(0);
+                                data.erase(data.begin());
+                            }
+                            //Get position
+                            union
+                            {
+                                float f;
+                                unsigned char bytes[4];
+                            } posx;
+                            union
+                            {
+                                float f;
+                                unsigned char bytes[4];
+                            } posy;
+                            for (int i = 0; i < 4; i++)
+                            {
+                                posx.bytes[i] = data.at(0);
+                                data.erase(data.begin());
+                            }
+                            for (int i = 0; i < 4; i++)
+                            {
+                                posy.bytes[i] = data.at(0);
+                                data.erase(data.begin());
+                            }
+                            //Get more data if needed and instantiate entity
+                            switch (codeu.i)
+                            {
+                            case EntityCodes::blackWarrior:
+                                {
+                                    {
+                                        BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
+                                        warrior->init(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE);
+                                        addEntity(warrior);
+                                    }
+                                }
+                                data.erase(data.begin());
+                                break;
+                            }
+                        }
                     }
                     chunkFile.close();
                     return;
