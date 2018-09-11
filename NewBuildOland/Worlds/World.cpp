@@ -3,6 +3,7 @@
 #include "../Game.h"
 #include "../States/StateBase.h"
 #include "../Entities/BlackWarrior.h"
+#include "../Entities/TNTEntity.h"
 
 #include <fstream>
 #include <iostream>
@@ -129,10 +130,19 @@ void World::loadChunk(sf::Vector2i chunk)
                                     {
                                         BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
                                         warrior->init(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE);
+                                        warrior->setDirection(data.at(0));
                                         addEntity(warrior);
                                     }
                                 }
                                 data.erase(data.begin());
+                                break;
+                            case EntityCodes::tnt:
+                                {
+                                    {
+                                        TNTEntity* te = new TNTEntity(this, getNextEntityId(), sf::Vector2i(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE));
+                                        addEntity(te);
+                                    }
+                                }
                                 break;
                             }
                         }

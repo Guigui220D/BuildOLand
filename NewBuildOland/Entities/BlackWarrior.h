@@ -7,6 +7,9 @@
 class BlackWarrior : public LivingEntity {
 public:
     BlackWarrior(World *world, unsigned id);
+
+    inline void setDirection(unsigned char dir) { direction = dir; };
+
 protected:
     std::string getTextureName() override;
     std::vector<IntRect> getIdleAnim() override;
