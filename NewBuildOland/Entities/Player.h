@@ -16,8 +16,6 @@ public:
 
 	inline sf::String getDisplayName() { return nameText.getString(); };
 
-	virtual Player* clone() const { return nullptr; };
-
 	std::vector<unsigned char> getBytes() override;
 
 private:

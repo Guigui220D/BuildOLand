@@ -20,8 +20,6 @@ protected:
 
     void updateMovement(float dt) override;
 
-    virtual BlackWarrior* clone() const { return new BlackWarrior(*this); };
-
     virtual std::vector<unsigned char> getBytes() override;
 
 private:

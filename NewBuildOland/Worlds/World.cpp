@@ -18,11 +18,6 @@ World::World(StateGame& stateGame, std::string name)
 
 	{
 	    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
-        warrior->init(1, 1);
-        addEntity(warrior);
-	}
-	{
-	    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
         warrior->init(2, 1);
         addEntity(warrior);
 	}
@@ -40,7 +35,9 @@ void World::loadChunk(sf::Vector2i chunk)
             {
                 loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i).chunk));
                 for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
-                    delete (*j);
+                {
+                    addEntity(*j);
+                }
                 (*i).entities.clear();
                 i = chunkCache.erase(i);
                 return;
@@ -176,10 +173,7 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
             if ((*i)->getPosition().x >= chunkTopLeft.x && (*i)->getPosition().x <= chunkBottomRight.x
                 && (*i)->getPosition().y >= chunkTopLeft.y && (*i)->getPosition().y <= chunkBottomRight.y)
             {
-                Entities* e = (*i)->clone();
-                std::cout << "Removed one entity: " << typeid(*e).name() << "\n";
-                cc.entities.push_back(e);
-                delete (*i);
+                cc.entities.push_back(*i);
                 i = entities.erase(i);
             }
             else

@@ -148,6 +148,9 @@ void StateMenu::handleEvent(sf::Event &event) {
             nickInput->eventInput(event.text.unicode);
             adressInput->eventInput(event.text.unicode);
             break;
+        default:
+
+            break;
     }
 
 }

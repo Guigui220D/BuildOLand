@@ -37,3 +37,5 @@
 
 - Proper kick (Online mode)
 - Make gui pointer lists in StateMenu instead of single objects
+- Find more adapted container for bytes to save/load than vector
+- Fix chunk destructor spam (???)
