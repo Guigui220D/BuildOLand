@@ -1,5 +1,6 @@
 #include "CachedChunk.h"
 #include "../../Entities/Entities.h"
+#include "../../States/StateGame.h"
 
 //Transform chunk to bytes
 std::vector<unsigned char> CachedChunk::getData()
@@ -46,6 +47,7 @@ std::vector<unsigned char> CachedChunk::getData()
         }
     }
     //Add blocks
+    unsigned char blockEntityCount = 0;
     for (int i = 0; i < Chunk::CHUNK_SIZE; i++)
     {
         for (int j = 0; j < Chunk::CHUNK_SIZE; j++)
@@ -56,10 +58,14 @@ std::vector<unsigned char> CachedChunk::getData()
                 unsigned char bytes[2];
             } block;
             block.i = chunk->getBlock(sf::Vector2i(j, i));
+            if (chunk->getWorld()->getStateGame()->getTileset()->getBlockById(block.i)->getTileEntity() != TileEntityCodes::none)
+                blockEntityCount++;
             data.push_back(block.bytes[0]);
             data.push_back(block.bytes[1]);
         }
     }
+    //Add block entity count
+    data.push_back(blockEntityCount);
     //Add entity count
     {
         union

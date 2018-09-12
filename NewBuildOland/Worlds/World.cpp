@@ -83,7 +83,8 @@ void World::loadChunk(sf::Vector2i chunk)
                             ecount.bytes[i] = data.at(0);
                             data.erase(data.begin());
                         }
-                        std::cout << "Entity count : " << ecount.i << '\n';
+                        if (ecount.i)
+                            std::cout << "Entity count : " << ecount.i << '\n';
                         //Get all entities
                         for (int i = 0; i < ecount.i; i++)
                         {
@@ -179,6 +180,11 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
             else
                 i++;
         }
+        if (!cc.chunk->isReady())
+        {
+            std::cout << "Cannot cache a chunk that is not ready.\n";
+            return;
+        }
         chunkCache.push_back(cc);
         if (erase)
             loadedChunks.erase(loadedChunks.find(vector2iToInt64(chunk)));
@@ -267,7 +273,7 @@ std::shared_ptr<Chunk> World::pgetChunk(sf::Vector2i chunk)
     return getChunk(chunk);
 }
 
-unsigned short World::getBlockId(sf::Vector2i pos, bool load)
+unsigned short World::getBlockId(sf::Vector2i pos, const bool load)
 {
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
@@ -279,7 +285,7 @@ unsigned short World::getBlockId(sf::Vector2i pos, bool load)
     return getChunk(chunkPos)->getBlock(blockPos);
 }
 
-unsigned short World::getGroundId(sf::Vector2i pos, bool load)
+unsigned short World::getGroundId(sf::Vector2i pos, const bool load)
 {
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
@@ -291,7 +297,7 @@ unsigned short World::getGroundId(sf::Vector2i pos, bool load)
     return getChunk(chunkPos)->getGround(groundPos);
 }
 
-Block* World::getBlockAt(sf::Vector2i pos, bool load)
+Block* World::getBlockAt(sf::Vector2i pos, const bool load)
 {
 	return stateGame->getTileset()->getBlockById(getBlockId(pos, load));
 }

@@ -31,6 +31,8 @@ class Chunk
 
         void updateTileEntities(float delta);
 
+        inline World* getWorld() { return world; };
+
     private:
         //The position of the chunk, not to confuse with the position of the blocks
         sf::Vector2i position;
@@ -39,7 +41,7 @@ class Chunk
         std::vector<unsigned short> grounds;
         std::vector<TileEntities*> blockEntities;
 
-        bool ready;
+        bool ready = false;
 
         World* world;
 

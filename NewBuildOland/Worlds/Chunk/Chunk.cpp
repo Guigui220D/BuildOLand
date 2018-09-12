@@ -27,7 +27,7 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
 {
     ready = false;
     //Check the size of the data
-    if (data.size() < CHUNK_SIZE * CHUNK_SIZE * 2)
+    if (data.size() < CHUNK_SIZE * CHUNK_SIZE * 2 + 1)
     {
         std::cout << "Could not load chunk " << chunkPos.x << ", " << chunkPos.y << " (invalid data size).\n";
         return;
@@ -51,11 +51,28 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
         }
         data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
         //Then blocks
+        unsigned char blockEntityCount = 0;
         for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE * 2); i += 2)
         {
-            blocks.push_back(data.at(i) | data.at(i + 1) << 8);
+            unsigned short block = (data.at(i) | data.at(i + 1) << 8);
+            blocks.push_back(block);
+            if (world->getStateGame()->getTileset()->getBlockById(block)->getTileEntity() != TileEntityCodes::none)
+                blockEntityCount++;
         }
         data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
+        //Get block entity count, to check
+        {
+            unsigned char fileBlockEntityCount = data.at(0);
+            data.erase(data.begin());
+            if (fileBlockEntityCount != blockEntityCount)
+            {
+                std::cout << "Failed load chunk " << chunkPos.x << ", " << chunkPos.y << ", didn't load tile entities (count doesn't match).\n";
+                return;
+            }
+            if (fileBlockEntityCount)
+                std::cout << "Loading " << (int)fileBlockEntityCount << " tile entities\n";
+        }
+
         ready = true;
     }
     else
