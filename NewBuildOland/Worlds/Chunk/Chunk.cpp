@@ -86,12 +86,14 @@ void Chunk::handlePacket(sf::Packet p, sf::Vector2i pos)
 
 Chunk::~Chunk()
 {
-    for (auto i = blockEntities.begin(); i < blockEntities.end(); i++)
     {
-        if ((*i) != nullptr)
-            delete (*i);
+        for (unsigned int i = 0; i < blockEntities.size(); i++)
+        {
+            if (blockEntities.at(i) != nullptr)
+                delete blockEntities.at(i);
+        }
     }
-    //std::cout << "Chunk deletion : " << position.x << ", " << position.y << "\n";
+    std::cout << "Chunk deletion : " << position.x << ", " << position.y << "\n";
 }
 
 void Chunk::setBlock(sf::Vector2i pos, unsigned short block)

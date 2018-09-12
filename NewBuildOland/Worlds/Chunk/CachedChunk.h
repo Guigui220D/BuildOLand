@@ -1,13 +1,14 @@
 #pragma once
 #include "Chunk.h"
 #include <vector>
+#include <memory>
 
 class Entities;
 
 struct CachedChunk
 {
     std::vector<unsigned char> getData();
-    Chunk chunk;
+    std::shared_ptr<Chunk> chunk;
     std::vector<Entities*> entities;
 };
 

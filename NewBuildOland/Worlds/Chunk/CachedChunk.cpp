@@ -12,7 +12,7 @@ std::vector<unsigned char> CachedChunk::getData()
             int i;
             unsigned char bytes[4];
         } posX;
-        posX.i = chunk.getPosition().x;
+        posX.i = chunk->getPosition().x;
         data.push_back(posX.bytes[0]);
         data.push_back(posX.bytes[1]);
         data.push_back(posX.bytes[2]);
@@ -24,7 +24,7 @@ std::vector<unsigned char> CachedChunk::getData()
             int i;
             unsigned char bytes[4];
         } posY;
-        posY.i = chunk.getPosition().y;
+        posY.i = chunk->getPosition().y;
         data.push_back(posY.bytes[0]);
         data.push_back(posY.bytes[1]);
         data.push_back(posY.bytes[2]);
@@ -40,7 +40,7 @@ std::vector<unsigned char> CachedChunk::getData()
                 unsigned short i;
                 unsigned char bytes[2];
             } ground;
-            ground.i = chunk.getGround(sf::Vector2i(j, i));
+            ground.i = chunk->getGround(sf::Vector2i(j, i));
             data.push_back(ground.bytes[0]);
             data.push_back(ground.bytes[1]);
         }
@@ -55,7 +55,7 @@ std::vector<unsigned char> CachedChunk::getData()
                 unsigned short i;
                 unsigned char bytes[2];
             } block;
-            block.i = chunk.getBlock(sf::Vector2i(j, i));
+            block.i = chunk->getBlock(sf::Vector2i(j, i));
             data.push_back(block.bytes[0]);
             data.push_back(block.bytes[1]);
         }
@@ -73,7 +73,7 @@ std::vector<unsigned char> CachedChunk::getData()
         data.push_back(ecount.bytes[2]);
         data.push_back(ecount.bytes[3]);
         if (entities.size() != 0)
-            std::cout << "Chunk " << chunk.getPosition().x << ", " << chunk.getPosition().y << " has " << ecount.i << " entities\n";
+            std::cout << "Chunk " << chunk->getPosition().x << ", " << chunk->getPosition().y << " has " << ecount.i << " entities\n";
     }
     //Add entities
     for (auto i = entities.begin(); i < entities.end(); i++)

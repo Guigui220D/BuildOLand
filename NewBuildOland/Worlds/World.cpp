@@ -25,13 +25,13 @@ World::World(StateGame& stateGame, std::string name)
 
 void World::loadChunk(sf::Vector2i chunk)
 {
-    //std::cout << "Load chunk " << chunk.x << ", " << chunk.y << "\n";
     if (!isChunkLoaded(chunk))
     {
+        std::cout << "Load chunk " << chunk.x << ", " << chunk.y << "\n";
         //Looking in cached chunks to see if it's already there
         for (auto i = chunkCache.begin(); i != chunkCache.end(); )
         {
-            if ((*i).chunk.getPosition() == chunk)
+            if ((*i).chunk->getPosition() == chunk)
             {
                 loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), (*i).chunk));
                 for (auto j = (*i).entities.begin(); j < (*i).entities.end(); j++)
@@ -69,7 +69,7 @@ void World::loadChunk(sf::Vector2i chunk)
                 delete buffer;
                 if (chunkFile)
                 {
-                    loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(this, data, chunk)));
+                    loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), ChunkPtr(new Chunk(this, data, chunk))));
                     //Process entities data on the remaining bytes
                     {
                         //Get entity count
@@ -153,8 +153,8 @@ void World::loadChunk(sf::Vector2i chunk)
             }
         }
         //The chunk doesn't exist, generate it
-        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), Chunk(this, chunk)));
-        generateChunk(*getChunk(chunk), Generators::SandGrassPattern1);
+        loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), ChunkPtr(new Chunk(this, chunk))));
+        generateChunk(getChunk(chunk), Generators::SandGrassPattern1);
     }
 }
 
@@ -164,9 +164,9 @@ void World::unloadChunk(sf::Vector2i chunk, bool erase)
     if (isChunkLoaded(chunk))
     {
         CachedChunk cc;
-        cc.chunk = *getChunk(chunk);
-        sf::Vector2f chunkTopLeft(cc.chunk.getPosition().x * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, cc.chunk.getPosition().y * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
-        sf::Vector2f chunkBottomRight((cc.chunk.getPosition().x + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, (cc.chunk.getPosition().y + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
+        cc.chunk = getChunk(chunk);
+        sf::Vector2f chunkTopLeft(cc.chunk->getPosition().x * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, cc.chunk->getPosition().y * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
+        sf::Vector2f chunkBottomRight((cc.chunk->getPosition().x + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE, (cc.chunk->getPosition().y + 1) * Chunk::CHUNK_SIZE * StateGame::TILE_SIZE);
         //Store entities
         for (auto i = entities.begin(); i < entities.end(); )
         {
@@ -194,7 +194,7 @@ void World::flushChunkCache()
     for (unsigned int i = 0; i < chunkCache.size(); i++)
     {
         std::vector<unsigned char> data = chunkCache.at(i).getData();
-        std::string const chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunkCache.at(i).chunk.getPosition().x) + "_" + std::to_string(chunkCache.at(i).chunk.getPosition().y) + ".chunk");
+        std::string const chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunkCache.at(i).chunk->getPosition().x) + "_" + std::to_string(chunkCache.at(i).chunk->getPosition().y) + ".chunk");
         //Save the chunk
         std::ofstream chunkFileFluxTest(chunkFileName.c_str(), std::ios::binary | std::ios::out);
         if (!chunkFileFluxTest.is_open())
@@ -226,8 +226,8 @@ void World::updateChunks(float delta)
     std::vector<sf::Vector2i> toUnload;
     for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
     {
-        (*i).second.updateTileEntities(delta);
-        sf::Vector2i pos = (*i).second.getPosition();
+        (*i).second->updateTileEntities(delta);
+        sf::Vector2i pos = (*i).second->getPosition();
         //Get center of chunk
         sf::Vector2f center(pos.x * Chunk::CHUNK_SIZE + Chunk::CHUNK_SIZE / 2, pos.y * Chunk::CHUNK_SIZE + Chunk::CHUNK_SIZE / 2);
         //calculate player's distance to chunk
@@ -244,7 +244,7 @@ void World::updateChunks(float delta)
         flushChunkCache();
 }
 
-void World::generateChunk(Chunk& chunk, Generators gen)
+void World::generateChunk(ChunkPtr chunk, Generators gen)
 {
     switch (gen)
     {
@@ -254,17 +254,17 @@ void World::generateChunk(Chunk& chunk, Generators gen)
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
                 if ((x + y) % 2 && (x + y) % 3)
-                    chunk.setGround(sf::Vector2i(x, y), 1);
+                    chunk->setGround(sf::Vector2i(x, y), 1);
             }
         }
         break;
     }
 }
 
-Chunk World::pgetChunk(sf::Vector2i chunk)
+std::shared_ptr<Chunk> World::pgetChunk(sf::Vector2i chunk)
 {
     loadChunk(chunk);
-    return *getChunk(chunk);
+    return getChunk(chunk);
 }
 
 unsigned short World::getBlockId(sf::Vector2i pos)
@@ -321,7 +321,7 @@ World::~World()
 void World::preDelete()
 {
     for (auto i = loadedChunks.begin(); i != loadedChunks.end(); i++)
-        unloadChunk((*i).second.getPosition(), false);
+        unloadChunk((*i).second->getPosition(), false);
     loadedChunks.clear();
     flushChunkCache();
 }

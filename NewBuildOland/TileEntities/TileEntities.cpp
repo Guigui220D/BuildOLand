@@ -1,5 +1,6 @@
 #include "TileEntities.h"
 #include "../Worlds/World.h"
+#include <iostream>
 
 TileEntities::TileEntities(World* world, sf::Vector2i blockPos) :
     world(world),
@@ -10,5 +11,5 @@ TileEntities::TileEntities(World* world, sf::Vector2i blockPos) :
 
 TileEntities::~TileEntities()
 {
-    //dtor
+
 }

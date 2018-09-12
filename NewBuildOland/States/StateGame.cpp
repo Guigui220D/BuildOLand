@@ -1,13 +1,15 @@
 #include "StateGame.h"
 
-#include "../Worlds/NetworkWorld.h"
 #include <iostream>
-#include "SFML/Audio/SoundBuffer.hpp"
-#include "../Gui/FpsCounter.h"
-#include "../Gui/InventoryGui.h"
+#include <memory>
 #include <math.h>
 #include <cstring>
 #include <sstream>
+
+#include "../Worlds/NetworkWorld.h"
+#include "SFML/Audio/SoundBuffer.hpp"
+#include "../Gui/FpsCounter.h"
+#include "../Gui/InventoryGui.h"
 #include "../Events/EventManager.h"
 
 
@@ -294,7 +296,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.setView(game->getWorldView());
 
 	//Get chunks to draw
-	std::vector<Chunk> chunksToDraw;
+	std::vector<std::shared_ptr<Chunk>> chunksToDraw;
 	sf::Vector2i playerChunk(floor(player->getWorldPos().x / Chunk::CHUNK_SIZE), floor(player->getWorldPos().y / Chunk::CHUNK_SIZE));
     for (int i = -1; i <= 1; i++)
     {
@@ -311,12 +313,12 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+                unsigned short groundId = chunksToDraw.at(i)->getGround(sf::Vector2i(x, y));
 
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getGroundRect(groundId);
                 groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -340,14 +342,14 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
                 if (!blockId)
                     continue;
                 if (!tileset.getBlockById(blockId)->hasVolume())
                 {
                     worldDraw.setTextureRect(tileset.getBlockRect(blockId));
-                    worldDraw.setPosition(sf::Vector2f((chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE + x) * TILE_SIZE_FLOAT
-                                                    , (chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE + y) * TILE_SIZE_FLOAT));
+                    worldDraw.setPosition(sf::Vector2f((chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE + x) * TILE_SIZE_FLOAT
+                                                    , (chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE + y) * TILE_SIZE_FLOAT));
                     window.draw(worldDraw);
                 }
             }
@@ -361,16 +363,16 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
 
                 if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
                     continue;
 
                 sf::Vertex thisBlockQuads[4];
-                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getBlockSideRect(blockId);
                 thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -407,16 +409,16 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
 
                 if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
                     continue;
 
                 sf::Vertex thisBlockQuads[4];
-                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getBlockRect(blockId);
                 thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -475,14 +477,14 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
-                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
+                unsigned short groundId = chunksToDraw.at(i)->getGround(sf::Vector2i(x, y));
 
                 sf::Vertex thisPixelQuads[4];
-                thisPixelQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisPixelQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisPixelQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisPixelQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisPixelQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisPixelQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 for (int j = 0; j < 4; j++)
                 {
