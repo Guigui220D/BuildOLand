@@ -267,29 +267,33 @@ std::shared_ptr<Chunk> World::pgetChunk(sf::Vector2i chunk)
     return getChunk(chunk);
 }
 
-unsigned short World::getBlockId(sf::Vector2i pos)
+unsigned short World::getBlockId(sf::Vector2i pos, bool load)
 {
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
+	if (!load && !isChunkLoaded(chunkPos))
+        return 0;
     loadChunk(chunkPos);
     //Get the position of the block in the chunk
     sf::Vector2i blockPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     return getChunk(chunkPos)->getBlock(blockPos);
 }
 
-unsigned short World::getGroundId(sf::Vector2i pos)
+unsigned short World::getGroundId(sf::Vector2i pos, bool load)
 {
 	sf::Vector2i chunkPos = getChunkPosFromBlock(pos);
 	//Check if chunk is loaded and load it
+	if (!load && !isChunkLoaded(chunkPos))
+        return 0;
     loadChunk(chunkPos);
     //Get the position of the block in the chunk
     sf::Vector2i groundPos(pos.x - chunkPos.x * Chunk::CHUNK_SIZE, pos.y - chunkPos.y * Chunk::CHUNK_SIZE);
     return getChunk(chunkPos)->getGround(groundPos);
 }
 
-Block* World::getBlockAt(sf::Vector2i pos)
+Block* World::getBlockAt(sf::Vector2i pos, bool load)
 {
-	return stateGame->getTileset()->getBlockById(getBlockId(pos));
+	return stateGame->getTileset()->getBlockById(getBlockId(pos, load));
 }
 
 void World::setGroundId(sf::Vector2i pos, unsigned short ground)

@@ -29,9 +29,9 @@ public:
 
 	virtual void handlePacket(sf::Packet p);
 
-	unsigned short getGroundId(sf::Vector2i pos);
-	unsigned short getBlockId(sf::Vector2i pos);
-	Block* getBlockAt(sf::Vector2i pos);
+	unsigned short getGroundId(sf::Vector2i pos, bool load = true);
+	unsigned short getBlockId(sf::Vector2i pos, bool load = true);
+	Block* getBlockAt(sf::Vector2i pos, bool load = true);
 	void setGroundId(sf::Vector2i pos, unsigned short ground);
 	void setBlockId(sf::Vector2i pos, unsigned short block);
 	ChunkPtr pgetChunk(sf::Vector2i chunk);
