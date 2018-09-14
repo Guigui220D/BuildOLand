@@ -14,10 +14,8 @@ std::vector<unsigned char> CachedChunk::getData()
             unsigned char bytes[4];
         } posX;
         posX.i = chunk->getPosition().x;
-        data.push_back(posX.bytes[0]);
-        data.push_back(posX.bytes[1]);
-        data.push_back(posX.bytes[2]);
-        data.push_back(posX.bytes[3]);
+        for (int i = 0; i < 4; i++)
+            data.push_back(posX.bytes[i]);
     }
     {
         union
@@ -26,10 +24,8 @@ std::vector<unsigned char> CachedChunk::getData()
             unsigned char bytes[4];
         } posY;
         posY.i = chunk->getPosition().y;
-        data.push_back(posY.bytes[0]);
-        data.push_back(posY.bytes[1]);
-        data.push_back(posY.bytes[2]);
-        data.push_back(posY.bytes[3]);
+        for (int i = 0; i < 4; i++)
+            data.push_back(posY.bytes[i]);
     }
     //Add grounds
     for (int i = 0; i < Chunk::CHUNK_SIZE; i++)
@@ -66,6 +62,36 @@ std::vector<unsigned char> CachedChunk::getData()
     }
     //Add block entity count
     data.push_back(blockEntityCount);
+    //Save block-entities data
+    for (int i = 0; i < Chunk::CHUNK_SIZE; i++)
+    {
+        for (int j = 0; j < Chunk::CHUNK_SIZE; j++)
+        {
+            unsigned short block = chunk->getBlock(sf::Vector2i(i, j));
+            if (chunk->getWorld()->getStateGame()->getTileset()->getBlockById(block)->getTileEntity() == TileEntityCodes::none)
+                continue;
+            if (chunk->getEntity(sf::Vector2i(i, j)) == nullptr)
+            {
+                std::cout << "An entity is missing on chunk " << chunk->getPosition().x << ", " << chunk->getPosition().y << ".\n";
+                //Add 0 bytes of data
+                for (int i = 0; i < 4; i++)
+                    data.push_back((unsigned char)0);
+                continue;
+            }
+            //Get the data and its size
+            union
+            {
+                unsigned int i;
+                unsigned char bytes[4];
+            } dataSize;
+            std::vector<unsigned char> ebData = chunk->getEntity(sf::Vector2i(i, j))->getData();
+            dataSize.i = ebData.size();
+            for (int i = 0; i < 4; i++)
+                data.push_back(dataSize.bytes[i]);
+            for (unsigned int i = 0; i < ebData.size(); i++)
+                data.push_back(ebData.at(i));
+        }
+    }
     //Add entity count
     {
         union
@@ -74,12 +100,8 @@ std::vector<unsigned char> CachedChunk::getData()
             unsigned char bytes[4];
         } ecount;
         ecount.i = entities.size();
-        data.push_back(ecount.bytes[0]);
-        data.push_back(ecount.bytes[1]);
-        data.push_back(ecount.bytes[2]);
-        data.push_back(ecount.bytes[3]);
-        if (entities.size() != 0)
-            std::cout << "Chunk " << chunk->getPosition().x << ", " << chunk->getPosition().y << " has " << ecount.i << " entities\n";
+        for (int i = 0; i < 4; i++)
+            data.push_back(ecount.bytes[i]);
     }
     //Add entities
     for (auto i = entities.begin(); i < entities.end(); i++)

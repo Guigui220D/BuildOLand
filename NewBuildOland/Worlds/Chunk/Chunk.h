@@ -25,6 +25,7 @@ class Chunk
         void setGround(sf::Vector2i pos, unsigned short ground);
         unsigned short getBlock(sf::Vector2i pos);
         unsigned short getGround(sf::Vector2i pos);
+        TileEntities* getEntity(sf::Vector2i pos);
 
         inline sf::Vector2i getPosition() { return position; };
         inline bool isReady() { return ready; };

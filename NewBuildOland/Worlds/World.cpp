@@ -27,7 +27,7 @@ void World::loadChunk(sf::Vector2i chunk)
 {
     if (!isChunkLoaded(chunk))
     {
-        std::cout << "Load chunk " << chunk.x << ", " << chunk.y << "\n";
+        //std::cout << "Load chunk " << chunk.x << ", " << chunk.y << "\n";
         //Looking in cached chunks to see if it's already there
         for (auto i = chunkCache.begin(); i != chunkCache.end(); )
         {

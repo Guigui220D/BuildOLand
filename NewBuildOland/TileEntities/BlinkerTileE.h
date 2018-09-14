@@ -10,6 +10,9 @@ class BlinkerTileE : public TileEntities
         void update(float delta) override;
         void draw(sf::RenderWindow& window) override;
 
+        virtual void takeData(std::vector<unsigned char> data) override;
+        virtual std::vector<unsigned char> getData() override;
+
     protected:
 
     private:

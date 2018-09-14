@@ -26,3 +26,11 @@ void BlinkerTileE::update(float delta)
 }
 
 void BlinkerTileE::draw(sf::RenderWindow& window) {}
+
+void BlinkerTileE::takeData(std::vector<unsigned char> data)
+{}
+
+std::vector<unsigned char> BlinkerTileE::getData()
+{
+    return std::vector<unsigned char>();
+}

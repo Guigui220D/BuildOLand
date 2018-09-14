@@ -14,7 +14,10 @@ class TileEntities
         virtual void draw(sf::RenderWindow& window) = 0;
 
         inline World* getWorld() { return world; };
-        sf::Vector2i getPosition() { return pos; };
+        inline sf::Vector2i getPosition() { return pos; };
+
+        virtual void takeData(std::vector<unsigned char> data) = 0;
+        virtual std::vector<unsigned char> getData() = 0;
 
     protected:
 
