@@ -10,6 +10,7 @@
 #include <Windows.h>
 #include <string>
 #include <sys/stat.h>
+#include <queue>
 
 World::World(StateGame& stateGame, std::string name)
 	: stateGame(&stateGame)
@@ -61,10 +62,10 @@ void World::loadChunk(sf::Vector2i chunk)
                 chunkFile.seekg(0, chunkFile.beg);
                 char* buffer = new char[fileSize];
                 chunkFile.read(buffer, fileSize);
-                std::vector<unsigned char> data;
+                std::queue<unsigned char> data;
                 for (int i = 0; i < fileSize; i++)
                 {
-                    data.push_back((unsigned char)buffer[i]);
+                    data.push((unsigned char)buffer[i]);
                 }
                 delete buffer;
                 if (chunkFile)
@@ -80,8 +81,8 @@ void World::loadChunk(sf::Vector2i chunk)
                         } ecount;
                         for (int i = 0; i < 4; i++)
                         {
-                            ecount.bytes[i] = data.at(0);
-                            data.erase(data.begin());
+                            ecount.bytes[i] = data.front();
+                            data.pop();
                         }
                         if (ecount.i)
                             std::cout << "Entity count : " << ecount.i << '\n';
@@ -96,8 +97,8 @@ void World::loadChunk(sf::Vector2i chunk)
                             } codeu;
                             for (int i = 0; i < 4; i++)
                             {
-                                codeu.bytes[i] = data.at(0);
-                                data.erase(data.begin());
+                                codeu.bytes[i] = data.front();
+                                data.pop();
                             }
                             //Get position
                             union
@@ -112,13 +113,13 @@ void World::loadChunk(sf::Vector2i chunk)
                             } posy;
                             for (int i = 0; i < 4; i++)
                             {
-                                posx.bytes[i] = data.at(0);
-                                data.erase(data.begin());
+                                posx.bytes[i] = data.front();
+                                data.pop();
                             }
                             for (int i = 0; i < 4; i++)
                             {
-                                posy.bytes[i] = data.at(0);
-                                data.erase(data.begin());
+                                posy.bytes[i] = data.front();
+                                data.pop();
                             }
                             //Get more data if needed and instantiate entity
                             switch (codeu.i)
@@ -128,11 +129,11 @@ void World::loadChunk(sf::Vector2i chunk)
                                     {
                                         BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
                                         warrior->init(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE);
-                                        warrior->setDirection(data.at(0));
+                                        warrior->setDirection(data.front());
                                         addEntity(warrior);
                                     }
                                 }
-                                data.erase(data.begin());
+                                data.pop();
                                 break;
                             case EntityCodes::tnt:
                                 {

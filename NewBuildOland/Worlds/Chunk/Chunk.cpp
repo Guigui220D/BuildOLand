@@ -23,7 +23,7 @@ Chunk::Chunk(World* world) : world(world) { ready = false; }
 
 Chunk::Chunk() { }
 
-Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkPos) : world(world)
+Chunk::Chunk(World* world, std::queue<unsigned char>& data, sf::Vector2i chunkPos) : world(world)
 {
     ready = false;
     //Check the size of the data
@@ -32,28 +32,43 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
         std::cout << "Could not load chunk " << chunkPos.x << ", " << chunkPos.y << " (invalid data size).\n";
         return;
     }
-    //We remove all block data, the rest, entities data, is kept for the world
-    int posX, posY;
     //Get pos x and pos y
-    posX = (int)((int)(data.at(0)) | (int)(data.at(1)) << 8 | (int)(data.at(2)) << 16 | (int)(data.at(3)) << 24);
-    data.erase(data.begin(), data.begin() + 4);
-    posY = (int)(data.at(0) | data.at(1) << 8 | data.at(2) << 16 | data.at(3) << 24);
-    data.erase(data.begin(), data.begin() + 4);
-    position = sf::Vector2i(posX, posY);
+    {
+        union
+        {
+            struct
+            {
+                int x;
+                int y;
+            } pos;
+            unsigned char bytes[8];
+        } upos;
+        for (int i = 0; i < 8; i++)
+        {
+            upos.bytes[i] = data.front();
+            data.pop();
+        }
+        position = sf::Vector2i(upos.pos.x, upos.pos.y);
+    }
     if (chunkPos == position)   //Check the position
     {
         //Get grounds
-        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE * 2); i += 2)
+        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
         {
-            grounds.push_back(data.at(i) | data.at(i + 1) << 8);
+            unsigned char a = data.front();
+            data.pop();
+            grounds.push_back(a | data.front() << 8);
+            data.pop();
         }
-        data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
         //Then blocks
         unsigned char blockEntityCount = 0;
         std::vector<TileEntities*> tentities;
-        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE * 2); i += 2)
+        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
         {
-            unsigned short block = (data.at(i) | data.at(i + 1) << 8);
+            unsigned char a = data.front();
+            data.pop();
+            unsigned short block = (a | data.front() << 8);
+            data.pop();
             blocks.push_back(block);
             TileEntityCodes codes = world->getStateGame()->getTileset()->getBlockById(block)->getTileEntity();
             blockEntityCount++;
@@ -62,7 +77,7 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
             {
             case TileEntityCodes::blinker:
                 {
-                    BlinkerTileE* e = new BlinkerTileE(world, sf::Vector2i((i / 2) % CHUNK_SIZE , (i / 2) / CHUNK_SIZE));
+                    BlinkerTileE* e = new BlinkerTileE(world, sf::Vector2i(i % CHUNK_SIZE, i / CHUNK_SIZE));
                     blockEntities.push_back(e);
                     tentities.push_back(e);
                 }
@@ -73,11 +88,10 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
                 break;
             }
         }
-        data.erase(data.begin(), data.begin() + (CHUNK_SIZE * CHUNK_SIZE * 2));
         //Get block entity count, to check
         {
-            unsigned char fileBlockEntityCount = data.at(0);
-            data.erase(data.begin());
+            unsigned char fileBlockEntityCount = data.front();
+            data.pop();
             if (fileBlockEntityCount != blockEntityCount || tentities.size() != fileBlockEntityCount)
             {
                 std::cout << "Failed load chunk " << chunkPos.x << ", " << chunkPos.y << ", didn't load tile entities (count doesn't match).\n";
@@ -95,14 +109,14 @@ Chunk::Chunk(World* world, std::vector<unsigned char>& data, sf::Vector2i chunkP
                 } dataSize;
                 for (int i = 0; i < 4; i++)
                 {
-                    dataSize.bytes[i] = data.at(0);
-                    data.erase(data.begin());
+                    dataSize.bytes[i] = data.front();
+                    data.pop();
                 }
                 std::vector<unsigned char> teData;
                 for (unsigned int i = 0; i < dataSize.i; i++)
                 {
-                    teData.push_back(data.at(0));
-                    data.erase(data.begin());
+                    teData.front();
+                    data.pop();
                 }
                 te->takeData(teData);
             }
