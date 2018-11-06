@@ -4,10 +4,10 @@
 #include "../States/StateBase.h"
 #include "../Entities/BlackWarrior.h"
 #include "../Entities/TNTEntity.h"
+#include "../Utils/VarToBytes.h"
 
 #include <fstream>
 #include <iostream>
-#include <Windows.h>
 #include <string>
 #include <sys/stat.h>
 #include <queue>
@@ -74,73 +74,46 @@ void World::loadChunk(sf::Vector2i chunk)
                     //Process entities data on the remaining bytes
                     {
                         //Get entity count
-                        union
+                        VarU<int> ecount(0);
+                        for (auto i = 0u; i < ecount.size(); i++)
                         {
-                            int i;
-                            unsigned char bytes[4];
-                        } ecount;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            ecount.bytes[i] = data.front();
+                            ecount[i] = data.front();
                             data.pop();
                         }
-                        if (ecount.i)
-                            std::cout << "Entity count : " << ecount.i << '\n';
+                        if (ecount())
+                            std::cout << "Entity count : " << ecount() << '\n';
                         //Get all entities
-                        for (int i = 0; i < ecount.i; i++)
+                        for (int i = 0; i < ecount(); i++)
                         {
                             //Get the code
-                            union
+                            VarU<int> codeu(0);
+                            for (auto i = 0u; i < codeu.size(); i++)
                             {
-                                int i;
-                                unsigned char bytes[4];
-                            } codeu;
-                            for (int i = 0; i < 4; i++)
-                            {
-                                codeu.bytes[i] = data.front();
+                                codeu[i] = data.front();
                                 data.pop();
                             }
                             //Get position
-                            union
-                            {
-                                float f;
-                                unsigned char bytes[4];
-                            } posx;
-                            union
-                            {
-                                float f;
-                                unsigned char bytes[4];
-                            } posy;
+                            VarU<float> posx(0.f), posy(0.f);
                             for (int i = 0; i < 4; i++)
-                            {
-                                posx.bytes[i] = data.front();
-                                data.pop();
-                            }
+                                { posx[i] = data.front(); data.pop(); }
                             for (int i = 0; i < 4; i++)
-                            {
-                                posy.bytes[i] = data.front();
-                                data.pop();
-                            }
+                                { posy[i] = data.front(); data.pop(); }
                             //Get more data if needed and instantiate entity
-                            switch (codeu.i)
+                            switch (codeu())
                             {
                             case EntityCodes::blackWarrior:
                                 {
-                                    {
-                                        BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
-                                        warrior->init(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE);
-                                        warrior->setDirection(data.front());
-                                        addEntity(warrior);
-                                    }
+                                    BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
+                                    warrior->init(posx() / StateGame::TILE_SIZE, posy() / StateGame::TILE_SIZE);
+                                    warrior->setDirection(data.front());
+                                    addEntity(warrior);
                                 }
                                 data.pop();
                                 break;
                             case EntityCodes::tnt:
                                 {
-                                    {
-                                        TNTEntity* te = new TNTEntity(this, getNextEntityId(), sf::Vector2i(posx.f / StateGame::TILE_SIZE, posy.f / StateGame::TILE_SIZE));
-                                        addEntity(te);
-                                    }
+                                    TNTEntity* te = new TNTEntity(this, getNextEntityId(), sf::Vector2i(posx() / StateGame::TILE_SIZE, posy() / StateGame::TILE_SIZE));
+                                    addEntity(te);
                                 }
                                 break;
                             }
