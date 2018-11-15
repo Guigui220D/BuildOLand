@@ -63,7 +63,8 @@ Chunk::Chunk(World* world, std::queue<unsigned char>& data, sf::Vector2i chunkPo
         //Then blocks
         unsigned char blockEntityCount = 0;
         std::vector<TileEntities*> tentities;
-        for (int i = 0; i < (CHUNK_SIZE * CHUNK_SIZE); i++)
+        for (int y = 0; y < CHUNK_SIZE; y++)
+        for (int x = 0; x < CHUNK_SIZE; x++)
         {
             unsigned char a = data.front();
             data.pop();
@@ -77,7 +78,7 @@ Chunk::Chunk(World* world, std::queue<unsigned char>& data, sf::Vector2i chunkPo
             {
             case TileEntityCodes::blinker:
                 {
-                    BlinkerTileE* e = new BlinkerTileE(world, sf::Vector2i(i % CHUNK_SIZE, i / CHUNK_SIZE));
+                    BlinkerTileE* e = new BlinkerTileE(world, sf::Vector2i(x + position.x * CHUNK_SIZE, y + position.y * CHUNK_SIZE));
                     blockEntities.push_back(e);
                     tentities.push_back(e);
                 }
