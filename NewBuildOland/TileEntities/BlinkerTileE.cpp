@@ -13,15 +13,7 @@ BlinkerTileE::~BlinkerTileE()
 
 void BlinkerTileE::update(float delta)
 {
-    if (block)
-    {
-        getWorld()->setBlockId(getPosition() + sf::Vector2i(1, 0), 1);
-    }
-    else
-    {
-        getWorld()->setBlockId(getPosition() + sf::Vector2i(1, 0), 0);
-    }
-
+    getWorld()->setBlockId(getPosition() + sf::Vector2i(1, 0), block);
     block = !block;
 }
 
