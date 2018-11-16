@@ -1,16 +1,17 @@
 #pragma once
-#include "GuiLayer.h"
+#include "GuiZone.h"
 
 class GuiDomain
 {
     public:
         GuiDomain();
 
+        //Dispatch an event to all zones
         bool handleEvent(sf::Event e);
+        //Ask all the zones to draw their GUIs
         void draw(sf::RenderWindow& rw);
-        std::vector<std::unique_ptr<GuiLayer>> layers;
-
-    protected:
+        //The zones in the domain
+        std::vector<std::unique_ptr<GuiZone>> zones;
 
     private:
 };

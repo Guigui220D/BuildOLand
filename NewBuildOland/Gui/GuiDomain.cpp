@@ -4,7 +4,7 @@ GuiDomain::GuiDomain() {}
 
 bool GuiDomain::handleEvent(sf::Event e)
 {
-    for (auto i = layers.begin(); i != layers.end(); i++)
+    for (auto i = zones.begin(); i != zones.end(); i++)
         if ((*i)->handleEvent(e))
             return true;
     return false;
@@ -12,6 +12,6 @@ bool GuiDomain::handleEvent(sf::Event e)
 
 void GuiDomain::draw(sf::RenderWindow& rw)
 {
-    for (auto i = layers.begin(); i != layers.end(); i++)
+    for (auto i = zones.begin(); i != zones.end(); i++)
         (*i)->draw(rw);
 }
