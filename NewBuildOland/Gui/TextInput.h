@@ -19,9 +19,7 @@ public:
 
     bool isActive(sf::Vector2i mousePos) override;
 
-    void eventResize() override;
-
-    void eventInput(short unicode);
+    bool handleEvent(sf::Event e) override;
 
     const std::string &getInputText() const;
 
@@ -43,6 +41,7 @@ private:
     bool active = false;
     bool wasActive = false;
 
+    void eventInput(short unicode);
     bool alphaNumericOnly;
 };
 

@@ -13,18 +13,17 @@ TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHo
     //BACKGROUND
     background = sf::RectangleShape();
     background.setFillColor(sf::Color(0, 0, 0, 100));
-    background.setSize(sf::Vector2f(500, 100));
-    background.setPosition(pos.x - background.getSize().x / 2,
-                           pos.y - background.getSize().y / 2 + 13);
+    background.setSize(sf::Vector2f(100.f, 20.f));
+    background.setPosition(pos.x, pos.y);
 
 
     //TEXT
     text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::White);
-    text.setCharacterSize(45);
+    text.setCharacterSize(40);
+    text.setScale(sf::Vector2f(.3f, .3f));
     text.setString(placeHolder);
-    text.setPosition(-background.getSize().x * 0.5f + text.getLocalBounds().width * 0.5f- text.getLocalBounds().width / 2 + margin,
-                     pos.y - text.getLocalBounds().height / 2);
+    text.setPosition(pos.x + 5.f, pos.y + 2.5f);
 
     //CURSOR ( | )
     cursor = sf::RectangleShape();
@@ -69,10 +68,19 @@ bool TextInput::isActive(sf::Vector2i mousePos) {
     return active;
 }
 
-void TextInput::eventResize() {
-    if(wasActive) {
-        active = true;
+bool TextInput::handleEvent(sf::Event e) {
+    if (e.type == sf::Event::Resized)
+    {
+        if(wasActive)
+            active = true;
+        return true;
     }
+    if (e.type == sf::Event::TextEntered)
+    {
+        eventInput(e.text.unicode);
+        return true;
+    }
+    return false;
 }
 
 void TextInput::eventInput(short unicode) {

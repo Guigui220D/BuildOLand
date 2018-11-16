@@ -9,8 +9,9 @@ Gui::~Gui()
 {
 }
 
-void Gui::eventResize() {
-
+bool Gui::handleEvent(sf::Event e)
+{
+    return false;
 }
 
 bool Gui::isReleased(sf::Vector2i mousePos) {

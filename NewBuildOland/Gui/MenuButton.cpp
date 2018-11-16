@@ -11,17 +11,16 @@ MenuButton::MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2
     //TEXT
     text.setFont(*stateMenu->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
-    text.setCharacterSize(45);
+    text.setCharacterSize(40);
+    text.setScale(sf::Vector2f(.3f, .3f));
     text.setString(textString);
-    text.setPosition(pos.x - text.getLocalBounds().width / 2,
-                     pos.y - text.getLocalBounds().height / 2);
+    text.setPosition(pos.x + 5.f, pos.y + 2.5f);
 
     //BACKGROUND
     background = sf::RectangleShape();
     background.setFillColor(sf::Color::White);
-    background.setSize(sf::Vector2f(500, 100));
-    background.setPosition(pos.x - background.getSize().x / 2,
-                           pos.y - background.getSize().y / 2 + 13);
+    background.setSize(sf::Vector2f(100.f, 20.f));
+    background.setPosition(pos.x, pos.y);
 }
 
 void MenuButton::update(float dt) {
@@ -34,9 +33,9 @@ void MenuButton::draw(sf::RenderWindow &window) {
     sf::Vector2f backgroundPos = background.getPosition();
     background.setFillColor(sf::Color(0, 0, 0, 100));
     if(hovered) {
-        background.setPosition(backgroundPos.x + 10, backgroundPos.y + 10);
+        background.setPosition(backgroundPos.x + 5.f, backgroundPos.y + 5.f);
     } else {
-        background.setPosition(backgroundPos.x + 5, backgroundPos.y + 5);
+        background.setPosition(backgroundPos.x + 3.f, backgroundPos.y + 3.f);
     }
     window.draw(background);
     //And the background
@@ -95,6 +94,11 @@ bool MenuButton::isHovered(sf::Vector2i mousePos) {
     return hovered;
 }
 
-void MenuButton::eventResize() {
-    justGotResized = true;
+bool MenuButton::handleEvent(sf::Event e) {
+    if (e.type == sf::Event::Resized)
+    {
+        justGotResized = true;
+        return true;
+    }
+    return false;
 }

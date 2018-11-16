@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 
@@ -24,6 +25,6 @@ private:
 
     bool active = false;
 };
-
+*/
 
 

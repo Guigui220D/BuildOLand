@@ -31,9 +31,3 @@ void FpsCounter::update(float dt) {
     text.setString(s.str());
 
 }
-
-void FpsCounter::eventResize() {
-    //Put it back to the left
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2,
-                     -stateGame->getGuiView().getSize().y / 2);
-}

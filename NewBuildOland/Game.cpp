@@ -41,24 +41,25 @@ void Game::run()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Resized) {
-				updateView();
-			}
-
-			if (event.type == sf::Event::LostFocus) {
+		    switch (event.type)
+		    {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::Resized:
+                updateView();
+                break;
+            case sf::Event::LostFocus:
                 focused = false;
-			}
-
-			if (event.type == sf::Event::GainedFocus) {
+                break;
+            case sf::Event::GainedFocus:
                 focused = true;
-			}
-
-			//send the event to the current state
-			currentState->handleEvent(event);
-
-			if (event.type == sf::Event::Closed) {
-				window.close();
-			}
+                break;
+            default:
+                //Send the event to the current state
+                currentState->handleEvent(event);
+                break;
+		    }
 
 		}
 

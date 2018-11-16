@@ -56,7 +56,7 @@ private:
 
 	std::vector<std::unique_ptr<Gui>> gui;
 	InventoryGui *inventoryGui;
-	ChatGui *chatGui;
+	//ChatGui *chatGui;
 
 	World *currentWorld = nullptr;
 

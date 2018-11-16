@@ -5,20 +5,45 @@ GuiZone::GuiZone(sf::FloatRect zone, float aspectRatio, ZoneHAlign hAlign, ZoneV
     ratio(aspectRatio),
     hAlign(hAlign),
     vAlign(vAlign),
-    viewWindowSize()
+    viewWindowSize(),
+    viewWidth(ratio),
+    viewHeight(ratio)
 { }
+
+void GuiZone::setZoneHeight(float height)
+{
+    viewHeight = height;
+    viewWidth = height * ratio;
+}
+
+void GuiZone::setZoneWidth(float width)
+{
+    viewWidth = width;
+    viewHeight = width / ratio;
+}
 
 bool GuiZone::handleEvent(sf::Event e)
 {
-
+    for (auto i = guiElements.begin(); i != guiElements.end(); i++)
+        if ((*i)->handleEvent(e))
+            return true;
+    return false;
 }
 
 void GuiZone::draw(sf::RenderWindow& rw)
 {
-
+    rw.setView(getView(rw.getSize()));
+    for (auto i = guiElements.begin(); i != guiElements.end(); i++)
+        (*i)->draw(rw);
 }
 
-sf::View GuiZone::getView(sf::Vector2f windowSize)
+void GuiZone::update(float dt)
+{
+    for (auto i = guiElements.begin(); i != guiElements.end(); i++)
+        (*i)->update(dt);
+}
+
+sf::View GuiZone::getView(sf::Vector2u windowSize)
 {
     if (windowSize != viewWindowSize)
     {
@@ -30,7 +55,7 @@ sf::View GuiZone::getView(sf::Vector2f windowSize)
 
 void GuiZone::calculateView()
 {
-    sf::View ret(sf::FloatRect(0, 0, ratio, 1));
+    sf::View ret(sf::FloatRect(0, 0, viewWidth, viewHeight));
     sf::FloatRect zoneRect(rect.left * viewWindowSize.x, rect.top * viewWindowSize.y, rect.width * viewWindowSize.x, rect.height * viewWindowSize.y);
     float zoneRatio = zoneRect.width / zoneRect.height;
     if (zoneRatio < ratio)

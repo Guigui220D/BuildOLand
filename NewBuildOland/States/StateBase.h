@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "../Utils/AssetManager.h"
+#include "../Gui/GuiDomain.h"
 
 class Game;
 
@@ -24,5 +25,7 @@ protected:
 	Game *game = nullptr;
 
     AssetManager assetManager;
+
+    GuiDomain guiDomain;
 };
 

@@ -6,10 +6,17 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
 {
     initAssets();
 
-    buttonLocal = std::make_unique<MenuButton>(this, "Local", sf::Vector2f(0, -100));
-    buttonMultiplayer = std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(0, 100));
-    nickInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 200), "Username", 16, true);
-    adressInput = std::make_unique<TextInput>(this, sf::Vector2f(0, 300), "Address", 0);
+    //buttonLocal = ;
+
+
+    GuiZone* center = new GuiZone(sf::FloatRect(.2f, .2f, .6f, .8f), 3.f / 4.f);
+    center->setZoneWidth(110.f);
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 10)));
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 35)));
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 65), "Username", 16, true));
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 85), "Address", 0));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(center));
+
 
     game.getWindow().setMouseCursorVisible(true);
 
@@ -46,7 +53,7 @@ void StateMenu::initAssets()
 
 void StateMenu::handleInput() {
     Vector2i mousePos = sf::Mouse::getPosition(game->getWindow());
-
+    /*
     //Handle onHover for the guiElements
     buttonMultiplayer->isHovered(mousePos);
     buttonLocal->isHovered(mousePos);
@@ -80,13 +87,11 @@ void StateMenu::handleInput() {
         }
     }
 
-
+*/
 }
 
 void StateMenu::update(float dt, bool focused) {
-    buttonLocal->update(dt);
-    buttonMultiplayer->update(dt);
-    nickInput->update(dt);
+    guiDomain.update(dt);
 }
 
 void StateMenu::draw(sf::RenderWindow &window) {
@@ -122,35 +127,16 @@ void StateMenu::draw(sf::RenderWindow &window) {
     //============= SFML =============//
     window.draw(sfmlSprite);
 
-    //And draw the button
-    buttonLocal->draw(window);
-    buttonMultiplayer->draw(window);
-    nickInput->draw(window);
-    adressInput->draw(window);
-
-
+    //And draw the gui
+    guiDomain.draw(window);
 }
 
-void StateMenu::handleEvent(sf::Event &event) {
+void StateMenu::handleEvent(sf::Event &event)
+{
+    if (guiDomain.handleEvent(event))
+        return;
     switch (event.type) {
-        //RESIZE EVENT
-        case sf::Event::Resized:
-            //Send the event to all gui elements
-            buttonMultiplayer->eventResize();
-            buttonLocal->eventResize();
-            nickInput->eventResize();
-            adressInput->eventResize();
-            //Reposition sfml logo
-            sfmlSprite.setPosition(-game->getWorldView().getSize().x / 2 * 0.97f,
-                                   game->getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
-            break;
-        case sf::Event::TextEntered:
-            nickInput->eventInput(event.text.unicode);
-            adressInput->eventInput(event.text.unicode);
-            break;
         default:
-
             break;
     }
-
 }

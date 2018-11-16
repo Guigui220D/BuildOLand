@@ -18,7 +18,7 @@ public:
     bool isHovered(sf::Vector2i mousePos) override;
     bool isActive(sf::Vector2i mousePos) override;
 
-    void eventResize() override;
+    bool handleEvent(sf::Event e) override;
 
 private:
     StateMenu* stateMenu;

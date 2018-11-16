@@ -12,7 +12,7 @@ public:
     virtual void draw(sf::RenderWindow &window) = 0;
     virtual void update(float dt) = 0;
 
-    virtual void eventResize();
+    virtual bool handleEvent(sf::Event e);
 
     virtual bool isReleased(sf::Vector2i mousePos);
     virtual bool isActive(sf::Vector2i mousePos);

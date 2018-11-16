@@ -100,12 +100,12 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 
 	//Setup the gui
 	inventoryGui = new InventoryGui(this, player->getInventory(), &inventoryCursorId);
-	chatGui = new ChatGui(this);
+	//chatGui = new ChatGui(this);
 
 	gui = std::vector<std::unique_ptr<Gui>>();
 	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
 	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
-	gui.push_back(std::unique_ptr<Gui>(chatGui));
+	//gui.push_back(std::unique_ptr<Gui>(chatGui));
 
 }
 
@@ -258,6 +258,7 @@ void StateGame::handleInput() {
 
 
 	//For showing the tchat writing bar
+	/*
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 		if(!chatGui->isActive()) {
 			chatGui->setIsActive(true);
@@ -267,7 +268,7 @@ void StateGame::handleInput() {
 			chatGui->setIsActive(false);
 		}
 	}
-
+    */
 }
 
 void StateGame::update(float dt, bool focused) {
@@ -539,18 +540,11 @@ StateGame::~StateGame() {
 	std::cout << "Stategame delete\n";
 }
 
-void StateGame::handleEvent(sf::Event &event) {
-
+void StateGame::handleEvent(sf::Event &event)
+{
+    if (guiDomain.handleEvent(event))
+        return;
     switch (event.type) {
-        //RESIZE EVENT
-        case sf::Event::Resized:
-            //Send the event to all gui elements
-            for (unsigned int i = 0; i < gui.size(); i++)
-            {
-                gui[i]->eventResize();
-            }
-            break;
-
         //SCROLL EVENT
         case sf::Event::MouseWheelScrolled:
             //Change the position of the cursor
@@ -561,12 +555,8 @@ void StateGame::handleEvent(sf::Event &event) {
             }
 
             break;
-
-		case sf::Event::TextEntered:
-			chatGui->eventInput(event.text.unicode);
-			break;
-
-        default: break;
+        default:
+            break;
     }
 
 }

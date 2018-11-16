@@ -1,3 +1,4 @@
+/*
 #include "ChatGui.h"
 #include "../States/StateGame.h"
 #include "TextInput.h"
@@ -71,4 +72,4 @@ void ChatGui::eventInput(short unicode) {
     textInput->eventInput(unicode);
 
 }
-
+*/
