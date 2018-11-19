@@ -6,6 +6,8 @@
 #include "Gui.h"
 #include "../Utils/Inventory.h"
 
+class StateGame;
+
 class InventoryGui : public Gui {
 public:
     InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId);
@@ -19,6 +21,8 @@ public:
     unsigned int getInventorySlots() const;
 
 private:
+    StateGame* stateGame;
+
     float inventoryScale = 2;
     unsigned int inventorySlots = 8;
 

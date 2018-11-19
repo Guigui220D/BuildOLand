@@ -542,7 +542,7 @@ StateGame::~StateGame() {
 
 void StateGame::handleEvent(sf::Event &event)
 {
-    if (guiDomain.handleEvent(event))
+    if (guiDomain.handleEvent(event, game->getWindow()))
         return;
     switch (event.type) {
         //SCROLL EVENT

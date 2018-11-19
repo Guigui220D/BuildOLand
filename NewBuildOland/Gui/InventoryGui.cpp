@@ -2,10 +2,11 @@
 #include "InventoryGui.h"
 #include "../States/StateGame.h"
 
-InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId)
-    : Gui(stateGame)
-    , inventory(inventory)
-    , cursorId(cursorId)
+InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId) :
+    Gui(stateGame),
+    stateGame(stateGame),
+    inventory(inventory),
+    cursorId(cursorId)
 {
     //Get the inventory image
     inventorySprite.setTexture(*stateGame->getAssetManager()->getTexture("INVENTORY_BAR"));

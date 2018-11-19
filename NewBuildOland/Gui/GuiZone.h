@@ -22,9 +22,9 @@ class GuiZone
     public:
         GuiZone(sf::FloatRect zone, float aspectRatio, ZoneHAlign hAlign = ZoneHAlign::HCenter, ZoneVAlign vAlign = ZoneVAlign::VCenter);
         //Dispatch an event (click for example) to children
-        bool handleEvent(sf::Event e);
+        bool handleEvent(sf::Event e, sf::RenderWindow& rw);
         void draw(sf::RenderWindow& rw);
-        void update(float dt);
+        void update(float dt, sf::RenderWindow& rw);
 
         inline void setVAlign(ZoneVAlign valign) { vAlign = valign; }
         inline void setHAlign(ZoneHAlign halign) { hAlign = halign; }

@@ -4,7 +4,7 @@
 class FpsCounter : public Gui
 {
 public:
-    FpsCounter(StateGame* stateGame);
+    FpsCounter(StateBase* stateBase);
     virtual ~FpsCounter();
 
     void draw(sf::RenderWindow &window) override;

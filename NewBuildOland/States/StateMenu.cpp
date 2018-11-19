@@ -2,21 +2,38 @@
 #include "StateMenu.h"
 #include "../Game.h"
 
+#include "../Gui/MenuButton.h"
+#include "../Gui/TextInput.h"
+#include "../Gui/GuiSprite.h"
+
 StateMenu::StateMenu(Game &game) : StateBase(game)
 {
     initAssets();
 
-    //buttonLocal = ;
-
-
-    GuiZone* center = new GuiZone(sf::FloatRect(.2f, .2f, .6f, .8f), 3.f / 4.f);
+    //Create the zone for the interface
+    GuiZone* center = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f);
     center->setZoneWidth(110.f);
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 10)));
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 35)));
-    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 65), "Username", 16, true));
-    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 85), "Address", 0));
-    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(center));
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 0)));
+    //Beurk
+    buttonLocal = (MenuButton*)center->guiElements.back().get();
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 25)));
+    buttonMultiplayer = (MenuButton*)center->guiElements.back().get();
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 55), "Username", 16, true));
+    nicknameInput = (TextInput*)center->guiElements.back().get();
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 75), "Address", 0));
+    addressInput = (TextInput*)center->guiElements.back().get();
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(center));    //Add the zone to the domain
 
+    //Title
+    GuiZone* title = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
+    title->setZoneWidth(1626.f);
+    title->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO")));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(title));
+    //SFML
+    GuiZone* sfml = new GuiZone(sf::FloatRect(.05f, .8f, .15f, .15f), 373.f / 113., ZoneHAlign::HLeft, ZoneVAlign::VBottom);
+    sfml->setZoneWidth(373.f);
+    sfml->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("SFML")));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(sfml));
 
     game.getWindow().setMouseCursorVisible(true);
 
@@ -25,19 +42,6 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     backgroundRect.setTextureRect(sf::IntRect(69, 1, 32, 32));
     backgroundRect.setSize(sf::Vector2f(StateGame::TILE_SIZE, StateGame::TILE_SIZE));
     backgroundRect.setPosition(0, 0);
-
-    //Get buildoland logo
-    logoSprite.setTexture(*assetManager.getTexture("LOGO"));
-    float logoWidth = logoSprite.getLocalBounds().width;
-    float logoScale = 0.5;
-    logoSprite.scale(logoScale, logoScale);
-    logoSprite.setPosition(- logoWidth / 2 * logoScale, -game.getWorldView().getSize().y * 0.95f / 2);
-
-    //Get sfml logo
-    sfmlSprite.setScale(0.5f, 0.5f);
-    sfmlSprite.setTexture(*assetManager.getTexture("SFML"));
-    sfmlSprite.setPosition(-game.getWorldView().getSize().x / 2 * 0.97f,
-                            game.getWorldView().getSize().y / 2 - sfmlSprite.getLocalBounds().height * 0.6f);
 }
 
 void StateMenu::initAssets()
@@ -51,50 +55,22 @@ void StateMenu::initAssets()
     assetManager.loadTextureFromFile("sfml-logo-small.png", "SFML");
 }
 
-void StateMenu::handleInput() {
-    Vector2i mousePos = sf::Mouse::getPosition(game->getWindow());
-    /*
-    //Handle onHover for the guiElements
-    buttonMultiplayer->isHovered(mousePos);
-    buttonLocal->isHovered(mousePos);
-    nickInput->isHovered(mousePos);
-    adressInput->isHovered(mousePos);
-
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        if(!isMouseLeftClicked) {
-            //Just got clicked
-            buttonMultiplayer->isActive(mousePos);
-            buttonLocal->isActive(mousePos);
-            nickInput->isActive(mousePos);
-            adressInput->isActive(mousePos);
-        }
-        isMouseLeftClicked = true;
-
-    } else {
-        if(isMouseLeftClicked) {
-            //Just released the click
-            isMouseLeftClicked = false;
-
-            //Send the event to the gui
-            if(buttonLocal->isReleased(mousePos)) {
-                //init the stategame as a local game
-                game->setCurrentState(new StateGame(*game, false));
-            }
-            else if(buttonMultiplayer->isReleased(mousePos)) {
-                //init the stategame as an online game
-                game->setCurrentState(new StateGame(*game, true, nickInput->getInputText(), adressInput->getInputText()));
-            }
-        }
-    }
-
-*/
+void StateMenu::handleInput()
+{
+    if (buttonLocal->onClick())
+        game->setCurrentState(new StateGame(*game, false));
+    if (buttonMultiplayer->onClick())
+        std::cout << "Multiplayer mode is still in development in this version\n" << nicknameInput->getInputText() << "\n" << addressInput->getInputText() << "\n";
+        //game->setCurrentState(new StateGame(*game, true, nicknameInput->getInputText(), addressInput->getInputText()));
 }
 
-void StateMenu::update(float dt, bool focused) {
-    guiDomain.update(dt);
+void StateMenu::update(float dt, bool focused)
+{
+    guiDomain.update(dt, game->getWindow());
 }
 
-void StateMenu::draw(sf::RenderWindow &window) {
+void StateMenu::draw(sf::RenderWindow &window)
+{
     window.setView(game->getWorldView());
 
     //======== BACKGROUND TILES ========//
@@ -113,30 +89,12 @@ void StateMenu::draw(sf::RenderWindow &window) {
         }
     }
 
-    //============= LOGO =============//
-    //Draw the logo shadow
-    sf::Vector2f logoPos = logoSprite.getPosition();
-    logoSprite.setColor(sf::Color(0, 0, 0, 100));
-    logoSprite.setPosition(logoPos.x + 5, logoPos.y + 5);
-    window.draw(logoSprite);
-    //And the real logo
-    logoSprite.setColor(sf::Color(255, 255, 255, 255));
-    logoSprite.setPosition(logoPos.x, logoPos.y);
-    window.draw(logoSprite);
-
-    //============= SFML =============//
-    window.draw(sfmlSprite);
-
-    //And draw the gui
+    //Draw the gui
     guiDomain.draw(window);
 }
 
 void StateMenu::handleEvent(sf::Event &event)
 {
-    if (guiDomain.handleEvent(event))
+    if (guiDomain.handleEvent(event, game->getWindow()))
         return;
-    switch (event.type) {
-        default:
-            break;
-    }
 }

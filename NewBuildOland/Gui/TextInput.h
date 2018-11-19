@@ -14,11 +14,7 @@ public:
     TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0, bool alphaNumeric = false);
 
     void update(float dt) override;
-
     void draw(sf::RenderWindow &window) override;
-
-    bool isActive(sf::Vector2i mousePos) override;
-
     bool handleEvent(sf::Event e) override;
 
     const std::string &getInputText() const;
@@ -33,13 +29,11 @@ private:
     std::string inputText;
     bool isPlaceHolder = true;
     unsigned maxSize;
+    bool active = false;
 
     sf::RectangleShape background;
     sf::RectangleShape cursor;
     sf::Text text;
-
-    bool active = false;
-    bool wasActive = false;
 
     void eventInput(short unicode);
     bool alphaNumericOnly;

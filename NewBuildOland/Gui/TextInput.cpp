@@ -28,9 +28,8 @@ TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHo
     //CURSOR ( | )
     cursor = sf::RectangleShape();
     cursor.setFillColor(sf::Color::White);
-    cursor.setSize(sf::Vector2f(2, 60));
-    cursor.setPosition(pos.x + text.getLocalBounds().width + 10 - background.getSize().x / 2 + margin,
-                       pos.y - background.getSize().y / 2 + 13 + 20);
+    cursor.setSize(sf::Vector2f(1, 13));
+    cursor.setPosition(pos.x + text.getGlobalBounds().width + 6.5f, pos.y + 2.5f);
 
 
 }
@@ -49,33 +48,13 @@ void TextInput::draw(sf::RenderWindow &window) {
     }
 }
 
-bool TextInput::isActive(sf::Vector2i mousePos) {
-
-    sf::Vector2f pixelPos = stateBase->getGame()->getWindow().mapPixelToCoords(mousePos);
-
-    wasActive = active;
-
-    active = pixelPos.x > background.getPosition().x &&
-             pixelPos.x < background.getPosition().x + background.getSize().x &&
-             pixelPos.y > background.getPosition().y &&
-             pixelPos.y < background.getPosition().y + background.getSize().y;
-
-    //Just got active
-    if(!wasActive && active) {
-        cursorTime = 0;
-    }
-
-    return active;
-}
-
 bool TextInput::handleEvent(sf::Event e) {
-    if (e.type == sf::Event::Resized)
+    if (e.type == sf::Event::MouseButtonPressed)
     {
-        if(wasActive)
-            active = true;
-        return true;
+        sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
+        active = background.getGlobalBounds().contains(mousePos);
     }
-    if (e.type == sf::Event::TextEntered)
+    if (e.type == sf::Event::TextEntered && active)
     {
         eventInput(e.text.unicode);
         return true;
@@ -108,8 +87,7 @@ void TextInput::eventInput(short unicode) {
         }
 
         text.setString(inputText);
-        cursor.setPosition(pos.x + text.getLocalBounds().width + 10 - background.getSize().x / 2 + margin,
-                           pos.y - background.getSize().y / 2 + 13 + 20);
+        cursor.setPosition(pos.x + text.getGlobalBounds().width + 6.5f, pos.y + 2.5f);
     }
 }
 

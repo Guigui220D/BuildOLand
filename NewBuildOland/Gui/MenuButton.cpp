@@ -23,29 +23,22 @@ MenuButton::MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2
     background.setPosition(pos.x, pos.y);
 }
 
-void MenuButton::update(float dt) {
-
+void MenuButton::update(float dt)
+{
+    sf::Vector2f mousePos = stateMenu->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateMenu->getGame()->getWindow()));
+    hovered = background.getGlobalBounds().contains(mousePos);
 }
 
-void MenuButton::draw(sf::RenderWindow &window) {
+void MenuButton::draw(sf::RenderWindow &window)
+{
 
     //Draw the background shadow
     sf::Vector2f backgroundPos = background.getPosition();
     background.setFillColor(sf::Color(0, 0, 0, 100));
-    if(hovered) {
-        background.setPosition(backgroundPos.x + 5.f, backgroundPos.y + 5.f);
-    } else {
-        background.setPosition(backgroundPos.x + 3.f, backgroundPos.y + 3.f);
-    }
+    background.setPosition(backgroundPos.x + (hovered ? 5.f : 3.f), backgroundPos.y + (hovered ? 5.f : 3.f));
     window.draw(background);
     //And the background
-    if(active) {
-        background.setFillColor(sf::Color(200, 200, 200, 255));
-    } else if(hovered) {
-        background.setFillColor(sf::Color(230, 230, 230, 255));
-    } else {
-        background.setFillColor(sf::Color(255, 255, 255, 255));
-    }
+    background.setFillColor(hovered ? sf::Color(255, 240, 220, 255) : sf::Color(255, 255, 255, 255));
     background.setPosition(backgroundPos.x, backgroundPos.y);
     window.draw(background);
 
@@ -53,52 +46,24 @@ void MenuButton::draw(sf::RenderWindow &window) {
     window.draw(text);
 }
 
-bool MenuButton::isReleased(sf::Vector2i mousePos) {
-    sf::Vector2f pixelPos = stateMenu->getGame()->getWindow().mapPixelToCoords(mousePos);
-
-    released = pixelPos.x > background.getPosition().x &&
-              pixelPos.x < background.getPosition().x + background.getSize().x &&
-              pixelPos.y > background.getPosition().y &&
-              pixelPos.y < background.getPosition().y + background.getSize().y &&
-              !justGotResized;
-    if(justGotResized) {
-        justGotResized = false;
-    }
-    return released;
-}
-
-bool MenuButton::isActive(sf::Vector2i mousePos) {
-    sf::Vector2f pixelPos = stateMenu->getGame()->getWindow().mapPixelToCoords(mousePos);
-
-    active = pixelPos.x > background.getPosition().x &&
-              pixelPos.x < background.getPosition().x + background.getSize().x &&
-              pixelPos.y > background.getPosition().y &&
-              pixelPos.y < background.getPosition().y + background.getSize().y;
-
-    return active;
-
-}
-
-bool MenuButton::isHovered(sf::Vector2i mousePos) {
-    sf::Vector2f pixelPos = stateMenu->getGame()->getWindow().mapPixelToCoords(mousePos);
-
-    hovered = pixelPos.x > background.getPosition().x &&
-              pixelPos.x < background.getPosition().x + background.getSize().x &&
-              pixelPos.y > background.getPosition().y &&
-              pixelPos.y < background.getPosition().y + background.getSize().y;
-
-    //Stop being active if you don't hover the element
-    if(active && !hovered) {
-        active = false;
-    }
-    return hovered;
-}
-
-bool MenuButton::handleEvent(sf::Event e) {
-    if (e.type == sf::Event::Resized)
+bool MenuButton::handleEvent(sf::Event e)
+{
+    if (e.type == sf::Event::MouseButtonReleased)
     {
-        justGotResized = true;
-        return true;
+        sf::Vector2f mousePos = stateMenu->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateMenu->getGame()->getWindow()));
+        if (background.getGlobalBounds().contains(mousePos))
+        {
+            clicked = true;
+            return true;
+        }
     }
     return false;
+}
+
+bool MenuButton::onClick()
+{
+    if (!clicked)
+        return false;
+    clicked = false;
+    return true;
 }

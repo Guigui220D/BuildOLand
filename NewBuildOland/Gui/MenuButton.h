@@ -8,17 +8,13 @@ class StateMenu;
 
 class MenuButton : public Gui {
 public:
-    MenuButton(StateMenu* stateMenu,std::string textString, sf::Vector2f pos);
+    MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2f pos);
 
     void update(float dt) override;
-
     void draw(sf::RenderWindow &window) override;
-
-    bool isReleased(sf::Vector2i mousePos) override;
-    bool isHovered(sf::Vector2i mousePos) override;
-    bool isActive(sf::Vector2i mousePos) override;
-
     bool handleEvent(sf::Event e) override;
+
+    bool onClick();
 
 private:
     StateMenu* stateMenu;
@@ -26,13 +22,10 @@ private:
     sf::RectangleShape background;
     sf::Text text;
 
-    sf::Vector2f pos;
-
     bool hovered = false;
-    bool active = false;
-    bool released = false;
+    bool clicked = false;
 
-    bool justGotResized = false;
+    sf::Vector2f pos;
 };
 
 
