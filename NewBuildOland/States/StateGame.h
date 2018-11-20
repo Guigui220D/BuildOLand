@@ -13,6 +13,7 @@
 #include <memory>
 #include "../Utils/NetworkManager.h"
 #include "../Gui/ChatGui.h"
+#include <GuiShroud.h>
 
 class StateGame : public StateBase
 {
@@ -76,7 +77,9 @@ private:
 
 	Player *player;
 
-
+	bool paused;
+    GuiShroud* pauseShroud;
+    GuiZone* pauseTitle;
 
 };
 

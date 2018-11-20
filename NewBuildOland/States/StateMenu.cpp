@@ -63,8 +63,6 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     title->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(title));
 
-    guiDomain.zones.push_back(std::make_unique<GuiShroud>());
-
     //SFML
     GuiZone* sfml = new GuiZone(sf::FloatRect(.05f, .8f, .15f, .15f), 373.f / 113., ZoneHAlign::HLeft, ZoneVAlign::VBottom);
     sfml->setZoneWidth(400.f);

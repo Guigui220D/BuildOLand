@@ -12,10 +12,13 @@
 #include "../Gui/InventoryGui.h"
 #include "../Events/EventManager.h"
 
+#include "../Gui/GuiSprite.h"
 
-StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput)
-	: StateBase(game)
-	, nManager(this)
+
+StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
+    StateBase(game),
+	nManager(this),
+	paused(false)
 {
     initAssets();
 
@@ -88,7 +91,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	pointer.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	pointer.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	pointer.setTexture(tileset.getTexture());
-	pointer.setTextureRect(sf::IntRect(136, 34, 32, 32));
+	pointer.setTextureRect(sf::IntRect(137, 35, 32, 32));
 
 	mouse = sf::RectangleShape();
 	mouse.setSize(sf::Vector2f(TILE_SIZE_FLOAT / 3, TILE_SIZE_FLOAT / 3));
@@ -112,6 +115,17 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     inventoryBar->guiElements.push_back(std::make_unique<InventoryGui>(this, player->getInventory(), &inventoryCursorId));
     inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
+
+    //Pause menu
+    pauseShroud = new GuiShroud();
+    pauseShroud->setEnabled(false);
+    guiDomain.zones.push_back(std::unique_ptr<GuiShroud>(pauseShroud));
+
+    pauseTitle = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 9.f / 2.f);
+    pauseTitle->setEnabled(false);
+    pauseTitle->setZoneWidth(950.f);
+    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("PAUSE"), sf::Vector2f(), 1.f, sf::Vector2f(5.f, 5.f)));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseTitle));
 }
 
 void StateGame::initAssets()
@@ -133,9 +147,13 @@ void StateGame::initAssets()
     assetManager.loadTextureFromFile("hand.png", "HAND");
     assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
     assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
+    assetManager.loadTextureFromFile("pause.png", "PAUSE");
 }
 
-void StateGame::handleInput() {
+void StateGame::handleInput()
+{
+    if (paused)
+        return;
 	//Temporary, for testing
 	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -276,7 +294,11 @@ void StateGame::handleInput() {
     */
 }
 
-void StateGame::update(float dt, bool focused) {
+void StateGame::update(float dt, bool focused)
+{
+    if (paused && !onlineMode)
+        return;
+
     currentWorld->updateChunks(dt);
 
     if (focused) { player->update(dt); }
@@ -293,7 +315,8 @@ void StateGame::update(float dt, bool focused) {
 	guiDomain.update(dt, game->getWindow());
 }
 
-void StateGame::draw(sf::RenderWindow &window) {
+void StateGame::draw(sf::RenderWindow &window)
+{
 	//Set the right view for world drawing
 	window.setView(game->getWorldView());
 
@@ -441,7 +464,7 @@ void StateGame::draw(sf::RenderWindow &window) {
     }
 
 	//Draw block highlighter
-	if (game->getWindow().hasFocus())
+	if (game->getWindow().hasFocus() && !paused)
 	{
 		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
@@ -516,7 +539,8 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(mouse);
 }
 
-void StateGame::setWorld(World &world) {
+void StateGame::setWorld(World &world)
+{
 	//We delete the old world
 	//as we will be changing the pointer's adress
     currentWorld->preDelete();
@@ -529,7 +553,8 @@ void StateGame::setWorld(World &world) {
 	player->setCurrentWorld(currentWorld);
 }
 
-StateGame::~StateGame() {
+StateGame::~StateGame()
+{
 	//We delete the world to prevent memory leaks
 	currentWorld->preDelete();
 	delete currentWorld;
@@ -538,6 +563,14 @@ StateGame::~StateGame() {
 
 void StateGame::handleEvent(sf::Event &event)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+    {
+        paused = !paused;
+        pauseShroud->setEnabled(paused);
+        pauseTitle->setEnabled(paused);
+        return;
+    }
+
     if (guiDomain.handleEvent(event, game->getWindow()))
         return;
     switch (event.type) {
@@ -549,7 +582,6 @@ void StateGame::handleEvent(sf::Event &event)
             } else {
                 inventoryCursorId = inventoryCursorId <= 0 ? inventoryGui->getInventorySlots() - 1 : inventoryCursorId - 1;
             }
-
             break;
         default:
             break;
