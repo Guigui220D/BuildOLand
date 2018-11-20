@@ -6,33 +6,69 @@
 #include "../Gui/TextInput.h"
 #include "../Gui/GuiSprite.h"
 
+#include "../Gui/GuiShroud.h"
+
 StateMenu::StateMenu(Game &game) : StateBase(game)
 {
     initAssets();
 
+    //Render wooden background
+    {
+        sf::RenderTexture rd;
+        rd.create(330, 440);
+        rd.clear(sf::Color::Transparent);
+
+        sf::Sprite a, b;
+        a.setTexture(*assetManager.getTexture("TILESET"));
+        a.setTextureRect(sf::IntRect(69, 35, 32, 32));
+        //a.setColor(sf::Color(190, 190, 190));
+        b.setTexture(*assetManager.getTexture("TILESET"));
+        b.setTextureRect(sf::IntRect(69, 69, 32, 29));
+        a.setScale(sf::Vector2f(3.438f, 3.438f / 1.5f)); //Totally arbitrary numbers
+        b.setScale(sf::Vector2f(3.438f, 3.794f));       //Do not touch
+
+        for (int i = 0; i < 3; i++)
+        {
+            a.setPosition(sf::Vector2f(i * 110.f, 0));
+            rd.draw(a);
+            for (int j = 0; j < 10; j++)
+            {
+                b.setPosition(sf::Vector2f(i * 110.f, j * 110.f + 110.f / 1.5f));
+                rd.draw(b);
+            }
+        }
+
+
+        rd.display();
+        woodenBackGround = rd.getTexture();
+    }
+
     //Create the zone for the interface
-    GuiZone* center = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f);
+    GuiZone* center = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f, ZoneHAlign::HCenter, ZoneVAlign::VTop);
     center->setZoneWidth(110.f);
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 0)));
-    //Beurk
+    center->guiElements.push_back(std::make_unique<GuiSprite>(this, &woodenBackGround, sf::Vector2f(), 1.f / 3.f));
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 30)));
     buttonLocal = (MenuButton*)center->guiElements.back().get();
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 25)));
+    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 55)));
     buttonMultiplayer = (MenuButton*)center->guiElements.back().get();
-    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 55), "Username", 16, true));
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 85), "Username", 16, true));
     nicknameInput = (TextInput*)center->guiElements.back().get();
-    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 75), "Address", 0));
+    center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 105), "Address", 0));
     addressInput = (TextInput*)center->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(center));    //Add the zone to the domain
 
     //Title
     GuiZone* title = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
-    title->setZoneWidth(1626.f);
-    title->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO")));
+    title->setZoneWidth(1700.f);
+    title->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(title));
+
+    guiDomain.zones.push_back(std::make_unique<GuiShroud>());
+
     //SFML
     GuiZone* sfml = new GuiZone(sf::FloatRect(.05f, .8f, .15f, .15f), 373.f / 113., ZoneHAlign::HLeft, ZoneVAlign::VBottom);
-    sfml->setZoneWidth(373.f);
-    sfml->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("SFML")));
+    sfml->setZoneWidth(400.f);
+    sfml->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("SFML"), sf::Vector2f(), 1.f, sf::Vector2f(5.f, 5.f)));
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(sfml));
 
     game.getWindow().setMouseCursorVisible(true);

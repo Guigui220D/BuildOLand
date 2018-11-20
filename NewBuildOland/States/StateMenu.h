@@ -31,6 +31,8 @@ private:
     TextInput* nicknameInput;
     TextInput* addressInput;
 
+    sf::Texture woodenBackGround;
+
     float elapsedTime = 0;
 
     bool isSpacePressed = false;

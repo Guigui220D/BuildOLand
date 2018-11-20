@@ -5,7 +5,6 @@
 - [ ] Path finding for AI entities
 - [ ] User interface and pause
 - [ ] Authentification
-- [ ] Tile-entities
 - [ ] Chat and command-line
 - [ ] Character personnalization
 - [ ] Better sound
@@ -13,7 +12,6 @@
 - [ ] Versionning
 
 - [x] Proper resource management (sound, textures, fonts)
-- [x] Create proper todo list
 - [x] Events system
 - [x] Animations
 - [x] Interactive blocks
@@ -23,6 +21,7 @@
 - [x] Main menu
 - [x] Infinite world
 - [x] Per-chunk vertex-array rendering
+- [x] Tile-entities
 
 ### Content :
 
@@ -31,9 +30,7 @@
 - [ ] Items and tools
 - [ ] A gameplay
 - [ ] Cool world generation
-- [ ] Better interface
 
 ### Bug fixes, corrections, minor things :
 
 - Proper kick (Online mode)
-- Make gui pointer lists in StateMenu instead of single objects

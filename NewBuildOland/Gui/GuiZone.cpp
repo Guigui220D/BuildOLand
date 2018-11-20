@@ -7,7 +7,8 @@ GuiZone::GuiZone(sf::FloatRect zone, float aspectRatio, ZoneHAlign hAlign, ZoneV
     vAlign(vAlign),
     viewHeight(ratio),
     viewWidth(ratio),
-    viewWindowSize()
+    viewWindowSize(),
+    enabled(true)
 { }
 
 void GuiZone::setZoneHeight(float height)
@@ -24,6 +25,8 @@ void GuiZone::setZoneWidth(float width)
 
 bool GuiZone::handleEvent(sf::Event e, sf::RenderWindow& rw)
 {
+    if (!enabled)
+        return false;
     rw.setView(calculatedView);
     for (auto i = guiElements.begin(); i != guiElements.end(); i++)
         if ((*i)->handleEvent(e))
@@ -33,16 +36,22 @@ bool GuiZone::handleEvent(sf::Event e, sf::RenderWindow& rw)
 
 void GuiZone::draw(sf::RenderWindow& rw)
 {
-    rw.setView(getView(rw.getSize()));
-    for (auto i = guiElements.begin(); i != guiElements.end(); i++)
-        (*i)->draw(rw);
+    if (enabled)
+    {
+        rw.setView(getView(rw.getSize()));
+        for (auto i = guiElements.begin(); i != guiElements.end(); i++)
+            (*i)->draw(rw);
+    }
 }
 
 void GuiZone::update(float dt, sf::RenderWindow& rw)
 {
-    rw.setView(getView(rw.getSize()));
-    for (auto i = guiElements.begin(); i != guiElements.end(); i++)
-        (*i)->update(dt);
+    if (enabled)
+    {
+        rw.setView(getView(rw.getSize()));
+        for (auto i = guiElements.begin(); i != guiElements.end(); i++)
+            (*i)->update(dt);
+    }
 }
 
 sf::View GuiZone::getView(sf::Vector2u windowSize)

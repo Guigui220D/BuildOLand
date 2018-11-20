@@ -54,7 +54,6 @@ private:
     NetworkManager nManager;
     bool onlineMode;
 
-	std::vector<std::unique_ptr<Gui>> gui;
 	InventoryGui *inventoryGui;
 	//ChatGui *chatGui;
 

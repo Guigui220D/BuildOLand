@@ -98,15 +98,20 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     player->init(0, 0);
 	cameraFollow = player;
 
-	//Setup the gui
-	inventoryGui = new InventoryGui(this, player->getInventory(), &inventoryCursorId);
 	//chatGui = new ChatGui(this);
-
-	gui = std::vector<std::unique_ptr<Gui>>();
-	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
-	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
 	//gui.push_back(std::unique_ptr<Gui>(chatGui));
 
+	//Setup the GUI
+	GuiZone* fps = new GuiZone(sf::FloatRect(0, 0, .4f, .05f), 8.f, ZoneHAlign::HLeft, ZoneVAlign::VTop);
+	fps->setZoneHeight(32.f);
+    fps->guiElements.push_back(std::make_unique<FpsCounter>(this));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(fps));
+
+    GuiZone* inventoryBar = new GuiZone(sf::FloatRect(.2f, .9f, .6f, .1f), 292.f / 40.f, ZoneHAlign::HCenter, ZoneVAlign::VBottom);
+    inventoryBar->setZoneHeight(40.f);
+    inventoryBar->guiElements.push_back(std::make_unique<InventoryGui>(this, player->getInventory(), &inventoryCursorId));
+    inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
 }
 
 void StateGame::initAssets()
@@ -285,11 +290,7 @@ void StateGame::update(float dt, bool focused) {
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 
 	//Update the GUI
-	for (unsigned int i = 0; i < gui.size(); i++)
-	{
-		gui[i]->update(dt);
-	}
-
+	guiDomain.update(dt, game->getWindow());
 }
 
 void StateGame::draw(sf::RenderWindow &window) {
@@ -506,12 +507,7 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(mapFrame);
 
     //Draw the gui
-	window.setView(game->getGuiView());
-
-	for (unsigned int i = 0; i < gui.size(); i++)
-    {
-		gui[i]->draw(window);
-    }
+    guiDomain.draw(window);
     //Draw the mouse
 	window.setView(game->getWorldView());
 	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());

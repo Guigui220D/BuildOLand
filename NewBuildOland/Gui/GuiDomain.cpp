@@ -4,9 +4,12 @@ GuiDomain::GuiDomain() {}
 
 bool GuiDomain::handleEvent(sf::Event e, sf::RenderWindow& rw)
 {
-    for (auto i = zones.begin(); i != zones.end(); i++)
+    for (auto i = zones.end(); i != zones.begin();)
+    {
+        i--;
         if ((*i)->handleEvent(e, rw))
             return true;
+    }
     return false;
 }
 

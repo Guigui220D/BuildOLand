@@ -23,7 +23,6 @@ public:
 private:
     StateGame* stateGame;
 
-    float inventoryScale = 2;
     unsigned int inventorySlots = 8;
 
     sf::Sprite inventorySprite;
