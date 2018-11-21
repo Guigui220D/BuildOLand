@@ -2,7 +2,7 @@
 #include "StateMenu.h"
 #include "../Game.h"
 
-#include "../Gui/MenuButton.h"
+#include "../Gui/GuiButton.h"
 #include "../Gui/TextInput.h"
 #include "../Gui/GuiSprite.h"
 
@@ -47,10 +47,10 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     GuiZone* center = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f, ZoneHAlign::HCenter, ZoneVAlign::VTop);
     center->setZoneWidth(110.f);
     center->guiElements.push_back(std::make_unique<GuiSprite>(this, &woodenBackGround, sf::Vector2f(), 1.f / 3.f));
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Local", sf::Vector2f(5, 30)));
-    buttonLocal = (MenuButton*)center->guiElements.back().get();
-    center->guiElements.push_back(std::make_unique<MenuButton>(this, "Multiplayer", sf::Vector2f(5, 55)));
-    buttonMultiplayer = (MenuButton*)center->guiElements.back().get();
+    center->guiElements.push_back(std::make_unique<GuiButton>(this, "Local", sf::Vector2f(5, 30)));
+    buttonLocal = (GuiButton*)center->guiElements.back().get();
+    center->guiElements.push_back(std::make_unique<GuiButton>(this, "Multiplayer", sf::Vector2f(5, 55)));
+    buttonMultiplayer = (GuiButton*)center->guiElements.back().get();
     center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 85), "Username", 16, true));
     nicknameInput = (TextInput*)center->guiElements.back().get();
     center->guiElements.push_back(std::make_unique<TextInput>(this, sf::Vector2f(5, 105), "Address", 0));

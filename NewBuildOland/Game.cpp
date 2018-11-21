@@ -2,15 +2,16 @@
 #include "States/StateMenu.h"
 #include <iostream>
 
-Game::Game()
-	: window(sf::VideoMode(800, 600), "BuildOLand")
-	, currentState(0)
+Game::Game() :
+	window(sf::VideoMode(800, 600), "BuildOLand"),
+	currentState(0)
 {
 	Image icon;
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256, 256, icon.getPixelsPtr());
 
-	window.setVerticalSyncEnabled(true);
+	//window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
 	//The worldView sizing is automated

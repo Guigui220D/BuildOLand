@@ -4,7 +4,7 @@
 
 #include "StateBase.h"
 
-class MenuButton;
+class GuiButton;
 class TextInput;
 
 class StateMenu : public StateBase {
@@ -26,8 +26,9 @@ private:
     sf::Sprite logoSprite;
     sf::Sprite sfmlSprite;
 
-    MenuButton* buttonLocal;
-    MenuButton* buttonMultiplayer;
+    GuiDomain guiDomain;
+    GuiButton* buttonLocal;
+    GuiButton* buttonMultiplayer;
     TextInput* nicknameInput;
     TextInput* addressInput;
 

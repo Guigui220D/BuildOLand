@@ -25,7 +25,5 @@ protected:
 	Game *game = nullptr;
 
     AssetManager assetManager;
-
-    GuiDomain guiDomain;
 };
 

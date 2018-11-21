@@ -1,15 +1,14 @@
 #include <iostream>
-#include "MenuButton.h"
+#include "GuiButton.h"
 #include "../Game.h"
 #include "../States/StateMenu.h"
 
-MenuButton::MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2f pos)
-        : Gui(nullptr)
-        , stateMenu(stateMenu)
-        , pos(pos)
+GuiButton::GuiButton(StateBase* stateBase, std::string textString, sf::Vector2f pos) :
+        Gui(stateBase),
+        pos(pos)
 {
     //TEXT
-    text.setFont(*stateMenu->getAssetManager()->getFont("LUCON"));
+    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(40);
     text.setScale(sf::Vector2f(.3f, .3f));
@@ -23,13 +22,13 @@ MenuButton::MenuButton(StateMenu* stateMenu, std::string textString, sf::Vector2
     background.setPosition(pos.x, pos.y);
 }
 
-void MenuButton::update(float dt)
+void GuiButton::update(float dt)
 {
-    sf::Vector2f mousePos = stateMenu->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateMenu->getGame()->getWindow()));
+    sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
     hovered = background.getGlobalBounds().contains(mousePos);
 }
 
-void MenuButton::draw(sf::RenderWindow &window)
+void GuiButton::draw(sf::RenderWindow &window)
 {
 
     //Draw the background shadow
@@ -46,21 +45,32 @@ void MenuButton::draw(sf::RenderWindow &window)
     window.draw(text);
 }
 
-bool MenuButton::handleEvent(sf::Event e)
+bool GuiButton::handleEvent(sf::Event e)
 {
+    if (e.type == sf::Event::MouseButtonPressed)
+    {
+        sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
+        clickDowned = background.getGlobalBounds().contains(mousePos);
+        if (clickDowned)
+            return true;
+    }
     if (e.type == sf::Event::MouseButtonReleased)
     {
-        sf::Vector2f mousePos = stateMenu->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateMenu->getGame()->getWindow()));
-        if (background.getGlobalBounds().contains(mousePos))
+        sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
+        if (clickDowned)
         {
-            clicked = true;
-            return true;
+            if (background.getGlobalBounds().contains(mousePos))
+            {
+                clicked = true;
+                return true;
+            }
+            clickDowned = false;
         }
     }
     return false;
 }
 
-bool MenuButton::onClick()
+bool GuiButton::onClick()
 {
     if (!clicked)
         return false;

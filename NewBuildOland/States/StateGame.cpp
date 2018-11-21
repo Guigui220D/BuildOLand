@@ -14,6 +14,7 @@
 
 #include "../Gui/GuiSprite.h"
 
+#include "StateMenu.h"
 
 StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
     StateBase(game),
@@ -117,15 +118,32 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
 
     //Pause menu
-    pauseShroud = new GuiShroud();
-    pauseShroud->setEnabled(false);
-    guiDomain.zones.push_back(std::unique_ptr<GuiShroud>(pauseShroud));
+    pauseGuiDomain.setEnabled(false);
 
-    pauseTitle = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 9.f / 2.f);
-    pauseTitle->setEnabled(false);
-    pauseTitle->setZoneWidth(950.f);
-    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("PAUSE"), sf::Vector2f(), 1.f, sf::Vector2f(5.f, 5.f)));
-    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseTitle));
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiShroud>(new GuiShroud()));
+
+    GuiZone* pauseTitle = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
+    pauseTitle->setZoneWidth(1700.f);
+    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseTitle));
+
+    GuiZone* pauseCenter = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f, ZoneHAlign::HCenter, ZoneVAlign::VTop);
+    pauseCenter->setZoneWidth(110.f);
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Resume", sf::Vector2f(5, 10)));
+    pauseResumeButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Settings", sf::Vector2f(5, 40)));
+    pauseSettingsButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Exit", sf::Vector2f(5, 70)));
+    pauseExitButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseCenter));
+}
+
+StateGame::~StateGame()
+{
+	//We delete the world to prevent memory leaks
+	currentWorld->preDelete();
+	delete currentWorld;
+	std::cout << "Stategame delete\n";
 }
 
 void StateGame::initAssets()
@@ -148,12 +166,24 @@ void StateGame::initAssets()
     assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
     assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
     assetManager.loadTextureFromFile("pause.png", "PAUSE");
+    assetManager.loadTextureFromFile("logo.png", "LOGO");
 }
 
 void StateGame::handleInput()
 {
     if (paused)
+    {
+        if (pauseResumeButton->onClick())
+        {
+            paused = false;
+            pauseGuiDomain.setEnabled(false);
+        }
+        if (pauseSettingsButton->onClick())
+            std::cout << "The settings menu is not yet availible.\n";
+        if (pauseExitButton->onClick())
+            game->setCurrentState(new StateMenu(*game));
         return;
+    }
 	//Temporary, for testing
 	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -296,6 +326,8 @@ void StateGame::handleInput()
 
 void StateGame::update(float dt, bool focused)
 {
+    pauseGuiDomain.update(dt, game->getWindow());
+
     if (paused && !onlineMode)
         return;
 
@@ -531,6 +563,7 @@ void StateGame::draw(sf::RenderWindow &window)
 
     //Draw the gui
     guiDomain.draw(window);
+    pauseGuiDomain.draw(window);
     //Draw the mouse
 	window.setView(game->getWorldView());
 	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
@@ -553,25 +586,18 @@ void StateGame::setWorld(World &world)
 	player->setCurrentWorld(currentWorld);
 }
 
-StateGame::~StateGame()
-{
-	//We delete the world to prevent memory leaks
-	currentWorld->preDelete();
-	delete currentWorld;
-	std::cout << "Stategame delete\n";
-}
-
 void StateGame::handleEvent(sf::Event &event)
 {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
         paused = !paused;
-        pauseShroud->setEnabled(paused);
-        pauseTitle->setEnabled(paused);
+        pauseGuiDomain.setEnabled(paused);
         return;
     }
 
-    if (guiDomain.handleEvent(event, game->getWindow()))
+    if (paused && pauseGuiDomain.handleEvent(event, game->getWindow()))
+        return;
+    if (!paused && guiDomain.handleEvent(event, game->getWindow()))
         return;
     switch (event.type) {
         //SCROLL EVENT

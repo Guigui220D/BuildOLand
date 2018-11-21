@@ -1,9 +1,14 @@
 #include "GuiDomain.h"
 
-GuiDomain::GuiDomain() {}
+GuiDomain::GuiDomain() :
+    enabled(true)
+{}
 
 bool GuiDomain::handleEvent(sf::Event e, sf::RenderWindow& rw)
 {
+    if (!enabled)
+        return false;
+
     for (auto i = zones.end(); i != zones.begin();)
     {
         i--;
@@ -15,12 +20,14 @@ bool GuiDomain::handleEvent(sf::Event e, sf::RenderWindow& rw)
 
 void GuiDomain::draw(sf::RenderWindow& rw)
 {
-    for (auto i = zones.begin(); i != zones.end(); i++)
-        (*i)->draw(rw);
+    if (enabled)
+        for (auto i = zones.begin(); i != zones.end(); i++)
+            (*i)->draw(rw);
 }
 
 void GuiDomain::update(float dt, sf::RenderWindow& rw)
 {
-    for (auto i = zones.begin(); i != zones.end(); i++)
-        (*i)->update(dt, rw);
+    if (enabled)
+        for (auto i = zones.begin(); i != zones.end(); i++)
+            (*i)->update(dt, rw);
 }

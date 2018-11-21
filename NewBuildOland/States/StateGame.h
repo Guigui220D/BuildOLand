@@ -7,13 +7,16 @@
 #include "../Utils/TileSet.h"
 #include "../Entities/Player.h"
 #include "../Entities/Entities.h"
-#include "../Gui/Gui.h"
-#include "../Gui/InventoryGui.h"
+
 #include <vector>
 #include <memory>
 #include "../Utils/NetworkManager.h"
+
+#include "../Gui/Gui.h"
+#include "../Gui/InventoryGui.h"
 #include "../Gui/ChatGui.h"
-#include <GuiShroud.h>
+#include "../Gui/GuiShroud.h"
+#include "../Gui/GuiButton.h"
 
 class StateGame : public StateBase
 {
@@ -55,9 +58,6 @@ private:
     NetworkManager nManager;
     bool onlineMode;
 
-	InventoryGui *inventoryGui;
-	//ChatGui *chatGui;
-
 	World *currentWorld = nullptr;
 
 	sf::View mapView;
@@ -77,9 +77,18 @@ private:
 
 	Player *player;
 
+    GuiDomain guiDomain;
+    InventoryGui *inventoryGui;
+	//ChatGui *chatGui;
+
 	bool paused;
-    GuiShroud* pauseShroud;
-    GuiZone* pauseTitle;
+	GuiDomain pauseGuiDomain;
+    GuiButton* pauseResumeButton;
+    GuiButton* pauseSettingsButton;
+    GuiButton* pauseExitButton;
+
+    bool inSettings;
+    GuiDomain settingsGuiDomain;
 
 };
 
