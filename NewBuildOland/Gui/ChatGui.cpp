@@ -1,75 +1,39 @@
-/*
 #include "ChatGui.h"
 #include "../States/StateGame.h"
 #include "TextInput.h"
 
-ChatGui::ChatGui(StateGame *stateGame) : Gui(stateGame) {
-    //Chatwidth = width from left to beggining of inventory (-10px)
-    float chatwidth = stateGame->getGuiView().getSize().x / 2.0f - 292 - 10;
-
-    text.setFont(*stateGame->getAssetManager()->getFont("LUCON"));
-    text.setFillColor(sf::Color::White);
-    text.setString("Type your command here - Available soon");
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                     stateGame->getGuiView().getSize().y / 2.0f - text.getLocalBounds().height - 50);
-    text.setCharacterSize(static_cast<unsigned int>(chatwidth * 1.0f / 23.1f));
-
-    //BACKGROUND
+ChatGui::ChatGui(StateGame *stateGame) :
+    Gui((StateBase*)stateGame)
+{
+    //Background
     background = sf::RectangleShape();
     background.setFillColor(sf::Color(0, 0, 0, 100));
-
-
-    background.setSize(sf::Vector2f(chatwidth, chatwidth * 0.5f));
-    background.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                           stateGame->getGuiView().getSize().y / 2.0f - background.getSize().y);
-
-    //TEXT INPUT BAR
-    //TODO: Make textInput a pure virtual class, so you can have more customisation
-    //And also create a pure virtual setPosition method (so that you can calculate height / width etc)
-    //Eventually a getHeight / getWidth method that you can set in the class, so it's easier to position it on the guiView
-    textInput = new TextInput(stateGame, sf::Vector2f(-stateGame->getGuiView().getSize().x / 2.0f, 0), "Write here");
+    background.setSize(sf::Vector2f(100, 160));
 }
 
-void ChatGui::draw(sf::RenderWindow &window) {
-
-    //always shown
+void ChatGui::draw(sf::RenderWindow &window)
+{
     window.draw(background);
-    window.draw(text);
-
-    //Only when user presses T or Enter
-    if(active) {
-        textInput->draw(window);
+    float height = 0.f;
+    for (sf::Text msg : messages)
+    {
+        msg.setPosition(sf::Vector2f(0.f, height));
+        window.draw(msg);
+        height += msg.getGlobalBounds().height;
     }
 }
 
-void ChatGui::update(float dt) {
-    textInput->update(dt);
-}
-
-void ChatGui::eventResize() {
-    //Chatwidth = width from left to beggining of inventory (-10px)
-    float chatwidth = stateGame->getGuiView().getSize().x / 2.0f - 292 - 10;
-
-    //Position the text left of the screen
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                     stateGame->getGuiView().getSize().y / 2.0f - text.getLocalBounds().height - 50);
-    text.setCharacterSize(static_cast<unsigned int>(chatwidth * 1.0f / 23.1f));
-
-    background.setSize(sf::Vector2f(chatwidth, chatwidth * 0.5f));
-    background.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                           stateGame->getGuiView().getSize().y / 2.0f - background.getSize().y);
-}
-
-bool ChatGui::isActive() const {
-    return active;
-}
-
-void ChatGui::setIsActive(bool isActive) {
-    ChatGui::active = isActive;
-}
-
-void ChatGui::eventInput(short unicode) {
-    textInput->eventInput(unicode);
+void ChatGui::update(float dt)
+{
 
 }
-*/
+
+bool ChatGui::handleEvent(sf::Event e)
+{
+    return false;
+}
+
+void ChatGui::addMessage(ChatMessage message)
+{
+    messages.push_back(message.getSfText());
+}

@@ -1,9 +1,12 @@
-/*
 #pragma once
-
 
 #include "Gui.h"
 #include "TextInput.h"
+#include "ChatMessage.h"
+
+#include <deque>
+
+class StateGame;
 
 class ChatGui : public Gui {
 
@@ -11,20 +14,13 @@ public:
     ChatGui(StateGame *stateGame);
     void draw(sf::RenderWindow &window) override;
     void update(float dt) override;
-    void eventResize() override;
+    bool handleEvent(sf::Event e) override;
 
-    bool isActive() const;
-    void setIsActive(bool isActive);
-
-    void eventInput(short unicode);
+    void addMessage(ChatMessage message);
 
 private:
-    sf::Text text;
     sf::RectangleShape background;
-    TextInput *textInput;
 
-    bool active = false;
+    std::deque<sf::Text> messages;
 };
-*/
-
 

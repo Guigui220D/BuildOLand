@@ -3,13 +3,11 @@
 ### Engine :
 
 - [ ] Path finding for AI entities
-- [ ] User interface and pause
+- [ ] User interface, settings and pause
 - [ ] Authentification
 - [ ] Chat and command-line
 - [ ] Character personnalization
 - [ ] Better sound
-- [ ] Personalizable setting (controls, sound, etc)
-- [ ] Versionning
 
 - [x] Proper resource management (sound, textures, fonts)
 - [x] Events system
@@ -34,3 +32,4 @@
 ### Bug fixes, corrections, minor things :
 
 - Proper kick (Online mode)
+- Versionning

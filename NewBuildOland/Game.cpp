@@ -2,10 +2,14 @@
 #include "States/StateMenu.h"
 #include <iostream>
 
+#include "GameGlobal.h"
+
 Game::Game() :
 	window(sf::VideoMode(800, 600), "BuildOLand"),
 	currentState(0)
 {
+    initGlobalAssets();
+
 	Image icon;
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256, 256, icon.getPixelsPtr());
@@ -24,6 +28,14 @@ Game::Game() :
 	updateView();
 
 	currentState = new StateMenu(*this);
+}
+
+void Game::initGlobalAssets()
+{
+    GameGlobal::assets.loadFontFromFile("lucon.ttf", "LUCON");
+
+    GameGlobal::assets.loadTextureFromFile("newTileset.png", "TILESET");
+    GameGlobal::assets.loadTextureFromFile("logo.png", "LOGO");
 }
 
 void Game::run()

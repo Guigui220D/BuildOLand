@@ -19,10 +19,10 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
         rd.clear(sf::Color::Transparent);
 
         sf::Sprite a, b;
-        a.setTexture(*assetManager.getTexture("TILESET"));
+        a.setTexture(*GameGlobal::assets.getTexture("TILESET"));
         a.setTextureRect(sf::IntRect(69, 35, 32, 32));
         //a.setColor(sf::Color(190, 190, 190));
-        b.setTexture(*assetManager.getTexture("TILESET"));
+        b.setTexture(*GameGlobal::assets.getTexture("TILESET"));
         b.setTextureRect(sf::IntRect(69, 69, 32, 29));
         a.setScale(sf::Vector2f(3.438f, 3.438f / 1.5f)); //Totally arbitrary numbers
         b.setScale(sf::Vector2f(3.438f, 3.794f));       //Do not touch
@@ -60,7 +60,7 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     //Title
     GuiZone* title = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
     title->setZoneWidth(1700.f);
-    title->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
+    title->guiElements.push_back(std::make_unique<GuiSprite>(this, GameGlobal::assets.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(title));
 
     //SFML
@@ -72,7 +72,7 @@ StateMenu::StateMenu(Game &game) : StateBase(game)
     game.getWindow().setMouseCursorVisible(true);
 
     //Get background image
-    backgroundRect.setTexture(assetManager.getTexture("TILESET"));
+    backgroundRect.setTexture(GameGlobal::assets.getTexture("TILESET"));
     backgroundRect.setTextureRect(sf::IntRect(69, 1, 32, 32));
     backgroundRect.setSize(sf::Vector2f(StateGame::TILE_SIZE, StateGame::TILE_SIZE));
     backgroundRect.setPosition(0, 0);
@@ -84,8 +84,6 @@ void StateMenu::initAssets()
 
     assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
     assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
-    assetManager.loadTextureFromFile("newTileset.png", "TILESET");
-    assetManager.loadTextureFromFile("logo.png", "LOGO");
     assetManager.loadTextureFromFile("sfml-logo-small.png", "SFML");
 }
 

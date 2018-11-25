@@ -111,11 +111,17 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     fps->guiElements.push_back(std::make_unique<FpsCounter>(this));
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(fps));
 
-    GuiZone* inventoryBar = new GuiZone(sf::FloatRect(.2f, .9f, .6f, .1f), 292.f / 40.f, ZoneHAlign::HCenter, ZoneVAlign::VBottom);
+    GuiZone* inventoryBar = new GuiZone(sf::FloatRect(.25f, .9f, .5f, .1f), 292.f / 40.f, ZoneHAlign::HCenter, ZoneVAlign::VBottom);
     inventoryBar->setZoneHeight(40.f);
     inventoryBar->guiElements.push_back(std::make_unique<InventoryGui>(this, player->getInventory(), &inventoryCursorId));
     inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
+
+    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, .0f, .25f, 1.f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
+    chat->setZoneWidth(100.f);
+    chat->guiElements.push_back(std::make_unique<ChatGui>(this));
+    chatGui = (ChatGui*)chat->guiElements.back().get();
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(chat));
 
     //Pause menu
     pauseGuiDomain.setEnabled(false);
@@ -588,6 +594,11 @@ void StateGame::setWorld(World &world)
 
 void StateGame::handleEvent(sf::Event &event)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)
+        chatGui->addMessage(ChatMessage("[Somebody] Hey!"));
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N)
+        chatGui->addMessage(ChatMessage("[A player] Hello, how are you?", ChatColor::ChatRed));
+
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
         paused = !paused;
