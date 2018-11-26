@@ -597,7 +597,7 @@ void StateGame::handleEvent(sf::Event &event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)
         chatGui->addMessage(ChatMessage("[Somebody] Hey!"));
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N)
-        chatGui->addMessage(ChatMessage("[A player] Hello, how are you?", ChatColor::ChatRed));
+        chatGui->addMessage(ChatMessage("[A player] This is a loooong message to test the chat gui, blah blah blah blah, yes yes yes", ChatColor::ChatRed));
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
