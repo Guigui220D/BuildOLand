@@ -19,6 +19,12 @@ public:
 
     const std::string &getInputText() const;
 
+    inline void setActive(bool activ) { active = activ; }
+    bool isActive() const { return active; }
+    bool isStillPlaceHolder() const { return isPlaceHolder; }
+
+    bool onEnter();
+
 private:
     StateBase* stateBase;
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>,wchar_t> unicodeConvert;
@@ -37,6 +43,8 @@ private:
 
     void eventInput(short unicode);
     bool alphaNumericOnly;
+
+    bool enterPressed;
 };
 
 

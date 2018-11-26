@@ -89,6 +89,17 @@ void StateMenu::initAssets()
 
 void StateMenu::handleInput()
 {
+    if (nicknameInput->onEnter())
+        addressInput->setActive(true);
+    if (addressInput->onEnter())
+    {
+        if (nicknameInput->isStillPlaceHolder() || addressInput->isStillPlaceHolder())
+        {
+            nicknameInput->setActive(true);
+        }
+        else
+            std::cout << "Multiplayer mode is still in development in this version\n" << nicknameInput->getInputText() << "\n" << addressInput->getInputText() << "\n";
+    }
     if (buttonLocal->onClick())
         game->setCurrentState(new StateGame(*game, false));
     if (buttonMultiplayer->onClick())

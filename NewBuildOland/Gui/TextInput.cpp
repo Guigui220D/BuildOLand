@@ -59,6 +59,12 @@ bool TextInput::handleEvent(sf::Event e) {
         eventInput(e.text.unicode);
         return true;
     }
+    if (active && e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)
+    {
+        enterPressed = true;
+        active = false;
+        return true;
+    }
     return false;
 }
 
@@ -93,4 +99,12 @@ void TextInput::eventInput(short unicode) {
 
 const std::string &TextInput::getInputText() const {
     return inputText;
+}
+
+bool TextInput::onEnter()
+{
+    if (!enterPressed)
+        return false;
+    enterPressed = false;
+    return true;
 }
