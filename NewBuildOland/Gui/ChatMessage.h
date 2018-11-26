@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "../Utils/ChatColors.h"
-#include <SFML/Graphics.hpp>
 
 struct ChatMessage
 {
@@ -9,6 +8,4 @@ struct ChatMessage
 
     std::string content;
     ChatColor color;
-
-    sf::Text getSfText();
 };

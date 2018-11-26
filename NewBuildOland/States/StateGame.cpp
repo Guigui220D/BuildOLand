@@ -117,7 +117,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
 
-    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, .0f, .25f, 1.f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
+    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, .0f, .5f, 1.f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
     chat->setZoneWidth(100.f);
     chat->guiElements.push_back(std::make_unique<ChatGui>(this));
     chatGui = (ChatGui*)chat->guiElements.back().get();
