@@ -6,7 +6,7 @@
 
 FpsCounter::FpsCounter(StateBase* stateBase) : Gui(stateBase)
 {
-    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
+    text.setFont(*GameGlobal::assets.getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(32);
 }

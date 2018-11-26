@@ -18,7 +18,7 @@ TileSet::TileSet()
 	generateBlocks();
 	generateGrounds();
 
-	texture.loadFromFile("Res/newTileset.png");
+	texture = *GameGlobal::assets.getTexture("TILESET");
 }
 
 void TileSet::generateBlocks()

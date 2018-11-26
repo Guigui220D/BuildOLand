@@ -9,7 +9,7 @@
 OtherPlayer::OtherPlayer(World *world, sf::String displayName, unsigned id)
     : LivingEntity(world, id, 20, 9)
 {
-	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);

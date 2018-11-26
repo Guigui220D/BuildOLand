@@ -18,7 +18,7 @@ TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHo
 
 
     //TEXT
-    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
+    text.setFont(*GameGlobal::assets.getFont("LUCON"));
     text.setFillColor(sf::Color::White);
     text.setCharacterSize(40);
     text.setScale(sf::Vector2f(.3f, .3f));

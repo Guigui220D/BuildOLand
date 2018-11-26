@@ -10,7 +10,7 @@ Player::Player(World *world, sf::String displayName, unsigned int id)
 	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
-	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);

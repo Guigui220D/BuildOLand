@@ -8,7 +8,7 @@ GuiButton::GuiButton(StateBase* stateBase, std::string textString, sf::Vector2f 
         pos(pos)
 {
     //TEXT
-    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
+    text.setFont(*GameGlobal::assets.getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(40);
     text.setScale(sf::Vector2f(.3f, .3f));
