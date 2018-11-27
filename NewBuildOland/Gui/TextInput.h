@@ -1,15 +1,11 @@
-
 #pragma once
-
 
 #include <codecvt>
 #include "Gui.h"
 #include "../States/StateBase.h"
 
-class StateMenu;
-
-class TextInput : public Gui{
-
+class TextInput : public Gui
+{
 public:
     TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize = 0, bool alphaNumeric = false);
 
@@ -26,8 +22,7 @@ public:
     bool onEnter();
 
 private:
-    StateBase* stateBase;
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>,wchar_t> unicodeConvert;
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> unicodeConvert;
 
     const float margin = 15.0f;
     sf::Vector2f pos;

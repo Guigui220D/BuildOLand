@@ -2,11 +2,11 @@
 #include "../States/StateBase.h"
 #include "../Game.h"
 
-TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize, bool alphaNumeric) : Gui(nullptr)
-    , stateBase(stateBase)
-    , pos(pos)
-    , inputText(placeHolder)
-    , maxSize(maxSize)
+TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize, bool alphaNumeric) :
+    Gui(stateBase),
+    pos(pos),
+    inputText(placeHolder),
+    maxSize(maxSize)
 {
     alphaNumericOnly = alphaNumeric;
 

@@ -3,12 +3,21 @@
 #include "TextInput.h"
 
 ChatGui::ChatGui(StateGame *stateGame) :
-    Gui((StateBase*)stateGame)
+    Gui((StateBase*)stateGame),
+    sentMessage("")
 {
     //Background
     background = sf::RectangleShape();
     background.setFillColor(sf::Color(0, 0, 0, 100));
     background.setSize(sf::Vector2f(100, 160));
+
+    inputText.setFont(*GameGlobal::assets.getFont("LUCON"));
+    inputText.setFillColor(sf::Color::Cyan);
+    inputText.setOutlineColor(sf::Color::Black);
+    inputText.setOutlineThickness(2.f);
+    inputText.setCharacterSize(20.f);
+    inputText.setScale(sf::Vector2f(.25f, .25f));
+    inputText.setString("> |");
 
     addMessage(ChatMessage(" - Console Init - ", ChatColor::ChatGreen));
 }
@@ -19,6 +28,14 @@ void ChatGui::draw(sf::RenderWindow &window)
     float height = 0.f;
     unsigned int i = 0;
     bool remove = false;
+
+    //Input text
+    height += inputText.getGlobalBounds().height + 2.f;
+    inputText.setPosition(sf::Vector2f(2.f, 160.f - height));
+    window.draw(inputText);
+
+    height += 5.f;
+
     for (sf::Text msg : messages)
     {
         height += msg.getGlobalBounds().height + 2.f;
@@ -43,7 +60,70 @@ void ChatGui::update(float dt)
 
 bool ChatGui::handleEvent(sf::Event e)
 {
+    if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::T)
+    {
+        lock = false;
+    }
+    if (e.type == sf::Event::TextEntered)
+    {
+        eventInput(e.text.unicode);
+        return true;
+    }
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)
+    {
+        if (input.length() == 0)
+            return false;
+        enterPressed = true;
+        addMessage(ChatMessage(input, ChatColor::ChatRed));
+        sentMessage = input;
+        inputText.setString("> |"); input = ""; displayInput = "";
+        return true;
+    }
     return false;
+}
+
+void ChatGui::eventInput(short unicode)
+{
+    if (lock)
+        return;
+    //Erase key
+    if(unicode == 8 && input.length() > 0)
+    {
+        if (displayInput[displayInput.length() - 1] == '\n')
+            displayInput = displayInput.substr(0, displayInput.length() - 1);
+        input = input.substr(0, input.length() - 1);
+        displayInput = displayInput.substr(0, displayInput.length() - 1);
+    }
+    else if (unicode >= 32 && input.length() < 255) //Chars below 32 are control chars
+    {
+        std::string inputt = unicodeConvert.to_bytes(unicode);
+        input += inputt;
+        displayInput += inputt;
+    }
+
+    inputText.setString("> " + displayInput + "|");
+    //Add line returns to fit in chat window
+    if (inputText.getGlobalBounds().width > 100.f)
+    {
+        displayInput.insert(displayInput.length() - 1, "\n");
+        inputText.setString("> " + displayInput + "|");
+    }
+}
+
+const std::string &ChatGui::getInputText() const {
+    return input;
+}
+
+const std::string &ChatGui::getLastMessage() const {
+    return sentMessage;
+}
+
+bool ChatGui::onEnter()
+{
+    if (!enterPressed)
+        return false;
+    enterPressed = false;
+    return true;
 }
 
 void ChatGui::addMessage(ChatMessage message)

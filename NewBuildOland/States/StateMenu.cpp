@@ -98,12 +98,12 @@ void StateMenu::handleInput()
             nicknameInput->setActive(true);
         }
         else
-            std::cout << "Multiplayer mode is still in development in this version\n" << nicknameInput->getInputText() << "\n" << addressInput->getInputText() << "\n";
+            std::cout << "Multiplayer mode is still in development in this version\nNickname : " << nicknameInput->getInputText() << "\nAddress : " << addressInput->getInputText() << "\n";
     }
     if (buttonLocal->onClick())
         game->setCurrentState(new StateGame(*game, false));
     if (buttonMultiplayer->onClick())
-        std::cout << "Multiplayer mode is still in development in this version\n" << nicknameInput->getInputText() << "\n" << addressInput->getInputText() << "\n";
+        std::cout << "Multiplayer mode is still in development in this version\nNickname : " << nicknameInput->getInputText() << "\nAddress : " << addressInput->getInputText() << "\n";
         //game->setCurrentState(new StateGame(*game, true, nicknameInput->getInputText(), addressInput->getInputText()));
 }
 

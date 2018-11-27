@@ -19,7 +19,8 @@
 StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
     StateBase(game),
 	nManager(this),
-	paused(false)
+	paused(false),
+	inChat(false)
 {
     initAssets();
 
@@ -117,12 +118,6 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
 
-    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, .0f, .5f, .9f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
-    chat->setZoneWidth(100.f);
-    chat->guiElements.push_back(std::make_unique<ChatGui>(this));
-    chatGui = (ChatGui*)chat->guiElements.back().get();
-    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(chat));
-
     //Pause menu
     pauseGuiDomain.setEnabled(false);
 
@@ -130,7 +125,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 
     GuiZone* pauseTitle = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
     pauseTitle->setZoneWidth(1700.f);
-    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, assetManager.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
+    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, GameGlobal::assets.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
     pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseTitle));
 
     GuiZone* pauseCenter = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f, ZoneHAlign::HCenter, ZoneVAlign::VTop);
@@ -142,6 +137,15 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Exit", sf::Vector2f(5, 70)));
     pauseExitButton = (GuiButton*)pauseCenter->guiElements.back().get();
     pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseCenter));
+
+    //Chat
+    chatGuiDomain.setEnabled(false);
+
+    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, 0.f, .5f, 1.f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
+    chat->setZoneWidth(100.f);
+    chat->guiElements.push_back(std::make_unique<ChatGui>(this));
+    chatGui = (ChatGui*)chat->guiElements.back().get();
+    chatGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(chat));
 }
 
 StateGame::~StateGame()
@@ -330,6 +334,7 @@ void StateGame::handleInput()
 
 void StateGame::update(float dt, bool focused)
 {
+    chatGuiDomain.update(dt, game->getWindow());
     pauseGuiDomain.update(dt, game->getWindow());
 
     if (paused && !onlineMode)
@@ -567,6 +572,7 @@ void StateGame::draw(sf::RenderWindow &window)
 
     //Draw the gui
     guiDomain.draw(window);
+    chatGuiDomain.draw(window);
     pauseGuiDomain.draw(window);
     //Draw the mouse
 	window.setView(game->getWorldView());
@@ -592,19 +598,35 @@ void StateGame::setWorld(World &world)
 
 void StateGame::handleEvent(sf::Event &event)
 {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)
-        chatGui->addMessage(ChatMessage("[Somebody] Hey!"));
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N)
-        chatGui->addMessage(ChatMessage("[A player] This is a loooong message to test the chat gui, blah blah blah blah, yes yes yes", ChatColor::ChatRed));
-
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+    if (event.type == sf::Event::KeyPressed)
     {
-        paused = !paused;
-        pauseGuiDomain.setEnabled(paused);
-        return;
+        if (!inChat && event.key.code == sf::Keyboard::T)
+        {
+            inChat = true;
+            chatGuiDomain.setEnabled(true);
+            chatGui->clearInput();
+            return;
+        }
+        if (event.key.code == sf::Keyboard::Escape)
+        {
+            if (inChat)
+            {
+                inChat = false;
+                chatGuiDomain.setEnabled(false);
+                return;
+            }
+            else
+            {
+                paused = !paused;
+                pauseGuiDomain.setEnabled(paused);
+                return;
+            }
+        }
     }
 
     if (paused && pauseGuiDomain.handleEvent(event, game->getWindow()))
+        return;
+    if (!paused && inChat && chatGuiDomain.handleEvent(event, game->getWindow()))
         return;
     if (!paused && guiDomain.handleEvent(event, game->getWindow()))
         return;

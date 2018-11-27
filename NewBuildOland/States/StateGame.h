@@ -79,13 +79,16 @@ private:
 
     GuiDomain guiDomain;
     InventoryGui *inventoryGui;
-	ChatGui *chatGui;
 
 	bool paused;
 	GuiDomain pauseGuiDomain;
     GuiButton* pauseResumeButton;
     GuiButton* pauseSettingsButton;
     GuiButton* pauseExitButton;
+
+    bool inChat;
+    GuiDomain chatGuiDomain;
+    ChatGui* chatGui;
 
     //bool inSettings;
     //GuiDomain settingsGuiDomain;
