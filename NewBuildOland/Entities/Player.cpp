@@ -7,7 +7,7 @@
 #include <math.h>
 
 Player::Player(World *world, sf::String displayName, unsigned int id)
-	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
+	: LivingEntity(world, id, 20, 72) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
 	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));

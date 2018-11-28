@@ -37,7 +37,7 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
 
 void InventoryGui::update(float dt) {
     std::stringstream s;
-    inventory->getItem(*cursorId)->getItem()->isGround();
+    inventory->getItem(*cursorId).getItem()->isGround();
 
     //Change the position of the cursor according to the cursorId
     selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36),
@@ -78,8 +78,8 @@ void InventoryGui::updateInventory() {
     //Update the items of the inventory
 
     for(unsigned int i = 0; i < inventorySlots; i++) {
-        ItemStack *itemStack = inventory->getItem(i);
-        Item *item = itemStack->getItem();
+        ItemStack itemStack = inventory->getItem(i);
+        Item *item = itemStack.getItem();
         sf::IntRect textureRect;
 
         //Get the item rect
@@ -97,7 +97,7 @@ void InventoryGui::updateInventory() {
         }
 
         //Set the quantity of the item
-        itemTexts[i]->setString(std::to_string(itemStack->getQuantity()));
+        itemTexts[i]->setString(std::to_string(itemStack.getQuantity()));
         itemTexts[i]->setPosition(34 + (i * 36) - itemTexts[i]->getLocalBounds().width, 26);
 
 

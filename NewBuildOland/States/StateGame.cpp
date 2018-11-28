@@ -214,15 +214,15 @@ void StateGame::handleInput()
                     {
                         //Remove block from player Inventory
                         Inventory *inventory = player->getInventory();
-                        ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
-                        Item *selectedItem = selectedItemStack->getItem();
+                        ItemStack& selectedItemStack = inventory->getItem(inventoryCursorId);
+                        Item *selectedItem = selectedItemStack.getItem();
 
                             //If it isn't empty, and is a placeable
-                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable())
+                        if(!selectedItemStack.isEmpty() && selectedItem->isPlaceable())
                         {
                             bool isGround = selectedItem->isGround();
                             //We remove an item (that was placed)
-                            selectedItemStack->remove();
+                            selectedItemStack.remove();
                             //Get the id from the tileset
                             unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
                                                                     : tileset.getBlockIdByName(selectedItem->getName());

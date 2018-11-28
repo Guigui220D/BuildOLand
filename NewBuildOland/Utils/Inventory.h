@@ -6,17 +6,17 @@
 class Inventory {
 public:
     Inventory(unsigned short size);
+    ~Inventory();
 
-    void setItem(unsigned short pos, ItemStack itemStack);
     bool addItem(ItemStack itemStack);
     void clearInventory();
 
-    ItemStack* getItem(unsigned short pos);
+    ItemStack& getItem(unsigned short pos);
 
     unsigned short getSize() const;
 
 private:
-    std::vector<ItemStack> inventory;
+    ItemStack* inventory;
     unsigned short size;
 };
 
