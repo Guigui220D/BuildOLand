@@ -14,6 +14,8 @@ public:
 	sf::Color getColor();
 	sf::IntRect getTextureRect();
 
+    virtual sf::IntRect getItemTextureRect() const override;
+
 	virtual void onPlaceableEnter(PlaceableEnterEvent e);
 	virtual void onPlaceableLeave(PlaceableLeaveEvent e);
 

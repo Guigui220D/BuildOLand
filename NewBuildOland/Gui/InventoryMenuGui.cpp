@@ -7,7 +7,8 @@
 
 InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inventory* inv) :
     Gui((StateBase*)stateGame),
-    inventory(inv)
+    inventory(inv),
+    size(size)
 {
     assert(size.x > 0 && size.y > 0 && size.y <= 8 && size.x <= 8);
     assert(size.x * size.y <= inv->getSize());
@@ -37,11 +38,14 @@ InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inve
     }
 
     backgroundSprite.setTexture(background);
+
+    updateContent();
 }
 
 void InventoryMenuGui::draw(sf::RenderWindow& window)
 {
     window.draw(backgroundSprite);
+    window.draw(contentSprite);
 }
 
 void InventoryMenuGui::update(float dt)
@@ -60,4 +64,34 @@ bool InventoryMenuGui::handleEvent(sf::Event e)
         }
     }
     return false;
+}
+
+void InventoryMenuGui::updateContent()
+{
+    //Render content
+    {
+        sf::RenderTexture rd;
+        rd.create(size.x * 40, size.y * 40);
+        rd.clear(sf::Color::Transparent);
+
+        sf::Sprite itemSprite;
+        itemSprite.setTexture(*GameGlobal::assets.getTexture("TILESET"));
+
+        unsigned int i;
+        for (unsigned int x = 0; x < size.x; x++)
+        for (unsigned int y = 0; y < size.y; y++)
+        {
+            i = x + y * size.x;
+            ItemStack itemStack = inventory->getItem(i);
+
+            itemSprite.setTextureRect(itemStack.getItem()->getItemTextureRect());
+            itemSprite.setPosition(sf::Vector2f(x * 40.f + 4.f, y * 40.f + 4.f));
+            rd.draw(itemSprite);
+        }
+
+        rd.display();
+        content = rd.getTexture();
+    }
+
+    contentSprite.setTexture(content);
 }

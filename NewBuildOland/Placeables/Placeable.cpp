@@ -23,6 +23,11 @@ sf::IntRect Placeable::getTextureRect()
 	return textureRect;
 }
 
+sf::IntRect Placeable::getItemTextureRect() const
+{
+    return textureRect;
+}
+
 void Placeable::onPlaceableEnter(PlaceableEnterEvent e)
 {
 }

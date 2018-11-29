@@ -7,7 +7,7 @@
 #include <math.h>
 
 Player::Player(World *world, sf::String displayName, unsigned int id)
-	: LivingEntity(world, id, 20, 72) //Player's id client side is always 0, because it doesn't matter
+	: LivingEntity(world, id, 20, 64) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
 	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));
@@ -23,14 +23,16 @@ void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
     TileSet* tileset = game->getTileset();
+
     inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(0), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
-    inventory->addItem(ItemStack(tileset->getGroundById(2), 120));
+    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(3), 100));
 }
 
 void Player::updateMovement(float dt) {

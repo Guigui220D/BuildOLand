@@ -29,6 +29,8 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
         text->setCharacterSize(8);
         //No need for setting the position now, as we need to change it according to the length of the text
         itemTexts.push_back(text);
+
+        itemSprites[i]->setTexture(*GameGlobal::assets.getTexture("TILESET"));
     }
 
 
@@ -76,31 +78,15 @@ void InventoryGui::draw(sf::RenderWindow &window) {
 void InventoryGui::updateInventory() {
 
     //Update the items of the inventory
-
     for(unsigned int i = 0; i < inventorySlots; i++) {
         ItemStack itemStack = inventory->getItem(i);
-        Item *item = itemStack.getItem();
-        sf::IntRect textureRect;
 
         //Get the item rect
-        if(item->isPlaceable()) {
-            if(item->isGround()) {
-                textureRect = stateGame->getTileset()->getGroundByName(item->getName())->getTextureRect();
-            } else {
-                textureRect = stateGame->getTileset()->getBlockByName(item->getName())->getTextureRect();
-            }
-
-            itemSprites[i]->setTextureRect(textureRect);
-            itemSprites[i]->setTexture(*stateGame->getTileset()->getTexture());
-        } else {
-            itemSprites[i]->setTextureRect(sf::IntRect(0, 0, 0, 0));
-        }
+        itemSprites[i]->setTextureRect(itemStack.getItem()->getItemTextureRect());
 
         //Set the quantity of the item
         itemTexts[i]->setString(std::to_string(itemStack.getQuantity()));
         itemTexts[i]->setPosition(34 + (i * 36) - itemTexts[i]->getLocalBounds().width, 26);
-
-
     }
 }
 

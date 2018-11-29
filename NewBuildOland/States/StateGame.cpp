@@ -236,6 +236,7 @@ void StateGame::handleInput()
                             //Get the id from the tileset
                             unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
                                                                     : tileset.getBlockIdByName(selectedItem->getName());
+
                             if(isGround)
                             {
                                 //Get the old ground
