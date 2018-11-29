@@ -1,6 +1,4 @@
-
 #pragma once
-
 
 #include <vector>
 #include "Gui.h"
@@ -13,7 +11,6 @@ public:
     InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId);
 
     void draw(sf::RenderWindow &window) override;
-
     void update(float dt) override;
 
     void updateInventory();

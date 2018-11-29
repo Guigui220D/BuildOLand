@@ -14,6 +14,7 @@
 
 #include "../Gui/Gui.h"
 #include "../Gui/InventoryGui.h"
+#include "../Gui/InventoryMenuGui.h"
 #include "../Gui/ChatGui.h"
 #include "../Gui/GuiShroud.h"
 #include "../Gui/GuiButton.h"
@@ -75,10 +76,12 @@ private:
 
 	TileSet tileset;
 
-	Player *player;
+	Player* player;
 
     GuiDomain guiDomain;
-    InventoryGui *inventoryGui;
+    InventoryGui* inventoryGui;
+    bool inInventory;
+    GuiZone* inventoryZone;
 
 	bool paused;
 	GuiDomain pauseGuiDomain;
@@ -89,6 +92,8 @@ private:
     bool inChat;
     GuiDomain chatGuiDomain;
     ChatGui* chatGui;
+
+    inline bool inGame() const { return !(paused || inChat || inInventory); }
 
     //bool inSettings;
     //GuiDomain settingsGuiDomain;

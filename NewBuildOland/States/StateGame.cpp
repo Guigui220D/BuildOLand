@@ -9,7 +9,6 @@
 #include "../Worlds/NetworkWorld.h"
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "../Gui/FpsCounter.h"
-#include "../Gui/InventoryGui.h"
 #include "../Events/EventManager.h"
 
 #include "../Gui/GuiSprite.h"
@@ -19,6 +18,7 @@
 StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
     StateBase(game),
 	nManager(this),
+    inInventory(false),
 	paused(false),
 	inChat(false)
 {
@@ -118,6 +118,12 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
 
+    inventoryZone = new GuiZone(sf::FloatRect(.25f, 0.f, .5f, 1.f), 1.f);
+    inventoryZone->setZoneHeight(320.f);
+    inventoryZone->setEnabled(false);
+    inventoryZone->guiElements.push_back(std::make_unique<InventoryMenuGui>(this, sf::Vector2u(8, 8), player->getInventory()));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryZone));
+
     //Pause menu
     pauseGuiDomain.setEnabled(false);
 
@@ -174,6 +180,7 @@ void StateGame::initAssets()
     assetManager.loadTextureFromFile("hand.png", "HAND");
     assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
     assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
+    assetManager.loadTextureFromFile("inventorySlot.png", "INVENTORY_SLOT");
     assetManager.loadTextureFromFile("pause.png", "PAUSE");
 }
 
@@ -192,6 +199,9 @@ void StateGame::handleInput()
             game->setCurrentState(new StateMenu(*game));
         return;
     }
+
+    if (!inGame())
+        return;
 	//Temporary, for testing
 	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -316,24 +326,16 @@ void StateGame::handleInput()
 	} else {
 		isPlaceKeyPressed = false;
 	}
-
-
-	//For showing the tchat writing bar
-	/*
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-		if(!chatGui->isActive()) {
-			chatGui->setIsActive(true);
-		}
-	} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-		if(chatGui->isActive()) {
-			chatGui->setIsActive(false);
-		}
-	}
-    */
 }
 
 void StateGame::update(float dt, bool focused)
 {
+    if (!game->getWindow().hasFocus())
+    {
+        paused = true;
+        pauseGuiDomain.setEnabled(true);
+    }
+
     chatGuiDomain.update(dt, game->getWindow());
     pauseGuiDomain.update(dt, game->getWindow());
 
@@ -342,7 +344,7 @@ void StateGame::update(float dt, bool focused)
 
     currentWorld->updateChunks(dt);
 
-    if (focused) { player->update(dt); }
+    if (focused && inGame()) { player->update(dt); }
 
 	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world
@@ -505,7 +507,7 @@ void StateGame::draw(sf::RenderWindow &window)
     }
 
 	//Draw block highlighter
-	if (game->getWindow().hasFocus() && !paused)
+	if (inGame())
 	{
 		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
@@ -600,25 +602,42 @@ void StateGame::handleEvent(sf::Event &event)
 {
     if (event.type == sf::Event::KeyPressed)
     {
-        if (!inChat && event.key.code == sf::Keyboard::T)
-        {
-            inChat = true;
-            chatGuiDomain.setEnabled(true);
-            chatGui->clearInput();
-            return;
-        }
         if (event.key.code == sf::Keyboard::Escape)
         {
+            if (paused)
+            {
+                paused = false;
+            }
+            else if (!inChat && !inInventory)
+            {
+                paused = true;
+            }
             if (inChat)
             {
                 inChat = false;
-                chatGuiDomain.setEnabled(false);
+            }
+            if (inInventory)
+            {
+                inInventory = false;
+            }
+            pauseGuiDomain.setEnabled(paused);
+            chatGuiDomain.setEnabled(inChat);
+            inventoryZone->setEnabled(inInventory);
+            return;
+        }
+        if (inGame())
+        {
+            if (event.key.code == sf::Keyboard::T)
+            {
+                inChat = true;
+                chatGuiDomain.setEnabled(true);
+                chatGui->clearInput();
                 return;
             }
-            else
+            if (event.key.code == sf::Keyboard::E)
             {
-                paused = !paused;
-                pauseGuiDomain.setEnabled(paused);
+                inInventory = true;
+                inventoryZone->setEnabled(true);
                 return;
             }
         }
@@ -626,10 +645,12 @@ void StateGame::handleEvent(sf::Event &event)
 
     if (paused && pauseGuiDomain.handleEvent(event, game->getWindow()))
         return;
-    if (!paused && inChat && chatGuiDomain.handleEvent(event, game->getWindow()))
+    if (inChat && chatGuiDomain.handleEvent(event, game->getWindow()))
         return;
-    if (!paused && guiDomain.handleEvent(event, game->getWindow()))
+    if (!paused && !inChat && guiDomain.handleEvent(event, game->getWindow()))
         return;
+
+
     switch (event.type) {
         //SCROLL EVENT
         case sf::Event::MouseWheelScrolled:
