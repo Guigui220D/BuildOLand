@@ -8,104 +8,98 @@
 #include "../Placeables/ClosedDoorBlock.h"
 #include "../Placeables/BlinkerBlock.h"
 #include <iostream>
-#include <math.h>
 //This is the tileset class that allows to get textures from a block id
 //All the tilsets should be in Res/
 
 TileSet::TileSet()
 {
-	texture = sf::Texture();
+    tileset = GameGlobal::assets.getTexture("TILESET");
 	generateBlocks();
 	generateGrounds();
+}
 
-	texture = *GameGlobal::assets.getTexture("TILESET");
+TileSet::~TileSet()
+{
+    for (Block* b : blocks)
+        delete b;
+    for (Ground* g : grounds)
+        delete g;
+}
+
+void TileSet::addTile(Placeable* tile)
+{
+    std::string name = tile->getName();
+    if (tile->isGround())
+    {
+        if (groundNames.find(name) == blockNames.end())
+        {
+            Ground* ground = (Ground*)tile;
+            //Add the ground
+            grounds.push_back(ground);
+            unsigned short id = grounds.size() - 1;
+            //Add the name in the map
+            groundNames.emplace(std::pair<std::string, unsigned short>(name, id));
+        }
+        else
+            std::cerr << "A ground with the name \"" << name <<"\" already exists, could not add it.\n";
+    }
+    else
+    {
+        if (blockNames.find(name) == blockNames.end())
+        {
+            Block* block = (Block*)tile;
+            //Add the block
+            blocks.push_back(block);
+            unsigned short id = blocks.size() - 1;
+            //Add the name in the map
+            blockNames.emplace(std::pair<std::string, unsigned short>(name, id));
+        }
+        else
+            std::cerr << "A block with the name \"" << name <<"\" already exists, could not add it.\n";
+    }
+    return;
 }
 
 void TileSet::generateBlocks()
 {
-	blocks.push_back(new Block(rectById(1), "AIR",				sf::Color(90, 70, 50),	false, false));                 //0
-	blocks.push_back(new Block(rectById(7), "LOG",				sf::Color(135, 90, 30),	true, true, rectById(12)));     //1
-	blocks.push_back(new Block(rectById(6), "BRICK",			sf::Color(90, 90, 90),	true));                         //2
-	blocks.push_back(new Block(rectById(5), "CONCRETE",			sf::Color(90, 90, 90),	true));                         //3
-	blocks.push_back(new Block(rectById(15), "METAL",			sf::Color(200, 200, 200),true));                        //4
-	blocks.push_back(new Block(rectById(16), "GOLD",			sf::Color(255, 255, 200),true));                        //5
-	blocks.push_back(new TNTBlock(rectById(17), rectById(18)));                                                         //6
-    blocks.push_back(new ClosedDoorBlock(rectById(22), rectById(20)));                                                  //7
-    blocks.push_back(new OpenDoorBlock(rectById(23), rectById(21)));                                                    //8
-	blocks.push_back(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));                 //9
-	blocks.push_back(new BlockSaver(rectById(10)));                                                                     //10
-	blocks.push_back(new BlockTeleporter(rectById(11)));                                                                //11
-	blocks.push_back(new BlinkerBlock(rectById(17), rectById(12)));                                                     //12
+	addTile(new Block(rectById(1), "AIR",				sf::Color(90, 70, 50),	false, false));                 //0
+	addTile(new Block(rectById(7), "LOG",				sf::Color(135, 90, 30),	true, true, rectById(12)));     //1
+	addTile(new Block(rectById(6), "BRICK",			    sf::Color(90, 90, 90),	true));                         //2
+	addTile(new Block(rectById(5), "CONCRETE",			sf::Color(90, 90, 90),	true));                         //3
+	addTile(new Block(rectById(15), "METAL",			sf::Color(200, 200, 200),true));                        //4
+	addTile(new Block(rectById(16), "GOLD",			    sf::Color(255, 255, 200),true));                        //5
+	addTile(new TNTBlock(rectById(17), rectById(18)));                                                         //6
+    addTile(new ClosedDoorBlock(rectById(22), rectById(20)));                                                  //7
+    addTile(new OpenDoorBlock(rectById(23), rectById(21)));                                                    //8
+	addTile(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));                 //9
+	addTile(new BlockSaver(rectById(10)));                                                                     //10
+	addTile(new BlockTeleporter(rectById(11)));                                                                //11
+	addTile(new BlinkerBlock(rectById(17), rectById(12)));                                                     //12
 
 }
 
 void TileSet::generateGrounds()
 {
-	grounds.push_back(new GroundGrass(rectById(2)));
-	grounds.push_back(new Ground(rectById(3), "SAND", sf::Color(215, 215, 60)));
-	grounds.push_back(new Ground(rectById(4), "WATER", sf::Color(60, 90, 210)));
-	grounds.push_back(new Ground(rectById(5), "CONCRETE", sf::Color(155, 155, 155)));
-	grounds.push_back(new WornConcrete(rectById(19), "WORN_CONCRETE", sf::Color(135, 135, 135)));
+	addTile(new GroundGrass(rectById(2)));
+	addTile(new Ground(rectById(3), "SAND", sf::Color(215, 215, 60)));
+	addTile(new Ground(rectById(4), "WATER", sf::Color(60, 90, 210)));
+	addTile(new Ground(rectById(5), "CONCRETE", sf::Color(155, 155, 155)));
+	addTile(new WornConcrete(rectById(19), "WORN_CONCRETE", sf::Color(135, 135, 135)));
 }
 
-sf::IntRect TileSet::rectById(unsigned int tilesetId)
+sf::IntRect TileSet::getBlockSideRect(unsigned int id) const
 {
-	//Creates an IntRect where the texture is according to the nth texture of the tileset
-	return sf::IntRect(tilesetId % TILES_IN_ROW * (TILE_SIZE + 2) + 1, (int)floorf(tilesetId / TILES_IN_ROW) * (TILE_SIZE + 2) + 1, TILE_SIZE, TILE_SIZE);
-
-}
-
-TileSet::~TileSet()
-{
-}
-
-sf::IntRect TileSet::getGroundRect(unsigned int id)
-{
-
-	if (id < grounds.size()) {
-		return grounds[id]->getTextureRect();
-	}
-	return errorRect;
-}
-
-sf::IntRect TileSet::getBlockRect(unsigned int id)
-{
-
-	if (id < blocks.size()) {
-		return blocks[id]->getTextureRect();
-	}
-	return errorRect;
-}
-
-sf::IntRect TileSet::getBlockSideRect(unsigned int id)
-{
-	if (id < blocks.size()) {
-		sf::IntRect side = blocks[id]->getSideRect();
+	if (id < blocks.size())
+    {
+		sf::IntRect side = blocks.at(id)->getSideRect();
 		if (side == sf::IntRect())
-			return blocks[id]->getTextureRect();
+			return blocks.at(id)->getTextureRect();
 		return side;
 	}
 	return errorRect;
 }
 
-Ground* TileSet::getGroundById(unsigned int id) {
-	return grounds[id];
-}
-
-Block* TileSet::getBlockById(unsigned int id) {
-	return blocks[id];
-}
-
-Block *TileSet::getBlockByName(std::string name) {
-	return getBlockById(getBlockIdByName(name));
-}
-
-Ground *TileSet::getGroundByName(std::string name) {
-	return getGroundById(getGroundIdByName(name));
-}
-
-
-sf::Color TileSet::getMapPixel(unsigned int groundId, unsigned int blockId)
+sf::Color TileSet::getMapPixel(unsigned int groundId, unsigned int blockId) const
 {
 	if (blockId > 0 && blockId < blocks.size())
 		return blocks[blockId]->getColor();
@@ -114,44 +108,14 @@ sf::Color TileSet::getMapPixel(unsigned int groundId, unsigned int blockId)
 	return errorColor;
 }
 
-sf::Color TileSet::getSideTint(unsigned int id)
+unsigned short TileSet::getBlockIdByName(const std::string name) const
 {
-	if (id < blocks.size()) {
-		return blocks[id]->getSideTint();
-	}
-	return sf::Color::White;
+    auto i = blockNames.find(name);
+    return (i != blockNames.end()) ? (i->second) : 0;
 }
 
-sf::Texture* TileSet::getTexture()
+unsigned short TileSet::getGroundIdByName(const std::string name) const
 {
-	return &texture;
-}
-
-unsigned int TileSet::getTotalBlockNb()
-{
-	return blocks.size();
-}
-unsigned int TileSet::getTotalGroundNb()
-{
-	return blocks.size();
-}
-
-unsigned short TileSet::getBlockIdByName(std::string name) {
-	for(unsigned short i = 0; i < blocks.size(); i++) {
-		if(blocks[i]->getName() == name) {
-			return i;
-		}
-	}
-
-	return 0;
-}
-
-unsigned short TileSet::getGroundIdByName(std::string name) {
-	for(unsigned short i = 0; i < grounds.size(); i++) {
-		if(grounds[i]->getName() == name) {
-			return i;
-		}
-	}
-
-	return 0;
+    auto i = groundNames.find(name);
+    return ((i != groundNames.end()) ? (i->second) : 0);
 }
