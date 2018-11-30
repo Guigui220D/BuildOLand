@@ -22,9 +22,14 @@ public:
 	bool isPlaceable() override;
 	bool isGround() override = 0;
 
+	inline void setTileId(unsigned short identifier) { tileId = identifier; }
+	inline unsigned short getTileId() const { return tileId; }
+
 protected:
 	//Used to get the right texture from the tileset
 	sf::IntRect textureRect;
 	sf::Color mapColor;
+
+	unsigned short tileId = 0;
 };
 

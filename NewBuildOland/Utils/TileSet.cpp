@@ -37,6 +37,7 @@ void TileSet::addTile(Placeable* tile)
             //Add the ground
             grounds.push_back(ground);
             unsigned short id = grounds.size() - 1;
+            ground->setId(id);
             //Add the name in the map
             groundNames.emplace(std::pair<std::string, unsigned short>(name, id));
         }
@@ -51,6 +52,7 @@ void TileSet::addTile(Placeable* tile)
             //Add the block
             blocks.push_back(block);
             unsigned short id = blocks.size() - 1;
+            block->setId(id);
             //Add the name in the map
             blockNames.emplace(std::pair<std::string, unsigned short>(name, id));
         }

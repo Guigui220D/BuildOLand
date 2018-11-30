@@ -234,8 +234,7 @@ void StateGame::handleInput()
                             //We remove an item (that was placed)
                             selectedItemStack.remove();
                             //Get the id from the tileset
-                            unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
-                                                                    : tileset.getBlockIdByName(selectedItem->getName());
+                            unsigned short placeableId = selectedItem->
 
                             if(isGround)
                             {

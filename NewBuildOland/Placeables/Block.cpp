@@ -1,8 +1,9 @@
 #include "Block.h"
 #include "../Events/EventManager.h"
 
-Block::Block(sf::IntRect textureRect, std::string name, sf::Color mapColor, bool hasHitbox, bool hasVolume, sf::IntRect side) : Placeable(textureRect, name, mapColor)
-, mHasHitbox(hasHitbox), mHasVolume(hasVolume), sideRect(side)
+Block::Block(sf::IntRect textureRect, std::string name, sf::Color mapColor, bool hasHitbox, bool hasVolume, sf::IntRect side) :
+    Placeable(textureRect, name, mapColor),
+    mHasHitbox(hasHitbox), mHasVolume(hasVolume), sideRect(side)
 {
 }
 
