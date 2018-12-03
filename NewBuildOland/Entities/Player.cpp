@@ -83,13 +83,13 @@ void Player::updateMovement(float dt) {
 std::string Player::getTextureName() {
     return "CHARACTERS_SHEET_1";
 }
-std::vector<IntRect> Player::getIdleAnim() {
+std::vector<sf::IntRect> Player::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
     idleAnim.push_back(sf::IntRect(37, 9, 32, 32));
 
     return idleAnim;
 }
-std::vector<IntRect> Player::getNorthWalkAnim() {
+std::vector<sf::IntRect> Player::getNorthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(5, 105, 32, 32));
@@ -99,7 +99,7 @@ std::vector<IntRect> Player::getNorthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getSouthWalkAnim() {
+std::vector<sf::IntRect> Player::getSouthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -110,7 +110,7 @@ std::vector<IntRect> Player::getSouthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getEastWalkAnim() {
+std::vector<sf::IntRect> Player::getEastWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -121,7 +121,7 @@ std::vector<IntRect> Player::getEastWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getWestWalkAnim() {
+std::vector<sf::IntRect> Player::getWestWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(5, 41, 32, 32));

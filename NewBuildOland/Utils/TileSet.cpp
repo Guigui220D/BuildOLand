@@ -37,12 +37,12 @@ void TileSet::addTile(Placeable* tile)
             //Add the ground
             grounds.push_back(ground);
             unsigned short id = grounds.size() - 1;
-            ground->setId(id);
+            ground->setTileId(id);
             //Add the name in the map
             groundNames.emplace(std::pair<std::string, unsigned short>(name, id));
         }
         else
-            std::cerr << "A ground with the name \"" << name <<"\" already exists, could not add it.\n";
+            std::cerr << "A ground with the name \"" << name << "\" already exists, could not add it.\n";
     }
     else
     {
@@ -52,7 +52,7 @@ void TileSet::addTile(Placeable* tile)
             //Add the block
             blocks.push_back(block);
             unsigned short id = blocks.size() - 1;
-            block->setId(id);
+            block->setTileId(id);
             //Add the name in the map
             blockNames.emplace(std::pair<std::string, unsigned short>(name, id));
         }

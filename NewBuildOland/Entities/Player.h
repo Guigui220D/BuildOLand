@@ -25,11 +25,11 @@ private:
 
 protected:
 	std::string getTextureName() override;
-	std::vector<IntRect> getIdleAnim() override;
-	std::vector<IntRect> getNorthWalkAnim() override;
-	std::vector<IntRect> getSouthWalkAnim() override;
-	std::vector<IntRect> getEastWalkAnim() override;
-	std::vector<IntRect> getWestWalkAnim() override;
+	std::vector<sf::IntRect> getIdleAnim() override;
+	std::vector<sf::IntRect> getNorthWalkAnim() override;
+	std::vector<sf::IntRect> getSouthWalkAnim() override;
+	std::vector<sf::IntRect> getEastWalkAnim() override;
+	std::vector<sf::IntRect> getWestWalkAnim() override;
 
 	void updateMovement(float dt) override;
 

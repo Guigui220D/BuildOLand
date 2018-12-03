@@ -18,12 +18,12 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
     //Load the item images
     for(unsigned i = 0; i < inventorySlots; i++){
         //Place the sprite correctly
-        sf::Sprite* item = new Sprite();
+        sf::Sprite* item = new sf::Sprite();
         item->setPosition(i * 36 + 4, 4);
         itemSprites.push_back(item);
 
         //And place the text correctly
-        sf::Text* text = new Text();
+        sf::Text* text = new sf::Text();
         text->setFont(*stateGame->getAssetManager()->getFont("AKASHI"));
         text->setFillColor(sf::Color::White);
         text->setCharacterSize(8);

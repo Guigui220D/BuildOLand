@@ -69,7 +69,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	backgroundAmbiance->play();
 
 	//Init all the drawers
-	mapView = View();
+	mapView = sf::View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
 	mapFrame = sf::RectangleShape();
 	mapFrame.setFillColor(sf::Color::Black);
@@ -122,6 +122,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     inventoryZone->setZoneHeight(320.f);
     inventoryZone->setEnabled(false);
     inventoryZone->guiElements.push_back(std::make_unique<InventoryMenuGui>(this, sf::Vector2u(8, 8), player->getInventory()));
+    inventoryMenu = (InventoryMenuGui*)inventoryZone->guiElements.back().get();
     guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryZone));
 
     //Pause menu
@@ -200,8 +201,7 @@ void StateGame::handleInput()
         return;
     }
 
-    if (!inGame())
-        return;
+    if (!inGame()) return;
 	//Temporary, for testing
 	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -209,12 +209,12 @@ void StateGame::handleInput()
 		if (!rightClicking)
 		{
 			//Gets the mouse pos in the window
-			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
 				game->getWindow().setView(game->getWorldView());
-				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player->getPosition();
+				sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				sf::Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
@@ -227,14 +227,15 @@ void StateGame::handleInput()
                         ItemStack& selectedItemStack = inventory->getItem(inventoryCursorId);
                         Item *selectedItem = selectedItemStack.getItem();
 
-                            //If it isn't empty, and is a placeable
+                        //If it isn't empty, and is a placeable
                         if(!selectedItemStack.isEmpty() && selectedItem->isPlaceable())
                         {
-                            bool isGround = selectedItem->isGround();
                             //We remove an item (that was placed)
                             selectedItemStack.remove();
                             //Get the id from the tileset
-                            unsigned short placeableId = selectedItem->
+                            Placeable* tile = (Placeable*)selectedItem;
+                            bool isGround = tile->isGround();
+                            unsigned short placeableId = tile->getTileId();
 
                             if(isGround)
                             {
@@ -277,12 +278,12 @@ void StateGame::handleInput()
 		if (!leftClicking)
 		{
 			//Gets the mouse pos in the window
-			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
 				game->getWindow().setView(game->getWorldView());
-				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player->getPosition();
+				sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				sf::Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
@@ -332,6 +333,10 @@ void StateGame::update(float dt, bool focused)
 {
     if (!game->getWindow().hasFocus())
     {
+        inChat = false;
+        inInventory = false;
+        chatGuiDomain.setEnabled(false);
+        inventoryZone->setEnabled(false);
         paused = true;
         pauseGuiDomain.setEnabled(true);
     }
@@ -509,11 +514,11 @@ void StateGame::draw(sf::RenderWindow &window)
 	//Draw block highlighter
 	if (inGame())
 	{
-		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+		sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
-			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			Vector2f diff = posInView - player->getPosition();
+			sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+			sf::Vector2f diff = posInView - player->getPosition();
 			int clickX = (int)roundf(posInView.x / TILE_SIZE);
 			int clickY = (int)roundf(posInView.y / TILE_SIZE);
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
@@ -578,8 +583,8 @@ void StateGame::draw(sf::RenderWindow &window)
     pauseGuiDomain.draw(window);
     //Draw the mouse
 	window.setView(game->getWorldView());
-	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
-	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
+	sf::Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
+	sf::Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
 	mouse.setPosition(sf::Vector2f(onGui.x, onGui.y));
 	window.draw(mouse);
 }
@@ -636,6 +641,7 @@ void StateGame::handleEvent(sf::Event &event)
             }
             if (event.key.code == sf::Keyboard::E)
             {
+                inventoryMenu->updateContent();
                 inInventory = true;
                 inventoryZone->setEnabled(true);
                 return;

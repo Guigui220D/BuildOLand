@@ -48,7 +48,7 @@ void TNTEntity::takePacket(sf::Packet p)
 
 void TNTEntity::explode(sf::Vector2i center)
 {
-    Sound* boomSound = new Sound();
+    sf::Sound* boomSound = new sf::Sound();
     game->getAssetManager()->addPlayingSound(boomSound);
     boomSound->setBuffer(*game->getAssetManager()->getSound("EXPLOSION"));
     boomSound->setVolume(20);

@@ -82,6 +82,7 @@ private:
     InventoryGui* inventoryGui;
     bool inInventory;
     GuiZone* inventoryZone;
+    InventoryMenuGui* inventoryMenu;
 
 	bool paused;
 	GuiDomain pauseGuiDomain;
