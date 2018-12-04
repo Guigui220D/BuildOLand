@@ -39,6 +39,8 @@ InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inve
 
     backgroundSprite.setTexture(background);
 
+    selectedSprite.setTexture(*stateBase->getAssetManager()->getTexture("SELECTED_SLOT"));
+
     updateContent();
 }
 
@@ -46,6 +48,8 @@ void InventoryMenuGui::draw(sf::RenderWindow& window)
 {
     window.draw(backgroundSprite);
     window.draw(contentSprite);
+    if (selected.x != -1)
+        window.draw(selectedSprite);
 }
 
 void InventoryMenuGui::update(float dt)
@@ -58,7 +62,23 @@ bool InventoryMenuGui::handleEvent(sf::Event e)
         sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
         if (backgroundSprite.getGlobalBounds().contains(mousePos))
         {
-            sf::Vector2u slot(mousePos.x / 40.f, mousePos.y / 40.f);
+            sf::Vector2i slot(mousePos.x / 40.f, mousePos.y / 40.f);
+            if (slot != selected)
+            {
+                if (selected.x != -1)
+                {
+                    //Swap items
+                    ItemStack temp = inventory->getItem(selected.x + selected.y * size.x);
+                    inventory->getItem(selected.x + selected.y * size.x) = inventory->getItem(slot.x + slot.y * size.x);
+                    inventory->getItem(slot.x + slot.y * size.x) = temp;
+                    updateContent();
+                }
+                else
+                    selected = slot;
+            }
+            else
+                selected = sf::Vector2i(-1, -1);
+            selectedSprite.setPosition(sf::Vector2f(selected.x * 40.f, selected.y * 40.f));
             std::cout << "Inventry clicked (slot " << slot.x << ", " << slot.y << ")\n";
             return true;
         }
@@ -94,4 +114,5 @@ void InventoryMenuGui::updateContent()
     }
 
     contentSprite.setTexture(content);
+    selected = sf::Vector2i(-1, -1);
 }

@@ -51,8 +51,9 @@ void ItemStack::add(unsigned int quantity) {
 void ItemStack::remove(unsigned int quantity) {
     ItemStack::quantity -= quantity;
 
-    if(quantity < 0) {
+    if(quantity <= 0) {
         ItemStack::quantity = 0;
+        item = new ItemAir();
     }
 }
 

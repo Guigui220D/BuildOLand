@@ -27,7 +27,11 @@ class InventoryMenuGui : public Gui
         sf::Texture content;
         sf::Sprite contentSprite;
 
+        sf::Sprite selectedSprite;
+
         sf::Vector2u size;
+
+        sf::Vector2i selected = sf::Vector2i(-1, -1);
 
     private:
 };
