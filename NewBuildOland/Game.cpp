@@ -10,7 +10,7 @@ Game::Game() :
 {
     initGlobalAssets();
 
-	Image icon;
+	sf::Image icon;
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256, 256, icon.getPixelsPtr());
 
@@ -40,8 +40,8 @@ void Game::initGlobalAssets()
 
 void Game::run()
 {
-	sf::Clock clk = Clock();
-	sf::Clock fpsClk = Clock();
+	sf::Clock clk = sf::Clock();
+	sf::Clock fpsClk = sf::Clock();
 	int count = 0;
 	focused = window.hasFocus();
 	//Start the game loop
@@ -132,8 +132,9 @@ StateBase* Game::getCurrentState() {
 }
 
 void Game::setCurrentState(StateBase *state) {
+    //Reset the view
+    getWorldView().setCenter(sf::Vector2f());
 	delete currentState;
-
 	currentState = state;
 }
 

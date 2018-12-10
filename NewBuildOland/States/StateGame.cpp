@@ -624,6 +624,7 @@ void StateGame::handleEvent(sf::Event &event)
             if (inInventory)
             {
                 inInventory = false;
+                inventoryGui->updateInventory();
             }
             pauseGuiDomain.setEnabled(paused);
             chatGuiDomain.setEnabled(inChat);
@@ -641,6 +642,7 @@ void StateGame::handleEvent(sf::Event &event)
             }
             if (event.key.code == sf::Keyboard::E)
             {
+                inventoryGui->updateInventory();
                 inventoryMenu->updateContent();
                 inInventory = true;
                 inventoryZone->setEnabled(true);

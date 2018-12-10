@@ -3,7 +3,6 @@
 #include "../States/StateGame.h"
 
 #include <assert.h>
-#include <iostream>
 
 InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inventory* inv) :
     Gui((StateBase*)stateGame),
@@ -17,7 +16,7 @@ InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inve
     {
         sf::RenderTexture rd;
         rd.create(size.x * 40, size.y * 40);
-        rd.clear(sf::Color::Transparent);
+        rd.clear(sf::Color(0, 0, 0, 127));
 
         sf::Sprite slot;
         slot.setTexture(*stateBase->getAssetManager()->getTexture("INVENTORY_SLOT"));
@@ -79,7 +78,6 @@ bool InventoryMenuGui::handleEvent(sf::Event e)
             else
                 selected = sf::Vector2i(-1, -1);
             selectedSprite.setPosition(sf::Vector2f(selected.x * 40.f, selected.y * 40.f));
-            std::cout << "Inventry clicked (slot " << slot.x << ", " << slot.y << ")\n";
             return true;
         }
     }

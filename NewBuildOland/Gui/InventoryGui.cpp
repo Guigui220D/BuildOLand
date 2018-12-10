@@ -38,7 +38,6 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
 }
 
 void InventoryGui::update(float dt) {
-    std::stringstream s;
     inventory->getItem(*cursorId).getItem()->isGround();
 
     //Change the position of the cursor according to the cursorId
