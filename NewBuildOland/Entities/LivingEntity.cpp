@@ -60,35 +60,23 @@ void LivingEntity::update(float dt) {
 
 void LivingEntity::selectAnimation() {
     //Choice of animation
-    switch (movement)
-    {
-        case 1:
-            animations.selectAnimation(1);
-            break;
-        case 2:
-            animations.selectAnimation(2);
-            break;
-        case 4:
-        case 5:
-        case 6:
-            animations.selectAnimation(3);
-            break;
-        case 8:
-        case 9:
-        case 10:
-            animations.selectAnimation(4);
-            break;
-        default:
-            animations.selectAnimation(0);
-            break;
-    }
+    int anim = 0;
+    if (movement & 0b1000)
+        anim = 4;
+    if (movement & 0b0100)
+        anim = 3;
+    if (movement & 0b0010)
+        anim = 2;
+    if (movement & 0b0001)
+        anim = 1;
+    animations.selectAnimation(anim);
 }
 
 void LivingEntity::moveNorth(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x, oldpos.y - EntitySpeed * dt));
 
-    movement += 1;
+    movement += 1 << 0;
 
     //Reset move if it touches block
     if (touchesBlock())
@@ -98,7 +86,7 @@ void LivingEntity::moveSouth(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x, oldpos.y + EntitySpeed * dt));
 
-    movement += 2;
+    movement += 1 << 1;
 
     //Reset move if it touches block
     if (touchesBlock())
@@ -108,7 +96,7 @@ void LivingEntity::moveEast(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x + EntitySpeed * dt, oldpos.y));
 
-    movement += 4;
+    movement += 1 << 2;
 
     //Reset move if it touches block
     if (touchesBlock())
@@ -118,7 +106,7 @@ void LivingEntity::moveWest(float dt) {
     sf::Vector2f oldpos = getPosition();
     setPosition(sf::Vector2f(oldpos.x - EntitySpeed * dt, oldpos.y));
 
-    movement += 8;
+    movement += 1 << 3;
 
     //Reset move if it touches block
     if (touchesBlock())

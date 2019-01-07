@@ -24,6 +24,7 @@
 ### Content :
 
 - [ ] More blocks
+- [ ] Electric & Logic blocks & cables
 - [ ] More entities
 - [ ] Items and tools
 - [ ] A gameplay

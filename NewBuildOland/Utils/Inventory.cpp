@@ -22,7 +22,6 @@ bool Inventory::addItem(ItemStack itemStack)
     for(unsigned short i = 0; i < size; i++) {
         if(inventory[i].getItem()->getName() == "AIR") {
             inventory[i] = itemStack;
-            printf("test\n");
             return true;
         }
     }
