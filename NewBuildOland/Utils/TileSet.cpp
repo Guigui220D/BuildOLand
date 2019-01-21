@@ -1,12 +1,11 @@
 #include "TileSet.h"
-#include "../Placeables/BlockTeleporter.h"
-#include "../Placeables/BlockSaver.h"
-#include "../Placeables/TNTBlock.h"
-#include "../Placeables/GroundGrass.h"
-#include "../Placeables/WornConcrete.h"
-#include "../Placeables/OpenDoorBlock.h"
-#include "../Placeables/ClosedDoorBlock.h"
-#include "../Placeables/BlinkerBlock.h"
+#include "../Placeables/EngineeringBlocks/BlockSaver.h"
+#include "../Placeables/EngineeringBlocks/TNTBlock.h"
+#include "../Placeables/Grounds/GroundGrass.h"
+#include "../Placeables/Grounds/WornConcrete.h"
+#include "../Placeables/BuildingBlocks/OpenDoorBlock.h"
+#include "../Placeables/BuildingBlocks/ClosedDoorBlock.h"
+#include "../Placeables/Prototypes/BlinkerBlock.h"
 #include <iostream>
 //This is the tileset class that allows to get textures from a block id
 //All the tilsets should be in Res/
@@ -74,8 +73,7 @@ void TileSet::generateBlocks()
     addTile(new ClosedDoorBlock(rectById(22), rectById(20)));                                                  //7
     addTile(new OpenDoorBlock(rectById(23), rectById(21)));                                                    //8
 	addTile(new Block(rectById(8), "PRESSURE_PLATE",   sf::Color(135, 30, 30), false, false));                 //9
-	addTile(new BlockSaver(rectById(10)));                                                                     //10
-	addTile(new BlockTeleporter(rectById(11)));                                                                //11
+	addTile(new BlockSaver(rectById(10)));                                                                     //10                                                          //11
 	addTile(new BlinkerBlock(rectById(17), rectById(12)));                                                     //12
 
 }
