@@ -29,6 +29,8 @@ class InventoryMenuGui : public Gui
 
         sf::Sprite selectedSprite;
 
+        sf::Text itemCountText;
+
         sf::Vector2u size;
 
         sf::Vector2i selected = sf::Vector2i(-1, -1);

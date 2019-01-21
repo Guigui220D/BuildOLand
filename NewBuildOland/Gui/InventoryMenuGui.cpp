@@ -40,6 +40,12 @@ InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inve
 
     selectedSprite.setTexture(*stateBase->getAssetManager()->getTexture("SELECTED_SLOT"));
 
+    itemCountText.setFont(*stateGame->getAssetManager()->getFont("AKASHI"));
+    itemCountText.setFillColor(sf::Color::White);
+    itemCountText.setCharacterSize(10);
+    itemCountText.setOutlineColor(sf::Color::Black);
+    itemCountText.setOutlineThickness(1.f);
+
     updateContent();
 }
 
@@ -105,6 +111,13 @@ void InventoryMenuGui::updateContent()
             itemSprite.setTextureRect(itemStack.getItem()->getItemTextureRect());
             itemSprite.setPosition(sf::Vector2f(x * 40.f + 4.f, y * 40.f + 4.f));
             rd.draw(itemSprite);
+
+            if (!itemStack.isEmpty())
+            {
+                itemCountText.setPosition(sf::Vector2f(x * 40.f + 6.f, y * 40.f + 23.f));
+                itemCountText.setString(std::to_string(itemStack.getQuantity()));
+                rd.draw(itemCountText);
+            }
         }
 
         rd.display();

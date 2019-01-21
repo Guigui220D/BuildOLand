@@ -8,7 +8,7 @@
 #include "../Placeables/Prototypes/BlinkerBlock.h"
 #include <iostream>
 //This is the tileset class that allows to get textures from a block id
-//All the tilsets should be in Res/
+//The tileset should be in Res/
 
 TileSet::TileSet()
 {
