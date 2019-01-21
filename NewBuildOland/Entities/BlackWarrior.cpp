@@ -27,10 +27,10 @@ void BlackWarrior::updateMovement(float dt) {
     //Direction : 0 EAST, 1 SOUTH, 2 WEST, 3 NORTH
 
     sf::Vector2f position = getWorldPos();
-    Block *eastBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x - 0.5) + 1, round(position.y)));
-    Block *southBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y - 0.5) + 1));
-    Block *westBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x + 0.5) - 1, round(position.y)));
-    Block *northBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y + 0.5) - 1));
+    Block *eastBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x - 0.5) + 1, round(position.y)), false);
+    Block *southBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y - 0.5) + 1), false);
+    Block *westBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x + 0.5) - 1, round(position.y)), false);
+    Block *northBlock = currentWorld->getBlockAt(sf::Vector2i(round(position.x), round(position.y + 0.5) - 1), false);
 
     if (direction == 0 && !eastBlock->hasHitbox()) {
         moveEast(dt);
@@ -104,13 +104,13 @@ void BlackWarrior::updateMovement(float dt) {
 std::string BlackWarrior::getTextureName() {
     return "CHARACTERS_SHEET_2";
 }
-std::vector<IntRect> BlackWarrior::getIdleAnim() {
+std::vector<sf::IntRect> BlackWarrior::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
     idleAnim.push_back(sf::IntRect(336, 0, 48, 48));
 
     return idleAnim;
 }
-std::vector<IntRect> BlackWarrior::getNorthWalkAnim() {
+std::vector<sf::IntRect> BlackWarrior::getNorthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
     //Walking to north
     walkingAnim.push_back(sf::IntRect(288, 144, 48, 48));
@@ -120,7 +120,7 @@ std::vector<IntRect> BlackWarrior::getNorthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> BlackWarrior::getSouthWalkAnim() {
+std::vector<sf::IntRect> BlackWarrior::getSouthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
     walkingAnim.push_back(sf::IntRect(288, 0, 48, 48));
     walkingAnim.push_back(sf::IntRect(336, 0, 48, 48));
@@ -129,7 +129,7 @@ std::vector<IntRect> BlackWarrior::getSouthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> BlackWarrior::getEastWalkAnim() {
+std::vector<sf::IntRect> BlackWarrior::getEastWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
     walkingAnim.push_back(sf::IntRect(288, 96, 48, 48));
     walkingAnim.push_back(sf::IntRect(336, 96, 48, 48));
@@ -138,7 +138,7 @@ std::vector<IntRect> BlackWarrior::getEastWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> BlackWarrior::getWestWalkAnim() {
+std::vector<sf::IntRect> BlackWarrior::getWestWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
     walkingAnim.push_back(sf::IntRect(288, 48, 48, 48));
     walkingAnim.push_back(sf::IntRect(336, 48, 48, 48));

@@ -2,73 +2,162 @@
 #include "../States/StateGame.h"
 #include "TextInput.h"
 
-ChatGui::ChatGui(StateGame *stateGame) : Gui(stateGame) {
-    //Chatwidth = width from left to beggining of inventory (-10px)
-    float chatwidth = stateGame->getGuiView().getSize().x / 2.0f - 292 - 10;
-
-    text.setFont(*stateGame->getAssetManager()->getFont("LUCON"));
-    text.setFillColor(sf::Color::White);
-    text.setString("Type your command here - Available soon");
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                     stateGame->getGuiView().getSize().y / 2.0f - text.getLocalBounds().height - 50);
-    text.setCharacterSize(static_cast<unsigned int>(chatwidth * 1.0f / 23.1f));
-
-    //BACKGROUND
+ChatGui::ChatGui(StateGame *stateGame) :
+    Gui((StateBase*)stateGame),
+    sentMessage("")
+{
+    //Background
     background = sf::RectangleShape();
     background.setFillColor(sf::Color(0, 0, 0, 100));
+    background.setSize(sf::Vector2f(100, 160));
 
+    inputText.setFont(*GameGlobal::assets.getFont("LUCON"));
+    inputText.setFillColor(sf::Color::Cyan);
+    inputText.setOutlineColor(sf::Color::Black);
+    inputText.setOutlineThickness(2.f);
+    inputText.setCharacterSize(20.f);
+    inputText.setScale(sf::Vector2f(.25f, .25f));
+    inputText.setString("> |");
 
-    background.setSize(sf::Vector2f(chatwidth, chatwidth * 0.5f));
-    background.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                           stateGame->getGuiView().getSize().y / 2.0f - background.getSize().y);
-
-    //TEXT INPUT BAR
-    //TODO: Make textInput a pure virtual class, so you can have more customisation
-    //And also create a pure virtual setPosition method (so that you can calculate height / width etc)
-    //Eventually a getHeight / getWidth method that you can set in the class, so it's easier to position it on the guiView
-    textInput = new TextInput(stateGame, sf::Vector2f(-stateGame->getGuiView().getSize().x / 2.0f, 0), "Write here");
+    addMessage(ChatMessage(" - Console Init - ", ChatColor::ChatGreen));
 }
 
-void ChatGui::draw(sf::RenderWindow &window) {
-
-    //always shown
+void ChatGui::draw(sf::RenderWindow &window)
+{
     window.draw(background);
-    window.draw(text);
+    float height = 0.f;
+    unsigned int i = 0;
+    bool remove = false;
 
-    //Only when user presses T or Enter
-    if(active) {
-        textInput->draw(window);
+    //Input text
+    height += inputText.getGlobalBounds().height + 2.f;
+    inputText.setPosition(sf::Vector2f(2.f, 160.f - height));
+    window.draw(inputText);
+
+    height += 5.f;
+
+    for (sf::Text msg : messages)
+    {
+        height += msg.getGlobalBounds().height + 2.f;
+        if (160.f - height < -20.f)
+        {
+            remove = true;
+            break;
+        }
+        msg.setPosition(sf::Vector2f(2.f, 160.f - height));
+        window.draw(msg);
+        i++;
+    }
+    if (remove)
+        for (unsigned int j = 0; j < messages.size() - i; j++)
+            messages.pop_back();
+}
+
+void ChatGui::update(float dt)
+{
+
+}
+
+bool ChatGui::handleEvent(sf::Event e)
+{
+    if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::T)
+    {
+        lock = false;
+    }
+    if (e.type == sf::Event::TextEntered)
+    {
+        eventInput(e.text.unicode);
+        return true;
+    }
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)
+    {
+        if (input.length() == 0)
+            return false;
+        enterPressed = true;
+        addMessage(ChatMessage(input, ChatColor::ChatRed));
+        sentMessage = input;
+        inputText.setString("> |"); input = ""; displayInput = "";
+        return true;
+    }
+    return false;
+}
+
+void ChatGui::eventInput(short unicode)
+{
+    if (lock)
+        return;
+    //Erase key
+    if(unicode == 8 && input.length() > 0)
+    {
+        if (displayInput[displayInput.length() - 1] == '\n')
+            displayInput = displayInput.substr(0, displayInput.length() - 1);
+        input = input.substr(0, input.length() - 1);
+        displayInput = displayInput.substr(0, displayInput.length() - 1);
+    }
+    else if (unicode >= 32 && input.length() < 255) //Chars below 32 are control chars
+    {
+        std::string inputt = unicodeConvert.to_bytes(unicode);
+        input += inputt;
+        displayInput += inputt;
+    }
+
+    inputText.setString("> " + displayInput + "|");
+    //Add line returns to fit in chat window
+    if (inputText.getGlobalBounds().width > 100.f)
+    {
+        displayInput.insert(displayInput.length() - 1, "\n");
+        inputText.setString("> " + displayInput + "|");
     }
 }
 
-void ChatGui::update(float dt) {
-    textInput->update(dt);
+const std::string &ChatGui::getInputText() const {
+    return input;
 }
 
-void ChatGui::eventResize() {
-    //Chatwidth = width from left to beggining of inventory (-10px)
-    float chatwidth = stateGame->getGuiView().getSize().x / 2.0f - 292 - 10;
-
-    //Position the text left of the screen
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                     stateGame->getGuiView().getSize().y / 2.0f - text.getLocalBounds().height - 50);
-    text.setCharacterSize(static_cast<unsigned int>(chatwidth * 1.0f / 23.1f));
-
-    background.setSize(sf::Vector2f(chatwidth, chatwidth * 0.5f));
-    background.setPosition(-stateGame->getGuiView().getSize().x / 2.0f,
-                           stateGame->getGuiView().getSize().y / 2.0f - background.getSize().y);
+const std::string &ChatGui::getLastMessage() const {
+    return sentMessage;
 }
 
-bool ChatGui::isActive() const {
-    return active;
+bool ChatGui::onEnter()
+{
+    if (!enterPressed)
+        return false;
+    enterPressed = false;
+    return true;
 }
 
-void ChatGui::setIsActive(bool isActive) {
-    ChatGui::active = isActive;
+void ChatGui::addMessage(ChatMessage message)
+{
+    //Create text
+    sf::Text t;
+    t.setFillColor(sf::Color((int)message.color));
+
+    t.setOutlineThickness(2.f);
+    t.setOutlineColor(sf::Color::Black);
+
+    t.setCharacterSize(20.f);
+    t.setScale(sf::Vector2f(.25f, .25f));
+
+    t.setFont(*GameGlobal::assets.getFont("LUCON"));
+    t.setString(message.content);
+
+    //Add line returns to fit in chat window
+    bool done = false;
+    while (!done)
+    {
+        done = true;
+        for (size_t i = 0; i < t.getString().getSize(); i++)
+        {
+            if (t.findCharacterPos(i).x > 95.f)
+            {
+                sf::String str = t.getString();
+                str.insert(i - 1, '\n');
+                t.setString(str);
+                done = false;
+                break;
+            }
+        }
+    }
+
+    messages.push_front(t);
 }
-
-void ChatGui::eventInput(short unicode) {
-    textInput->eventInput(unicode);
-
-}
-

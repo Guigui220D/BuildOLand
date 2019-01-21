@@ -9,7 +9,7 @@
 OtherPlayer::OtherPlayer(World *world, sf::String displayName, unsigned id)
     : LivingEntity(world, id, 20, 9)
 {
-	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);
@@ -57,13 +57,13 @@ void OtherPlayer::updateMovement(float dt)
 std::string OtherPlayer::getTextureName() {
     return "CHARACTERS_SHEET_1";
 }
-std::vector<IntRect> OtherPlayer::getIdleAnim() {
+std::vector<sf::IntRect> OtherPlayer::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
     idleAnim.push_back(sf::IntRect(151, 9, 32, 32));
 
     return idleAnim;
 }
-std::vector<IntRect> OtherPlayer::getNorthWalkAnim() {
+std::vector<sf::IntRect> OtherPlayer::getNorthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(119, 105, 32, 32));
@@ -73,7 +73,7 @@ std::vector<IntRect> OtherPlayer::getNorthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> OtherPlayer::getSouthWalkAnim() {
+std::vector<sf::IntRect> OtherPlayer::getSouthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -84,7 +84,7 @@ std::vector<IntRect> OtherPlayer::getSouthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> OtherPlayer::getEastWalkAnim() {
+std::vector<sf::IntRect> OtherPlayer::getEastWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -95,7 +95,7 @@ std::vector<IntRect> OtherPlayer::getEastWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> OtherPlayer::getWestWalkAnim() {
+std::vector<sf::IntRect> OtherPlayer::getWestWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(119, 41, 32, 32));

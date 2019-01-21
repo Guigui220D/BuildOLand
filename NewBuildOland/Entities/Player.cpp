@@ -7,10 +7,10 @@
 #include <math.h>
 
 Player::Player(World *world, sf::String displayName, unsigned int id)
-	: LivingEntity(world, id, 20, 9) //Player's id client side is always 0, because it doesn't matter
+	: LivingEntity(world, id, 20, 64) //Player's id client side is always 0, because it doesn't matter
 {
 	initInventory(currentWorld);
-	nameText.setFont(*game->getAssetManager()->getFont("LUCON"));
+	nameText.setFont(*GameGlobal::assets.getFont("LUCON"));
 	nameText.setString(displayName);
 	nameText.setOutlineColor(sf::Color(0, 0, 0, 127));
 	nameText.setOutlineThickness(2);
@@ -23,14 +23,16 @@ void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
     TileSet* tileset = game->getTileset();
+
     inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
-    inventory->addItem(ItemStack(tileset->getGroundById(2), 100));
     inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
-    inventory->addItem(ItemStack(tileset->getGroundById(0), 120));
+    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
+    inventory->addItem(ItemStack(tileset->getGroundById(0), 100));
     inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
+    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
+    inventory->addItem(ItemStack(tileset->getBlockById(3), 100));
 }
 
 void Player::updateMovement(float dt) {
@@ -81,13 +83,13 @@ void Player::updateMovement(float dt) {
 std::string Player::getTextureName() {
     return "CHARACTERS_SHEET_1";
 }
-std::vector<IntRect> Player::getIdleAnim() {
+std::vector<sf::IntRect> Player::getIdleAnim() {
     std::vector<sf::IntRect> idleAnim = std::vector<sf::IntRect>();
     idleAnim.push_back(sf::IntRect(37, 9, 32, 32));
 
     return idleAnim;
 }
-std::vector<IntRect> Player::getNorthWalkAnim() {
+std::vector<sf::IntRect> Player::getNorthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(5, 105, 32, 32));
@@ -97,7 +99,7 @@ std::vector<IntRect> Player::getNorthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getSouthWalkAnim() {
+std::vector<sf::IntRect> Player::getSouthWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -108,7 +110,7 @@ std::vector<IntRect> Player::getSouthWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getEastWalkAnim() {
+std::vector<sf::IntRect> Player::getEastWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim = std::vector<sf::IntRect>();
@@ -119,7 +121,7 @@ std::vector<IntRect> Player::getEastWalkAnim() {
 
     return walkingAnim;
 }
-std::vector<IntRect> Player::getWestWalkAnim() {
+std::vector<sf::IntRect> Player::getWestWalkAnim() {
     std::vector<sf::IntRect> walkingAnim = std::vector<sf::IntRect>();
 
     walkingAnim.push_back(sf::IntRect(5, 41, 32, 32));

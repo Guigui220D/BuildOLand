@@ -1,19 +1,26 @@
 #include "StateGame.h"
 
-#include "../Worlds/NetworkWorld.h"
 #include <iostream>
-#include "SFML/Audio/SoundBuffer.hpp"
-#include "../Gui/FpsCounter.h"
-#include "../Gui/InventoryGui.h"
+#include <memory>
 #include <math.h>
 #include <cstring>
 #include <sstream>
+
+#include "../Worlds/NetworkWorld.h"
+#include "SFML/Audio/SoundBuffer.hpp"
+#include "../Gui/FpsCounter.h"
 #include "../Events/EventManager.h"
 
+#include "../Gui/GuiSprite.h"
 
-StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput)
-	: StateBase(game)
-	, nManager(this)
+#include "StateMenu.h"
+
+StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
+    StateBase(game),
+	nManager(this),
+    inInventory(false),
+	paused(false),
+	inChat(false)
 {
     initAssets();
 
@@ -62,7 +69,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	backgroundAmbiance->play();
 
 	//Init all the drawers
-	mapView = View();
+	mapView = sf::View();
 	mapView.setViewport(sf::FloatRect(0.74f, 0.01f, 0.25f, 0.25f));
 	mapFrame = sf::RectangleShape();
 	mapFrame.setFillColor(sf::Color::Black);
@@ -86,7 +93,7 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
 	pointer.setSize(sf::Vector2f(TILE_SIZE_FLOAT, TILE_SIZE_FLOAT));
 	pointer.setOrigin(sf::Vector2f(TILE_SIZE / 2.0f, TILE_SIZE / 2.0f));
 	pointer.setTexture(tileset.getTexture());
-	pointer.setTextureRect(sf::IntRect(136, 34, 32, 32));
+	pointer.setTextureRect(sf::IntRect(137, 35, 32, 32));
 
 	mouse = sf::RectangleShape();
 	mouse.setSize(sf::Vector2f(TILE_SIZE_FLOAT / 3, TILE_SIZE_FLOAT / 3));
@@ -96,15 +103,64 @@ StateGame::StateGame(Game& game, bool online, std::string playerName, std::strin
     player->init(0, 0);
 	cameraFollow = player;
 
-	//Setup the gui
-	inventoryGui = new InventoryGui(this, player->getInventory(), &inventoryCursorId);
-	chatGui = new ChatGui(this);
+	//chatGui = new ChatGui(this);
+	//gui.push_back(std::unique_ptr<Gui>(chatGui));
 
-	gui = std::vector<std::unique_ptr<Gui>>();
-	gui.push_back(std::unique_ptr<Gui>(new FpsCounter(this)));
-	gui.push_back(std::unique_ptr<Gui>(inventoryGui));
-	gui.push_back(std::unique_ptr<Gui>(chatGui));
+	//Setup the GUI
+	GuiZone* fps = new GuiZone(sf::FloatRect(0, 0, .4f, .05f), 8.f, ZoneHAlign::HLeft, ZoneVAlign::VTop);
+	fps->setZoneHeight(32.f);
+    fps->guiElements.push_back(std::make_unique<FpsCounter>(this));
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(fps));
 
+    GuiZone* inventoryBar = new GuiZone(sf::FloatRect(.25f, .9f, .5f, .1f), 292.f / 40.f, ZoneHAlign::HCenter, ZoneVAlign::VBottom);
+    inventoryBar->setZoneHeight(40.f);
+    inventoryBar->guiElements.push_back(std::make_unique<InventoryGui>(this, player->getInventory(), &inventoryCursorId));
+    inventoryGui = (InventoryGui*)inventoryBar->guiElements.back().get();
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryBar));
+
+    inventoryZone = new GuiZone(sf::FloatRect(.25f, 0.f, .5f, 1.f), 1.f);
+    inventoryZone->setZoneHeight(320.f);
+    inventoryZone->setEnabled(false);
+    inventoryZone->guiElements.push_back(std::make_unique<InventoryMenuGui>(this, sf::Vector2u(8, 8), player->getInventory()));
+    inventoryMenu = (InventoryMenuGui*)inventoryZone->guiElements.back().get();
+    guiDomain.zones.push_back(std::unique_ptr<GuiZone>(inventoryZone));
+
+    //Pause menu
+    pauseGuiDomain.setEnabled(false);
+
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiShroud>(new GuiShroud()));
+
+    GuiZone* pauseTitle = new GuiZone(sf::FloatRect(.1f, .05f, .8f, .20f), 1626.f / 195.f);
+    pauseTitle->setZoneWidth(1700.f);
+    pauseTitle->guiElements.push_back(std::make_unique<GuiSprite>(this, GameGlobal::assets.getTexture("LOGO"), sf::Vector2f(), 1.f, sf::Vector2f(10.f, 10.f)));
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseTitle));
+
+    GuiZone* pauseCenter = new GuiZone(sf::FloatRect(.2f, .3f, .6f, .7f), 3.f / 4.f, ZoneHAlign::HCenter, ZoneVAlign::VTop);
+    pauseCenter->setZoneWidth(110.f);
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Resume", sf::Vector2f(5, 10)));
+    pauseResumeButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Settings", sf::Vector2f(5, 40)));
+    pauseSettingsButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseCenter->guiElements.push_back(std::make_unique<GuiButton>(this, "Exit", sf::Vector2f(5, 70)));
+    pauseExitButton = (GuiButton*)pauseCenter->guiElements.back().get();
+    pauseGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(pauseCenter));
+
+    //Chat
+    chatGuiDomain.setEnabled(false);
+
+    GuiZone* chat = new GuiZone(sf::FloatRect(0.f, 0.f, .5f, 1.f), 100.f / 160.f, ZoneHAlign::HLeft, ZoneVAlign::VBottom);
+    chat->setZoneWidth(100.f);
+    chat->guiElements.push_back(std::make_unique<ChatGui>(this));
+    chatGui = (ChatGui*)chat->guiElements.back().get();
+    chatGuiDomain.zones.push_back(std::unique_ptr<GuiZone>(chat));
+}
+
+StateGame::~StateGame()
+{
+	//We delete the world to prevent memory leaks
+	currentWorld->preDelete();
+	delete currentWorld;
+	std::cout << "Stategame delete\n";
 }
 
 void StateGame::initAssets()
@@ -117,7 +173,6 @@ void StateGame::initAssets()
     assetManager.loadSoundFromFile("save.ogg", "SAVE");
     assetManager.loadSoundFromFile("teleport.ogg", "TELEPORT");
 
-    assetManager.loadFontFromFile("lucon.ttf", "LUCON");
     assetManager.loadFontFromFile("Akashi.ttf", "AKASHI");
 
     assetManager.loadTextureFromFile("characters.png", "CHARACTERS_SHEET_1");
@@ -126,9 +181,27 @@ void StateGame::initAssets()
     assetManager.loadTextureFromFile("hand.png", "HAND");
     assetManager.loadTextureFromFile("inventorySelected.png", "SELECTED_SLOT");
     assetManager.loadTextureFromFile("inventoryBar.png", "INVENTORY_BAR");
+    assetManager.loadTextureFromFile("inventorySlot.png", "INVENTORY_SLOT");
+    assetManager.loadTextureFromFile("pause.png", "PAUSE");
 }
 
-void StateGame::handleInput() {
+void StateGame::handleInput()
+{
+    if (paused)
+    {
+        if (pauseResumeButton->onClick())
+        {
+            paused = false;
+            pauseGuiDomain.setEnabled(false);
+        }
+        if (pauseSettingsButton->onClick())
+            std::cout << "The settings menu is not yet availible.\n";
+        if (pauseExitButton->onClick())
+            game->setCurrentState(new StateMenu(*game));
+        return;
+    }
+
+    if (!inGame()) return;
 	//Temporary, for testing
 	//This is crappy code
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -136,12 +209,12 @@ void StateGame::handleInput() {
 		if (!rightClicking)
 		{
 			//Gets the mouse pos in the window
-			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
 				game->getWindow().setView(game->getWorldView());
-				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player->getPosition();
+				sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				sf::Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
@@ -151,18 +224,19 @@ void StateGame::handleInput() {
                     {
                         //Remove block from player Inventory
                         Inventory *inventory = player->getInventory();
-                        ItemStack *selectedItemStack = inventory->getItem(inventoryCursorId);
-                        Item *selectedItem = selectedItemStack->getItem();
+                        ItemStack& selectedItemStack = inventory->getItem(inventoryCursorId);
+                        Item *selectedItem = selectedItemStack.getItem();
 
-                            //If it isn't empty, and is a placeable
-                        if(!selectedItemStack->isEmpty() && selectedItem->isPlaceable())
+                        //If it isn't empty, and is a placeable
+                        if(!selectedItemStack.isEmpty() && selectedItem->isPlaceable())
                         {
-                            bool isGround = selectedItem->isGround();
                             //We remove an item (that was placed)
-                            selectedItemStack->remove();
+                            selectedItemStack.remove();
                             //Get the id from the tileset
-                            unsigned short placeableId = isGround ? tileset.getGroundIdByName(selectedItem->getName())
-                                                                    : tileset.getBlockIdByName(selectedItem->getName());
+                            Placeable* tile = (Placeable*)selectedItem;
+                            bool isGround = tile->isGround();
+                            unsigned short placeableId = tile->getTileId();
+
                             if(isGround)
                             {
                                 //Get the old ground
@@ -204,12 +278,12 @@ void StateGame::handleInput() {
 		if (!leftClicking)
 		{
 			//Gets the mouse pos in the window
-			Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+			sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 			if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 			{
 				game->getWindow().setView(game->getWorldView());
-				Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-				Vector2f diff = posInView - player->getPosition();
+				sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+				sf::Vector2f diff = posInView - player->getPosition();
 				if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
 				{
 					int clickX = (int)roundf(posInView.x / TILE_SIZE);
@@ -253,25 +327,29 @@ void StateGame::handleInput() {
 	} else {
 		isPlaceKeyPressed = false;
 	}
-
-
-	//For showing the tchat writing bar
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-		if(!chatGui->isActive()) {
-			chatGui->setIsActive(true);
-		}
-	} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-		if(chatGui->isActive()) {
-			chatGui->setIsActive(false);
-		}
-	}
-
 }
 
-void StateGame::update(float dt, bool focused) {
-    currentWorld->updateChunks();
+void StateGame::update(float dt, bool focused)
+{
+    if (!game->getWindow().hasFocus())
+    {
+        inChat = false;
+        inInventory = false;
+        chatGuiDomain.setEnabled(false);
+        inventoryZone->setEnabled(false);
+        paused = true;
+        pauseGuiDomain.setEnabled(true);
+    }
 
-    if (focused) { player->update(dt); }
+    chatGuiDomain.update(dt, game->getWindow());
+    pauseGuiDomain.update(dt, game->getWindow());
+
+    if (paused && !onlineMode)
+        return;
+
+    currentWorld->updateChunks(dt);
+
+    if (focused && inGame()) { player->update(dt); }
 
 	currentWorld->removeEntitiesThatNeedToBeRemoved();
 	//Update the entities of the world
@@ -282,19 +360,16 @@ void StateGame::update(float dt, bool focused) {
 	game->getWorldView().setCenter(cameraFollow->getPosition());
 
 	//Update the GUI
-	for (unsigned int i = 0; i < gui.size(); i++)
-	{
-		gui[i]->update(dt);
-	}
-
+	guiDomain.update(dt, game->getWindow());
 }
 
-void StateGame::draw(sf::RenderWindow &window) {
+void StateGame::draw(sf::RenderWindow &window)
+{
 	//Set the right view for world drawing
 	window.setView(game->getWorldView());
 
 	//Get chunks to draw
-	std::vector<Chunk> chunksToDraw;
+	std::vector<std::shared_ptr<Chunk>> chunksToDraw;
 	sf::Vector2i playerChunk(floor(player->getWorldPos().x / Chunk::CHUNK_SIZE), floor(player->getWorldPos().y / Chunk::CHUNK_SIZE));
     for (int i = -1; i <= 1; i++)
     {
@@ -311,12 +386,12 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+                unsigned short groundId = chunksToDraw.at(i)->getGround(sf::Vector2i(x, y));
 
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 0.5f);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getGroundRect(groundId);
                 groundQuads[(x + y * Chunk::CHUNK_SIZE) * 4 + 0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -340,14 +415,14 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
                 if (!blockId)
                     continue;
                 if (!tileset.getBlockById(blockId)->hasVolume())
                 {
                     worldDraw.setTextureRect(tileset.getBlockRect(blockId));
-                    worldDraw.setPosition(sf::Vector2f((chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE + x) * TILE_SIZE_FLOAT
-                                                    , (chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE + y) * TILE_SIZE_FLOAT));
+                    worldDraw.setPosition(sf::Vector2f((chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE + x) * TILE_SIZE_FLOAT
+                                                    , (chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE + y) * TILE_SIZE_FLOAT));
                     window.draw(worldDraw);
                 }
             }
@@ -361,16 +436,16 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
 
                 if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
                     continue;
 
                 sf::Vertex thisBlockQuads[4];
-                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + 0.5f + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getBlockSideRect(blockId);
                 thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -407,16 +482,16 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
 
                 if (!tileset.getBlockById(blockId)->hasVolume() || !blockId)
                     continue;
 
                 sf::Vertex thisBlockQuads[4];
-                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisBlockQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisBlockQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 sf::IntRect rect = tileset.getBlockRect(blockId);
                 thisBlockQuads[0].texCoords = sf::Vector2f(rect.left, rect.top);
@@ -437,13 +512,13 @@ void StateGame::draw(sf::RenderWindow &window) {
     }
 
 	//Draw block highlighter
-	if (game->getWindow().hasFocus())
+	if (inGame())
 	{
-		Vector2i pos = sf::Mouse::getPosition(game->getWindow());
+		sf::Vector2i pos = sf::Mouse::getPosition(game->getWindow());
 		if (pos.x >= 0 && pos.y >= 0 && (unsigned)pos.x < game->getWindow().getSize().x && (unsigned)pos.y < game->getWindow().getSize().y)
 		{
-			Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
-			Vector2f diff = posInView - player->getPosition();
+			sf::Vector2f posInView = game->getWindow().mapPixelToCoords(pos);
+			sf::Vector2f diff = posInView - player->getPosition();
 			int clickX = (int)roundf(posInView.x / TILE_SIZE);
 			int clickY = (int)roundf(posInView.y / TILE_SIZE);
 			if (sqrt(diff.x * diff.x + diff.y * diff.y) <= 240)
@@ -475,14 +550,14 @@ void StateGame::draw(sf::RenderWindow &window) {
         {
             for (int y = 0; y < Chunk::CHUNK_SIZE; y++)
             {
-                unsigned short blockId = chunksToDraw.at(i).getBlock(sf::Vector2i(x, y));
-                unsigned short groundId = chunksToDraw.at(i).getGround(sf::Vector2i(x, y));
+                unsigned short blockId = chunksToDraw.at(i)->getBlock(sf::Vector2i(x, y));
+                unsigned short groundId = chunksToDraw.at(i)->getGround(sf::Vector2i(x, y));
 
                 sf::Vertex thisPixelQuads[4];
-                thisPixelQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisPixelQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE - 1);
-                thisPixelQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
-                thisPixelQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i).getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i).getPosition().y * Chunk::CHUNK_SIZE);
+                thisPixelQuads[0].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[1].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE - 1);
+                thisPixelQuads[2].position = sf::Vector2f(x + 0.5f + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
+                thisPixelQuads[3].position = sf::Vector2f(x + chunksToDraw.at(i)->getPosition().x * Chunk::CHUNK_SIZE - 0.5f, y + chunksToDraw.at(i)->getPosition().y * Chunk::CHUNK_SIZE);
 
                 for (int j = 0; j < 4; j++)
                 {
@@ -503,21 +578,19 @@ void StateGame::draw(sf::RenderWindow &window) {
 	window.draw(mapFrame);
 
     //Draw the gui
-	window.setView(game->getGuiView());
-
-	for (unsigned int i = 0; i < gui.size(); i++)
-    {
-		gui[i]->draw(window);
-    }
+    guiDomain.draw(window);
+    chatGuiDomain.draw(window);
+    pauseGuiDomain.draw(window);
     //Draw the mouse
 	window.setView(game->getWorldView());
-	Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
-	Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
+	sf::Vector2i mousepos = sf::Mouse::getPosition(game->getWindow());
+	sf::Vector2f onGui = game->getWindow().mapPixelToCoords(mousepos);
 	mouse.setPosition(sf::Vector2f(onGui.x, onGui.y));
 	window.draw(mouse);
 }
 
-void StateGame::setWorld(World &world) {
+void StateGame::setWorld(World &world)
+{
 	//We delete the old world
 	//as we will be changing the pointer's adress
     currentWorld->preDelete();
@@ -530,25 +603,63 @@ void StateGame::setWorld(World &world) {
 	player->setCurrentWorld(currentWorld);
 }
 
-StateGame::~StateGame() {
-	//We delete the world to prevent memory leaks
-	currentWorld->preDelete();
-	delete currentWorld;
-	std::cout << "Stategame delete\n";
-}
+void StateGame::handleEvent(sf::Event &event)
+{
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Escape)
+        {
+            if (paused)
+            {
+                paused = false;
+            }
+            else if (!inChat && !inInventory)
+            {
+                paused = true;
+            }
+            if (inChat)
+            {
+                inChat = false;
+            }
+            if (inInventory)
+            {
+                inInventory = false;
+                inventoryGui->updateInventory();
+            }
+            pauseGuiDomain.setEnabled(paused);
+            chatGuiDomain.setEnabled(inChat);
+            inventoryZone->setEnabled(inInventory);
+            return;
+        }
+        if (inGame())
+        {
+            if (event.key.code == sf::Keyboard::T)
+            {
+                inChat = true;
+                chatGuiDomain.setEnabled(true);
+                chatGui->clearInput();
+                return;
+            }
+            if (event.key.code == sf::Keyboard::E)
+            {
+                inventoryGui->updateInventory();
+                inventoryMenu->updateContent();
+                inInventory = true;
+                inventoryZone->setEnabled(true);
+                return;
+            }
+        }
+    }
 
-void StateGame::handleEvent(sf::Event &event) {
+    if (paused && pauseGuiDomain.handleEvent(event, game->getWindow()))
+        return;
+    if (inChat && chatGuiDomain.handleEvent(event, game->getWindow()))
+        return;
+    if (!paused && !inChat && guiDomain.handleEvent(event, game->getWindow()))
+        return;
+
 
     switch (event.type) {
-        //RESIZE EVENT
-        case sf::Event::Resized:
-            //Send the event to all gui elements
-            for (unsigned int i = 0; i < gui.size(); i++)
-            {
-                gui[i]->eventResize();
-            }
-            break;
-
         //SCROLL EVENT
         case sf::Event::MouseWheelScrolled:
             //Change the position of the cursor
@@ -557,14 +668,9 @@ void StateGame::handleEvent(sf::Event &event) {
             } else {
                 inventoryCursorId = inventoryCursorId <= 0 ? inventoryGui->getInventorySlots() - 1 : inventoryCursorId - 1;
             }
-
             break;
-
-		case sf::Event::TextEntered:
-			chatGui->eventInput(event.text.unicode);
-			break;
-
-        default: break;
+        default:
+            break;
     }
 
 }

@@ -4,12 +4,11 @@
 #include <sstream>
 #include <cmath>
 
-FpsCounter::FpsCounter(StateGame* stateGame) : Gui(stateGame)
+FpsCounter::FpsCounter(StateBase* stateBase) : Gui(stateBase)
 {
-    text.setFont(*stateGame->getAssetManager()->getFont("LUCON"));
+    text.setFont(*GameGlobal::assets.getFont("LUCON"));
     text.setFillColor(sf::Color::Black);
     text.setCharacterSize(32);
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2, -stateGame->getGuiView().getSize().y / 2);
 }
 
 FpsCounter::~FpsCounter()
@@ -22,7 +21,7 @@ void FpsCounter::draw(sf::RenderWindow &window)
 
 float FpsCounter::getFPS()
 {
-    return round(stateGame->getGame()->getFPS());
+    return round(stateBase->getGame()->getFPS());
 }
 
 void FpsCounter::update(float dt) {
@@ -30,10 +29,4 @@ void FpsCounter::update(float dt) {
     s << "FPS : " << getFPS();
     text.setString(s.str());
 
-}
-
-void FpsCounter::eventResize() {
-    //Put it back to the left
-    text.setPosition(-stateGame->getGuiView().getSize().x / 2,
-                     -stateGame->getGuiView().getSize().y / 2);
 }

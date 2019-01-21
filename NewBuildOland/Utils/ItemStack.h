@@ -13,10 +13,9 @@ public:
     unsigned short getQuantity() const;
     bool isEmpty();
 
-    void setQuantity(unsigned short quantity);
-    void setItem(Item *item);
     void add(unsigned int quantity = 1);
     void remove(unsigned int quantity = 1);
+    bool stack(ItemStack otherStack);
 
 private:
     Item* item;

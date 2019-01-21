@@ -27,7 +27,6 @@ public:
 
 	inline virtual void takePacket(sf::Packet p) {}
 
-	virtual Entities* clone() const = 0;
 	virtual std::vector<unsigned char> getBytes() = 0;
 	std::vector<unsigned char> getBeginningBytes(int code);
 

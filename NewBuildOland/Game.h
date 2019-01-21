@@ -25,6 +25,8 @@ public:
 
 	float getFPS();
 
+	void initGlobalAssets();
+
 private:
 	sf::RenderWindow window;
 	StateBase *currentState;

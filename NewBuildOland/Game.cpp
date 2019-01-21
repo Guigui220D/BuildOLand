@@ -2,15 +2,20 @@
 #include "States/StateMenu.h"
 #include <iostream>
 
-Game::Game()
-	: window(sf::VideoMode(800, 600), "BuildOLand")
-	, currentState(0)
+#include "GameGlobal.h"
+
+Game::Game() :
+	window(sf::VideoMode(800, 600), "BuildOLand"),
+	currentState(0)
 {
-	Image icon;
+    initGlobalAssets();
+
+	sf::Image icon;
 	icon.loadFromFile("Res/icon.png");
 	window.setIcon(256, 256, icon.getPixelsPtr());
 
 	//window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(30);
 
 	//Setting the current state to a Game State
 	//The worldView sizing is automated
@@ -25,10 +30,18 @@ Game::Game()
 	currentState = new StateMenu(*this);
 }
 
+void Game::initGlobalAssets()
+{
+    GameGlobal::assets.loadFontFromFile("lucon.ttf", "LUCON");
+
+    GameGlobal::assets.loadTextureFromFile("newTileset.png", "TILESET");
+    GameGlobal::assets.loadTextureFromFile("logo.png", "LOGO");
+}
+
 void Game::run()
 {
-	sf::Clock clk = Clock();
-	sf::Clock fpsClk = Clock();
+	sf::Clock clk = sf::Clock();
+	sf::Clock fpsClk = sf::Clock();
 	int count = 0;
 	focused = window.hasFocus();
 	//Start the game loop
@@ -41,24 +54,25 @@ void Game::run()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Resized) {
-				updateView();
-			}
-
-			if (event.type == sf::Event::LostFocus) {
+		    switch (event.type)
+		    {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::Resized:
+                updateView();
+                break;
+            case sf::Event::LostFocus:
                 focused = false;
-			}
-
-			if (event.type == sf::Event::GainedFocus) {
+                break;
+            case sf::Event::GainedFocus:
                 focused = true;
-			}
-
-			//send the event to the current state
-			currentState->handleEvent(event);
-
-			if (event.type == sf::Event::Closed) {
-				window.close();
-			}
+                break;
+            default:
+                //Send the event to the current state
+                currentState->handleEvent(event);
+                break;
+		    }
 
 		}
 
@@ -118,8 +132,9 @@ StateBase* Game::getCurrentState() {
 }
 
 void Game::setCurrentState(StateBase *state) {
+    //Reset the view
+    getWorldView().setCenter(sf::Vector2f());
 	delete currentState;
-
 	currentState = state;
 }
 

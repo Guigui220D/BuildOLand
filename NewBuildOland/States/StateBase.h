@@ -2,6 +2,8 @@
 
 #include "SFML/Graphics.hpp"
 #include "../Utils/AssetManager.h"
+#include "../Gui/GuiDomain.h"
+#include "../GameGlobal.h"
 
 class Game;
 

@@ -2,11 +2,13 @@
 #include <SFML\system.hpp>
 #include <SFML\Network.hpp>
 #include <unordered_map>
+#include <math.h>
+#include <memory>
+
 #include "../Utils/TileSet.h"
 #include "../Placeables/Block.h"
-#include "Chunk.h"
-#include "CachedChunk.h"
-#include <math.h>
+#include "Chunk/Chunk.h"
+#include "Chunk/CachedChunk.h"
 #include "GenerationModes.h"
 
 class Entities;
@@ -16,6 +18,8 @@ class StateGame;
 class World
 {
 public:
+    typedef std::shared_ptr<Chunk> ChunkPtr;
+
     static const int UNLOAD_DISTANCE = 64;
     static const int WORLD_SEED = 546556;
 
@@ -25,12 +29,12 @@ public:
 
 	virtual void handlePacket(sf::Packet p);
 
-	unsigned short getGroundId(sf::Vector2i pos);
-	unsigned short getBlockId(sf::Vector2i pos);
-	Block* getBlockAt(sf::Vector2i pos);
+	unsigned short getGroundId(sf::Vector2i pos, const bool load = true);
+	unsigned short getBlockId(sf::Vector2i pos, const bool load = true);
+	Block* getBlockAt(sf::Vector2i pos, const bool load = true);
 	void setGroundId(sf::Vector2i pos, unsigned short ground);
 	void setBlockId(sf::Vector2i pos, unsigned short block);
-	Chunk pgetChunk(sf::Vector2i chunk);
+	ChunkPtr pgetChunk(sf::Vector2i chunk);
 
 	inline std::string getName() { return worldName; };
 
@@ -44,8 +48,8 @@ public:
     Entities* getEntityById(unsigned int id);
 
     //Chunks
-	void generateChunk(Chunk& chunk, Generators gen);
-    virtual void updateChunks();
+	void generateChunk(ChunkPtr chunk, Generators gen);
+    virtual void updateChunks(float delta);
     virtual void loadChunk(sf::Vector2i chunk);
     virtual void unloadChunk(sf::Vector2i chunk, bool erase);
     virtual void flushChunkCache();
@@ -59,10 +63,10 @@ protected:
 	std::vector<Entities*> entities;
 
 	//Chunks
-    std::map<uint64_t, Chunk> loadedChunks;
+    std::map<uint64_t, ChunkPtr> loadedChunks;
 	std::vector<CachedChunk> chunkCache;
 
-    inline Chunk* getChunk(sf::Vector2i chunkPos) { return &((*loadedChunks.find(vector2iToInt64(chunkPos))).second); };
+    inline ChunkPtr getChunk(sf::Vector2i chunkPos) { return (*loadedChunks.find(vector2iToInt64(chunkPos))).second; };
     inline sf::Vector2i getChunkPosFromBlock(sf::Vector2i block)
         { return sf::Vector2i((int)floor((float)block.x / Chunk::CHUNK_SIZE), (int)floor((float)block.y / Chunk::CHUNK_SIZE)); };
     inline bool isChunkLoaded(sf::Vector2i chunkPos) { return loadedChunks.find(vector2iToInt64(chunkPos)) != loadedChunks.end(); };

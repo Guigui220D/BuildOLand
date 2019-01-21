@@ -1,23 +1,22 @@
-
 #pragma once
-
 
 #include "LivingEntity.h"
 
 class BlackWarrior : public LivingEntity {
 public:
     BlackWarrior(World *world, unsigned id);
+
+    inline void setDirection(unsigned char dir) { direction = dir; };
+
 protected:
     std::string getTextureName() override;
-    std::vector<IntRect> getIdleAnim() override;
-    std::vector<IntRect> getNorthWalkAnim() override;
-    std::vector<IntRect> getSouthWalkAnim() override;
-    std::vector<IntRect> getEastWalkAnim() override;
-    std::vector<IntRect> getWestWalkAnim() override;
+    std::vector<sf::IntRect> getIdleAnim() override;
+    std::vector<sf::IntRect> getNorthWalkAnim() override;
+    std::vector<sf::IntRect> getSouthWalkAnim() override;
+    std::vector<sf::IntRect> getEastWalkAnim() override;
+    std::vector<sf::IntRect> getWestWalkAnim() override;
 
     void updateMovement(float dt) override;
-
-    virtual BlackWarrior* clone() const { return new BlackWarrior(*this); };
 
     virtual std::vector<unsigned char> getBytes() override;
 

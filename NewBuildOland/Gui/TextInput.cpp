@@ -2,36 +2,34 @@
 #include "../States/StateBase.h"
 #include "../Game.h"
 
-TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize, bool alphaNumeric) : Gui(nullptr)
-    , stateBase(stateBase)
-    , pos(pos)
-    , inputText(placeHolder)
-    , maxSize(maxSize)
+TextInput::TextInput(StateBase *stateBase, sf::Vector2f pos, std::string placeHolder, unsigned maxSize, bool alphaNumeric) :
+    Gui(stateBase),
+    pos(pos),
+    inputText(placeHolder),
+    maxSize(maxSize)
 {
     alphaNumericOnly = alphaNumeric;
 
     //BACKGROUND
     background = sf::RectangleShape();
     background.setFillColor(sf::Color(0, 0, 0, 100));
-    background.setSize(sf::Vector2f(500, 100));
-    background.setPosition(pos.x - background.getSize().x / 2,
-                           pos.y - background.getSize().y / 2 + 13);
+    background.setSize(sf::Vector2f(100.f, 20.f));
+    background.setPosition(pos.x, pos.y);
 
 
     //TEXT
-    text.setFont(*stateBase->getAssetManager()->getFont("LUCON"));
+    text.setFont(*GameGlobal::assets.getFont("LUCON"));
     text.setFillColor(sf::Color::White);
-    text.setCharacterSize(45);
+    text.setCharacterSize(40);
+    text.setScale(sf::Vector2f(.3f, .3f));
     text.setString(placeHolder);
-    text.setPosition(-background.getSize().x * 0.5f + text.getLocalBounds().width * 0.5f- text.getLocalBounds().width / 2 + margin,
-                     pos.y - text.getLocalBounds().height / 2);
+    text.setPosition(pos.x + 5.f, pos.y + 2.5f);
 
     //CURSOR ( | )
     cursor = sf::RectangleShape();
     cursor.setFillColor(sf::Color::White);
-    cursor.setSize(sf::Vector2f(2, 60));
-    cursor.setPosition(pos.x + text.getLocalBounds().width + 10 - background.getSize().x / 2 + margin,
-                       pos.y - background.getSize().y / 2 + 13 + 20);
+    cursor.setSize(sf::Vector2f(1, 13));
+    cursor.setPosition(pos.x + text.getGlobalBounds().width + 6.5f, pos.y + 2.5f);
 
 
 }
@@ -50,29 +48,24 @@ void TextInput::draw(sf::RenderWindow &window) {
     }
 }
 
-bool TextInput::isActive(sf::Vector2i mousePos) {
-
-    sf::Vector2f pixelPos = stateBase->getGame()->getWindow().mapPixelToCoords(mousePos);
-
-    wasActive = active;
-
-    active = pixelPos.x > background.getPosition().x &&
-             pixelPos.x < background.getPosition().x + background.getSize().x &&
-             pixelPos.y > background.getPosition().y &&
-             pixelPos.y < background.getPosition().y + background.getSize().y;
-
-    //Just got active
-    if(!wasActive && active) {
-        cursorTime = 0;
+bool TextInput::handleEvent(sf::Event e) {
+    if (e.type == sf::Event::MouseButtonPressed)
+    {
+        sf::Vector2f mousePos = stateBase->getGame()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(stateBase->getGame()->getWindow()));
+        active = background.getGlobalBounds().contains(mousePos);
     }
-
-    return active;
-}
-
-void TextInput::eventResize() {
-    if(wasActive) {
-        active = true;
+    if (e.type == sf::Event::TextEntered && active)
+    {
+        eventInput(e.text.unicode);
+        return true;
     }
+    if (active && e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Return)
+    {
+        enterPressed = true;
+        active = false;
+        return true;
+    }
+    return false;
 }
 
 void TextInput::eventInput(short unicode) {
@@ -100,11 +93,18 @@ void TextInput::eventInput(short unicode) {
         }
 
         text.setString(inputText);
-        cursor.setPosition(pos.x + text.getLocalBounds().width + 10 - background.getSize().x / 2 + margin,
-                           pos.y - background.getSize().y / 2 + 13 + 20);
+        cursor.setPosition(pos.x + text.getGlobalBounds().width + 6.5f, pos.y + 2.5f);
     }
 }
 
 const std::string &TextInput::getInputText() const {
     return inputText;
+}
+
+bool TextInput::onEnter()
+{
+    if (!enterPressed)
+        return false;
+    enterPressed = false;
+    return true;
 }

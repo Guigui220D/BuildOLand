@@ -10,8 +10,6 @@ class TNTEntity : public Entities
 
         void explode(sf::Vector2i center);
 
-        virtual TNTEntity* clone() const { return new TNTEntity(*this); };
-
         std::vector<unsigned char> getBytes() override;
 
         virtual void takePacket(sf::Packet p) override;

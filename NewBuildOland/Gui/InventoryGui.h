@@ -1,17 +1,16 @@
-
 #pragma once
-
 
 #include <vector>
 #include "Gui.h"
 #include "../Utils/Inventory.h"
+
+class StateGame;
 
 class InventoryGui : public Gui {
 public:
     InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId);
 
     void draw(sf::RenderWindow &window) override;
-
     void update(float dt) override;
 
     void updateInventory();
@@ -19,7 +18,8 @@ public:
     unsigned int getInventorySlots() const;
 
 private:
-    float inventoryScale = 2;
+    StateGame* stateGame;
+
     unsigned int inventorySlots = 8;
 
     sf::Sprite inventorySprite;

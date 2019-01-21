@@ -3,8 +3,9 @@
 
 
 #include "StateBase.h"
-#include "../Gui/MenuButton.h"
-#include "../Gui/TextInput.h"
+
+class GuiButton;
+class TextInput;
 
 class StateMenu : public StateBase {
 
@@ -25,10 +26,13 @@ private:
     sf::Sprite logoSprite;
     sf::Sprite sfmlSprite;
 
-    std::unique_ptr<MenuButton> buttonLocal;
-    std::unique_ptr<MenuButton> buttonMultiplayer;
-    std::unique_ptr<TextInput> nickInput;
-    std::unique_ptr<TextInput> adressInput;
+    GuiDomain guiDomain;
+    GuiButton* buttonLocal;
+    GuiButton* buttonMultiplayer;
+    TextInput* nicknameInput;
+    TextInput* addressInput;
+
+    sf::Texture woodenBackGround;
 
     float elapsedTime = 0;
 

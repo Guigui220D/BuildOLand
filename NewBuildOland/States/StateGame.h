@@ -7,12 +7,17 @@
 #include "../Utils/TileSet.h"
 #include "../Entities/Player.h"
 #include "../Entities/Entities.h"
-#include "../Gui/Gui.h"
-#include "../Gui/InventoryGui.h"
+
 #include <vector>
 #include <memory>
 #include "../Utils/NetworkManager.h"
+
+#include "../Gui/Gui.h"
+#include "../Gui/InventoryGui.h"
+#include "../Gui/InventoryMenuGui.h"
 #include "../Gui/ChatGui.h"
+#include "../Gui/GuiShroud.h"
+#include "../Gui/GuiButton.h"
 
 class StateGame : public StateBase
 {
@@ -54,10 +59,6 @@ private:
     NetworkManager nManager;
     bool onlineMode;
 
-	std::vector<std::unique_ptr<Gui>> gui;
-	InventoryGui *inventoryGui;
-	ChatGui *chatGui;
-
 	World *currentWorld = nullptr;
 
 	sf::View mapView;
@@ -75,9 +76,28 @@ private:
 
 	TileSet tileset;
 
-	Player *player;
+	Player* player;
 
+    GuiDomain guiDomain;
+    InventoryGui* inventoryGui;
+    bool inInventory;
+    GuiZone* inventoryZone;
+    InventoryMenuGui* inventoryMenu;
 
+	bool paused;
+	GuiDomain pauseGuiDomain;
+    GuiButton* pauseResumeButton;
+    GuiButton* pauseSettingsButton;
+    GuiButton* pauseExitButton;
+
+    bool inChat;
+    GuiDomain chatGuiDomain;
+    ChatGui* chatGui;
+
+    inline bool inGame() const { return !(paused || inChat || inInventory); }
+
+    //bool inSettings;
+    //GuiDomain settingsGuiDomain;
 
 };
 

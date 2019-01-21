@@ -239,6 +239,7 @@ _Pvt_Extensions
 *.cbp
 *.depend
 *.layout
+*.cscope_file_list
 
 # Removing dlls
 *.dll

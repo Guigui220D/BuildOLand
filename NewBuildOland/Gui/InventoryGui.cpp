@@ -2,42 +2,35 @@
 #include "InventoryGui.h"
 #include "../States/StateGame.h"
 
-InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId)
-    : Gui(stateGame)
-    , inventory(inventory)
-    , cursorId(cursorId)
+InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned short *cursorId) :
+    Gui(stateGame),
+    stateGame(stateGame),
+    inventory(inventory),
+    cursorId(cursorId)
 {
     //Get the inventory image
     inventorySprite.setTexture(*stateGame->getAssetManager()->getTexture("INVENTORY_BAR"));
-    float inventoryWidth = inventorySprite.getLocalBounds().width;
-    float inventoryHeight = inventorySprite.getLocalBounds().height;
-    float inventoryMargin = 10.0f;
-    inventorySprite.scale(inventoryScale, inventoryScale);
-    inventorySprite.setPosition(-inventoryWidth / 2 * inventoryScale,
-                                stateGame->getGuiView().getSize().y / 2 - inventoryHeight * inventoryScale - inventoryMargin);
 
     //Get the inventory selected cursor
     selectedSprite.setTexture(*stateGame->getAssetManager()->getTexture("SELECTED_SLOT"));
-    selectedSprite.setScale(inventoryScale, inventoryScale);
-    selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36) * inventoryScale,
-                               inventorySprite.getPosition().y);
+    selectedSprite.setPosition(*cursorId * 36, 0);
 
     //Load the item images
     for(unsigned i = 0; i < inventorySlots; i++){
         //Place the sprite correctly
-        sf::Sprite* item = new Sprite();
-        item->setScale(inventoryScale, inventoryScale);
-        item->setPosition(inventorySprite.getPosition().x + 4 * inventoryScale + (i * 36) * inventoryScale ,
-                          inventorySprite.getPosition().y + 4 * inventoryScale);
+        sf::Sprite* item = new sf::Sprite();
+        item->setPosition(i * 36 + 4, 4);
         itemSprites.push_back(item);
 
         //And place the text correctly
-        sf::Text* text = new Text();
+        sf::Text* text = new sf::Text();
         text->setFont(*stateGame->getAssetManager()->getFont("AKASHI"));
         text->setFillColor(sf::Color::White);
-        text->setCharacterSize(8 * inventoryScale);
+        text->setCharacterSize(8);
         //No need for setting the position now, as we need to change it according to the length of the text
         itemTexts.push_back(text);
+
+        itemSprites[i]->setTexture(*GameGlobal::assets.getTexture("TILESET"));
     }
 
 
@@ -45,23 +38,21 @@ InventoryGui::InventoryGui(StateGame *stateGame, Inventory *inventory, unsigned 
 }
 
 void InventoryGui::update(float dt) {
-    std::stringstream s;
-    inventory->getItem(*cursorId)->getItem()->isGround();
+    inventory->getItem(*cursorId).getItem()->isGround();
 
     //Change the position of the cursor according to the cursorId
-    selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36) * inventoryScale,
+    selectedSprite.setPosition(inventorySprite.getPosition().x + (*cursorId * 36),
                                inventorySprite.getPosition().y);
 }
 
 void InventoryGui::draw(sf::RenderWindow &window) {
     //Draw the shadow of the inventory bar
-    sf::Vector2f inventoryPos = inventorySprite.getPosition();
     inventorySprite.setColor(sf::Color(0, 0, 0, 100));
-    inventorySprite.setPosition(inventoryPos.x + 5, inventoryPos.y + 5);
+    inventorySprite.setPosition(5, 5);
     window.draw(inventorySprite);
     //And the inventory
     inventorySprite.setColor(sf::Color(255, 255, 255));
-    inventorySprite.setPosition(inventoryPos.x, inventoryPos.y);
+    inventorySprite.setPosition(0, 0);
     window.draw(inventorySprite);
 
     //Draw all items of the bar
@@ -86,32 +77,15 @@ void InventoryGui::draw(sf::RenderWindow &window) {
 void InventoryGui::updateInventory() {
 
     //Update the items of the inventory
-
     for(unsigned int i = 0; i < inventorySlots; i++) {
-        ItemStack *itemStack = inventory->getItem(i);
-        Item *item = itemStack->getItem();
-        sf::IntRect textureRect;
+        ItemStack itemStack = inventory->getItem(i);
 
         //Get the item rect
-        if(item->isPlaceable()) {
-            if(item->isGround()) {
-                textureRect = stateGame->getTileset()->getGroundByName(item->getName())->getTextureRect();
-            } else {
-                textureRect = stateGame->getTileset()->getBlockByName(item->getName())->getTextureRect();
-            }
-
-            itemSprites[i]->setTextureRect(textureRect);
-            itemSprites[i]->setTexture(*stateGame->getTileset()->getTexture());
-        } else {
-            itemSprites[i]->setTextureRect(sf::IntRect(0, 0, 0, 0));
-        }
+        itemSprites[i]->setTextureRect(itemStack.getItem()->getItemTextureRect());
 
         //Set the quantity of the item
-        itemTexts[i]->setString(std::to_string(itemStack->getQuantity()));
-        itemTexts[i]->setPosition(inventorySprite.getPosition().x + 34 * inventoryScale + (i * 36) * inventoryScale - itemTexts[i]->getLocalBounds().width,
-                                  inventorySprite.getPosition().y + 26 * inventoryScale);
-
-
+        itemTexts[i]->setString(std::to_string(itemStack.getQuantity()));
+        itemTexts[i]->setPosition(34 + (i * 36) - itemTexts[i]->getLocalBounds().width, 26);
     }
 }
 

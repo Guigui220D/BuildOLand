@@ -1,5 +1,5 @@
 #pragma once
-#include "Block.h"
+#include "../Block.h"
 #include "../Events/EventManager.h"
 
 class TNTBlock : public Block

@@ -14,15 +14,22 @@ public:
 	sf::Color getColor();
 	sf::IntRect getTextureRect();
 
+    virtual sf::IntRect getItemTextureRect() const override;
+
 	virtual void onPlaceableEnter(PlaceableEnterEvent e);
 	virtual void onPlaceableLeave(PlaceableLeaveEvent e);
 
 	bool isPlaceable() override;
 	bool isGround() override = 0;
 
+	inline void setTileId(unsigned short identifier) { tileId = identifier; }
+	inline unsigned short getTileId() const { return tileId; }
+
 protected:
 	//Used to get the right texture from the tileset
 	sf::IntRect textureRect;
 	sf::Color mapColor;
+
+	unsigned short tileId = 0;
 };
 

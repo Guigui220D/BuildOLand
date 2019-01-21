@@ -40,16 +40,8 @@ Item* ItemStack::getItem() const {
     return item;
 }
 
-void ItemStack::setQuantity(unsigned short quantity) {
-    ItemStack::quantity = quantity;
-}
-
 bool ItemStack::isEmpty() {
     return quantity <= 0;
-}
-
-void ItemStack::setItem(Item *item) {
-    ItemStack::item = item;
 }
 
 void ItemStack::add(unsigned int quantity) {
@@ -59,7 +51,19 @@ void ItemStack::add(unsigned int quantity) {
 void ItemStack::remove(unsigned int quantity) {
     ItemStack::quantity -= quantity;
 
-    if(quantity < 0) {
+    if(quantity <= 0) {
         ItemStack::quantity = 0;
+        item = new ItemAir();
     }
+}
+
+bool ItemStack::stack(ItemStack otherStack)
+{
+    if (otherStack.item == item)
+    {
+        quantity += otherStack.getQuantity();
+        return true;
+    }
+    else
+        return false;
 }
