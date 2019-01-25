@@ -19,7 +19,7 @@ void EventManager::OnBlockBreak(BlockBreakEvent e)
 	if (!state->isOnlineAndAvailible())
     {
         //Send event to the block
-        tileset->getBlockById(e.getOldBlock()->onBlockBreak(e);
+        tileset->getBlockById(e.getOldBlock())->onBlockBreak(e);
     }
     else    //To server
         state->getNetworkManager()->sendBlockBreak(e.getPosition());
