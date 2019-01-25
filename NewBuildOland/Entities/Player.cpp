@@ -24,15 +24,16 @@ void Player::initInventory(World* currentWorld) {
     //Later : save / load inventory from file
     TileSet* tileset = game->getTileset();
 
-    inventory->addItem(ItemStack(tileset->getBlockById(1), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(2), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(4), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(6), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(7), 100));
-    inventory->addItem(ItemStack(tileset->getGroundById(0), 100));
-    inventory->addItem(ItemStack(tileset->getGroundById(1), 120));
-    inventory->addItem(ItemStack(tileset->getBlockById(5), 100));
-    inventory->addItem(ItemStack(tileset->getBlockById(3), 100));
+    inventory->addItem(ItemStack(tileset->getBlockByName("LOG"), 100));
+    inventory->addItem(ItemStack(tileset->getBlockByName("BRICK"), 70));
+    inventory->addItem(ItemStack(tileset->getBlockByName("METAL"), 20));
+    inventory->addItem(ItemStack(tileset->getBlockByName("GOLD"), 5));
+    inventory->addItem(ItemStack(tileset->getBlockByName("CLOSED_DOOR"), 5));
+    inventory->addItem(ItemStack(tileset->getGroundByName("GRASS"), 100));
+    inventory->addItem(ItemStack(tileset->getGroundByName("WATER"), 50));
+    inventory->addItem(ItemStack(tileset->getGroundByName("SAND"), 120));
+    inventory->addItem(ItemStack(tileset->getBlockByName("TNT"), 999));
+    inventory->addItem(ItemStack(tileset->getBlockByName("CONCRETE"), 15));
 }
 
 void Player::updateMovement(float dt) {

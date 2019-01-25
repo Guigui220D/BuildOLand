@@ -27,7 +27,7 @@ public:
 	//Get a tile object using its ID
 	inline Block* getBlockById(unsigned int id) const
         { return blocks.at(id); }
-	inline Ground* getGroundById(unsigned int id) const
+    inline Ground* getGroundById(unsigned int id) const
         { return grounds.at(id); }
 
     //Get an id using a name
@@ -36,9 +36,9 @@ public:
 
 	//Get a tile using its name
 	inline Block* getBlockByName(std::string name) const
-        { return getBlockById(getBlockIdByName(name)); }
+        { return blocks.at(getBlockIdByName(name)); }
 	inline Ground* getGroundByName(std::string name) const
-        { return getGroundById(getGroundIdByName(name)); }
+        { return grounds.at(getGroundIdByName(name)); }
 
 	inline unsigned int getBlockCount() const { return blocks.size(); }
 	inline unsigned int getGroundCount() const { return grounds.size(); }
