@@ -6,15 +6,21 @@
 #include "../Placeables/BuildingBlocks/OpenDoorBlock.h"
 #include "../Placeables/BuildingBlocks/ClosedDoorBlock.h"
 #include "../Placeables/Prototypes/BlinkerBlock.h"
+#include "ItemSet.h"
 #include <iostream>
 //This is the tileset class that allows to get textures from a block id
 //The tileset should be in Res/
 
-TileSet::TileSet()
+TileSet::TileSet(ItemSet& toImportFrom)
 {
     tileset = GameGlobal::assets.getTexture("TILESET");
-	generateBlocks();
-	generateGrounds();
+	//Import tiles from itemset
+	Item* i;
+	while (toImportFrom.iterateThroughItems(i))
+    {
+        if (i->isPlaceable())
+            addTile((Placeable*)i);
+    }
 }
 
 TileSet::~TileSet()
@@ -60,7 +66,7 @@ void TileSet::addTile(Placeable* tile)
     }
     return;
 }
-
+/*
 void TileSet::generateBlocks()
 {
 	addTile(new Block(rectById(1), "AIR",				sf::Color(90, 70, 50),	false, false));                 //0
@@ -86,6 +92,7 @@ void TileSet::generateGrounds()
 	addTile(new Ground(rectById(5), "CONCRETE", sf::Color(155, 155, 155)));
 	addTile(new WornConcrete(rectById(19), "WORN_CONCRETE", sf::Color(135, 135, 135)));
 }
+*/
 
 sf::IntRect TileSet::getBlockSideRect(unsigned int id) const
 {

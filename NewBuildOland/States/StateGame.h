@@ -5,6 +5,7 @@
 #include "../Game.h"
 #include "../Worlds/World.h"
 #include "../Utils/TileSet.h"
+#include "../Utils/ItemSet.h"
 #include "../Entities/Player.h"
 #include "../Entities/Entities.h"
 
@@ -74,6 +75,7 @@ private:
 	unsigned short inventoryCursorId = 0;
 	bool isPlaceKeyPressed = false;
 
+	ItemSet itemset;
 	TileSet tileset;
 
 	Player* player;

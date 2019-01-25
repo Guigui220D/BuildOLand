@@ -33,7 +33,7 @@ void Player::initInventory(World* currentWorld) {
     inventory->addItem(ItemStack(tileset->getGroundByName("WATER"), 50));
     inventory->addItem(ItemStack(tileset->getGroundByName("SAND"), 120));
     inventory->addItem(ItemStack(tileset->getBlockByName("TNT"), 999));
-    inventory->addItem(ItemStack(tileset->getBlockByName("CONCRETE"), 15));
+    inventory->addItem(ItemStack(tileset->getBlockByName("CONCRETE_BLOCK"), 15));
 }
 
 void Player::updateMovement(float dt) {

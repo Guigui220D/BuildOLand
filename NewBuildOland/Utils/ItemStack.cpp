@@ -1,9 +1,10 @@
 #include "ItemStack.h"
 #include "Inventory.h"
 #include "../Placeables/ItemAir.h"
+#include "ItemSet.h"
 
 ItemStack::ItemStack() {
-    item = new ItemAir();
+    item = ItemSet::getSomeAir();
     ItemStack::quantity = 0;
 }
 
@@ -11,7 +12,7 @@ ItemStack::ItemStack(Item* item) {
 
     //If it has a nullptr it's the same as an ItemStack() without arguments
     if(item == nullptr) {
-        ItemStack::item = new ItemAir();
+        ItemStack::item = ItemSet::getSomeAir();
         ItemStack::quantity = 0;
         return;
     }
@@ -23,7 +24,7 @@ ItemStack::ItemStack(Item* item) {
 ItemStack::ItemStack(Item* item, unsigned short quantity) {
     //If it has a nullptr it's the same as an ItemStack() with a quantity
     if(item == nullptr) {
-        ItemStack::item = new ItemAir();
+        ItemStack::item = ItemSet::getSomeAir();
         ItemStack::quantity = quantity;
         return;
     }
@@ -45,7 +46,7 @@ bool ItemStack::isEmpty() {
 }
 
 void ItemStack::add(unsigned int quantity) {
-    ItemStack::quantity+= quantity;
+    ItemStack::quantity += quantity;
 }
 
 void ItemStack::remove(unsigned int quantity) {
@@ -53,7 +54,7 @@ void ItemStack::remove(unsigned int quantity) {
 
     if(quantity <= 0) {
         ItemStack::quantity = 0;
-        item = new ItemAir();
+        item = ItemSet::getSomeAir();
     }
 }
 

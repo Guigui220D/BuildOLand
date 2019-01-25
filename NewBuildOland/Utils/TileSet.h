@@ -7,10 +7,12 @@
 //This is the tileset class that allows to get textures from a block id
 //All the tilsets should be in Res/
 
+class ItemSet;
+
 class TileSet
 {
 public:
-	TileSet();
+	TileSet(ItemSet& toImportFrom);
 	~TileSet();
 
 	//Get the rectangles to draw the map (in the TILESET texture) using rectById()
@@ -54,16 +56,8 @@ private:
 	sf::IntRect errorRect = sf::IntRect(0, 0, 8, 8);
 	sf::Color errorColor = sf::Color(255, 0, 255);
 
-	//Creates an IntRect where the texture is according to the nth texture of the tileset
-    inline sf::IntRect rectById(unsigned int tilesetId) const
-        { return sf::IntRect(tilesetId % TILES_IN_ROW * (TILE_SIZE + 2) + 1, (int)floorf(tilesetId / TILES_IN_ROW) * (TILE_SIZE + 2) + 1, TILE_SIZE, TILE_SIZE); }
-
 	//Adds a tile
     void addTile(Placeable* tile);
-
-    //Add all grounds and block (do once on constructor)
-	void generateBlocks();
-	void generateGrounds();
 
 	std::vector<Block*> blocks;
 	std::vector<Ground*> grounds;

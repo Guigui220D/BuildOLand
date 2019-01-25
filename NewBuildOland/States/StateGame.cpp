@@ -18,6 +18,7 @@
 StateGame::StateGame(Game& game, bool online, std::string playerName, std::string addressInput) :
     StateBase(game),
 	nManager(this),
+	tileset(itemset),
     inInventory(false),
 	paused(false),
 	inChat(false)
