@@ -22,18 +22,18 @@ std::vector<unsigned char> Player::getBytes() { return std::vector<unsigned char
 void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file
-    TileSet* tileset = game->getTileset();
+    ItemSet* tileset = game->getItemset();
 
-    inventory->addItem(ItemStack(tileset->getBlockByName("LOG"), 100));
-    inventory->addItem(ItemStack(tileset->getBlockByName("BRICK"), 70));
-    inventory->addItem(ItemStack(tileset->getBlockByName("METAL"), 20));
-    inventory->addItem(ItemStack(tileset->getBlockByName("GOLD"), 5));
-    inventory->addItem(ItemStack(tileset->getBlockByName("CLOSED_DOOR"), 5));
-    inventory->addItem(ItemStack(tileset->getGroundByName("GRASS"), 100));
-    inventory->addItem(ItemStack(tileset->getGroundByName("WATER"), 50));
-    inventory->addItem(ItemStack(tileset->getGroundByName("SAND"), 120));
-    inventory->addItem(ItemStack(tileset->getBlockByName("TNT"), 999));
-    inventory->addItem(ItemStack(tileset->getBlockByName("CONCRETE_BLOCK"), 15));
+    inventory->addItem(ItemStack(tileset->getItemByName("LOG"), 100));
+    inventory->addItem(ItemStack(tileset->getItemByName("BRICK"), 70));
+    inventory->addItem(ItemStack(tileset->getItemByName("METAL"), 20));
+    inventory->addItem(ItemStack(tileset->getItemByName("GOLD"), 5));
+    inventory->addItem(ItemStack(tileset->getItemByName("CLOSED_DOOR"), 5));
+    inventory->addItem(ItemStack(tileset->getItemByName("GRASS"), 100));
+    inventory->addItem(ItemStack(tileset->getItemByName("WATER"), 50));
+    inventory->addItem(ItemStack(tileset->getItemByName("SAND"), 120));
+    inventory->addItem(ItemStack(tileset->getItemByName("TNT"), 999));
+    inventory->addItem(ItemStack(tileset->getItemByName("CONCRETE_BLOCK"), 15));
 }
 
 void Player::updateMovement(float dt) {

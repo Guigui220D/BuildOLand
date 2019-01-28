@@ -25,10 +25,7 @@ TileSet::TileSet(ItemSet& toImportFrom)
 
 TileSet::~TileSet()
 {
-    for (Block* b : blocks)
-        delete b;
-    for (Ground* g : grounds)
-        delete g;
+
 }
 
 void TileSet::addTile(Placeable* tile)

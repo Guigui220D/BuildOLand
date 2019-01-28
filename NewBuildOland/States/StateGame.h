@@ -46,6 +46,7 @@ public:
 
 	inline World* getWorld() { return currentWorld; };
 	inline TileSet* getTileset() { return &tileset; };
+	inline ItemSet* getItemset() { return &itemset; };
 	inline Player* getPlayer() { return player; };
 
     void handleEvent(sf::Event &event) override;

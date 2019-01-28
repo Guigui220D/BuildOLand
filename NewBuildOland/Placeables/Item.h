@@ -13,12 +13,13 @@ public:
 
     virtual sf::IntRect getItemTextureRect() const;
 
-    inline void setItemId(unsigned int id) { itemId = id; };
+    inline void setItemId(unsigned short id) { itemId = id; };
+    inline unsigned short getItemId() const { return itemId; };
 
 protected:
     std::string name;
 
-    unsigned int itemId;
+    unsigned short itemId;
 };
 
 

@@ -14,6 +14,7 @@ InventoryMenuGui::InventoryMenuGui(StateGame *stateGame, sf::Vector2u size, Inve
 
     //Render background
     {
+        std::cout << "Size of item stack : " << sizeof(ItemStack) << "\n";
         sf::RenderTexture rd;
         rd.create(size.x * 40, size.y * 40);
         rd.clear(sf::Color(0, 0, 0, 127));

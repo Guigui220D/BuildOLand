@@ -3,64 +3,46 @@
 #include "../Placeables/ItemAir.h"
 #include "ItemSet.h"
 
-ItemStack::ItemStack() {
-    item = ItemSet::getSomeAir();
-    ItemStack::quantity = 0;
+#include <cassert>
+
+ItemSet* ItemStack::currentItemSet;
+
+ItemStack::ItemStack()
+{
+    id = 0;
+    quantity = 0;
 }
 
-ItemStack::ItemStack(Item* item) {
-
-    //If it has a nullptr it's the same as an ItemStack() without arguments
-    if(item == nullptr) {
-        ItemStack::item = ItemSet::getSomeAir();
-        ItemStack::quantity = 0;
-        return;
-    }
-
-    ItemStack::item = item;
-    ItemStack::quantity = 1;
-}
-
-ItemStack::ItemStack(Item* item, unsigned short quantity) {
+ItemStack::ItemStack(Item* item, unsigned short count)
+{
+    /*
     //If it has a nullptr it's the same as an ItemStack() with a quantity
     if(item == nullptr) {
         ItemStack::item = ItemSet::getSomeAir();
         ItemStack::quantity = quantity;
         return;
     }
-
-    ItemStack::item = item;
-    ItemStack::quantity = quantity;
+    */
+    id = item->getItemId();
+    quantity = count;
 }
 
-unsigned short ItemStack::getQuantity() const {
-    return quantity;
-}
+Item* ItemStack::getItem() const
+    { return currentItemSet->getItemById(id); }
 
-Item* ItemStack::getItem() const {
-    return item;
-}
+void ItemStack::remove(unsigned short count)
+{
+    assert(count <= quantity);
 
-bool ItemStack::isEmpty() {
-    return quantity <= 0;
-}
+    quantity -= count;
 
-void ItemStack::add(unsigned int quantity) {
-    ItemStack::quantity += quantity;
-}
-
-void ItemStack::remove(unsigned int quantity) {
-    ItemStack::quantity -= quantity;
-
-    if (ItemStack::quantity <= 0) {
-        ItemStack::quantity = 0;
-        item = ItemSet::getSomeAir();
-    }
+    if (quantity == 0)
+        id = 0;
 }
 
 bool ItemStack::stack(ItemStack otherStack)
 {
-    if (otherStack.item == item)
+    if (otherStack.getID() == id)
     {
         quantity += otherStack.getQuantity();
         return true;

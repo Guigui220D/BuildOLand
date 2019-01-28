@@ -4,6 +4,7 @@ Inventory::Inventory(unsigned short size) :
     size(size)
 {
     inventory = new ItemStack[size];
+    std::cout << "Size of inventory in bytes " << sizeof(this) << "\n";
 }
 
 Inventory::~Inventory()

@@ -8,13 +8,19 @@
 #include "../Placeables/BuildingBlocks/OpenDoorBlock.h"
 #include "../Placeables/BuildingBlocks/ClosedDoorBlock.h"
 #include "../Placeables/Prototypes/BlinkerBlock.h"
+#include "ItemStack.h"
+
+#include <climits>
+#include <cassert>
 
 Item* ItemSet::air;
 
 ItemSet::ItemSet()
 {
+    air = new Block(tileRectById(1), "AIR", sf::Color::Black, false, false); //Air MUST be 0
+    addItem(air);
     generateItems();
-    air = getItemByName("AIR");
+    ItemStack::currentItemSet = this;
 }
 
 ItemSet::~ItemSet()
@@ -41,6 +47,7 @@ bool ItemSet::iterateThroughItems(Item*& item)
 
 void ItemSet::addItem(Item* item)
 {
+    assert(items.size() < USHRT_MAX - 1);
     std::string name = item->getName();
     if (itemNames.find(name) == itemNames.end())
     {
@@ -58,7 +65,6 @@ void ItemSet::addItem(Item* item)
 void ItemSet::generateItems()
 {
     //Blocks
-    addItem(new Block(tileRectById(1), "AIR",				sf::Color(90, 70, 50),	false, false));
 	addItem(new Block(tileRectById(7), "LOG",				sf::Color(135, 90, 30),	true, true, tileRectById(12)));
 	addItem(new Block(tileRectById(6), "BRICK",			    sf::Color(90, 90, 90),	true));
 	addItem(new Block(tileRectById(5), "CONCRETE_BLOCK",			sf::Color(90, 90, 90),	true));
