@@ -18,7 +18,7 @@ class Chunk
         Chunk(World* world);
         Chunk();    //Should not be called (only for CachedChunk's empty constructor
         //Load a chunk
-        Chunk(World* world, std::queue<unsigned char>& data, sf::Vector2i chunkPos);
+        Chunk(World* world, unsigned char*& dataPtr, sf::Vector2i chunkPos);
         virtual ~Chunk();
 
         void handlePacket(sf::Packet p, sf::Vector2i pos);

@@ -47,7 +47,7 @@ void World::loadChunk(sf::Vector2i chunk)
                 i++;
         }
         //If it's not, load from disk
-        std::string const chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunk.x) + "_" + std::to_string(chunk.y) + ".chunk");
+        const std::string chunkFileName("./gamedata/worlds/" + worldName + "/" + std::to_string(chunk.x) + "_" + std::to_string(chunk.y) + ".chunk");
         //Check if the file exists
         struct stat buffer; //???
         if (stat(chunkFileName.c_str(), &buffer) == 0)
@@ -61,58 +61,50 @@ void World::loadChunk(sf::Vector2i chunk)
                 //Get the data
                 chunkFile.seekg(0, chunkFile.beg);
                 char* buffer = new char[fileSize];
+                unsigned char* bufferPtr = (unsigned char*)buffer;
                 chunkFile.read(buffer, fileSize);
-                std::queue<unsigned char> data;
-                for (int i = 0; i < fileSize; i++)
-                {
-                    data.push((unsigned char)buffer[i]);
-                }
-                delete buffer;
+
                 if (chunkFile)
                 {
-                    loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), ChunkPtr(new Chunk(this, data, chunk))));
+                    loadedChunks.emplace(std::make_pair(vector2iToInt64(chunk), ChunkPtr(new Chunk(this, bufferPtr, chunk))));
                     //Process entities data on the remaining bytes
                     {
                         //Get entity count
-                        VarU<int> ecount(0);
-                        for (auto i = 0u; i < ecount.size(); i++)
-                        {
-                            ecount[i] = data.front();
-                            data.pop();
-                        }
-                        if (ecount())
-                            std::cout << "Entity count : " << ecount() << '\n';
+                        int ecount;
+                        memcpy(&ecount, bufferPtr, sizeof(int));
+                        bufferPtr += sizeof(int);
+                        if (ecount)
+                            std::cout << "Entity count : " << ecount << '\n';
                         //Get all entities
-                        for (int i = 0; i < ecount(); i++)
+                        for (int i = 0; i < ecount; i++)
                         {
                             //Get the code
-                            VarU<int> codeu(0);
-                            for (auto i = 0u; i < codeu.size(); i++)
-                            {
-                                codeu[i] = data.front();
-                                data.pop();
-                            }
+                            int code;
+                            memcpy(&code, bufferPtr, sizeof(int));
+                            bufferPtr += sizeof(int);
                             //Get position
-                            VarU<float> posx(0.f), posy(0.f);
-                            for (int i = 0; i < 4; i++)
-                                { posx[i] = data.front(); data.pop(); }
-                            for (int i = 0; i < 4; i++)
-                                { posy[i] = data.front(); data.pop(); }
+                            float posx, posy;
+                            memcpy(&posx, bufferPtr, sizeof(float));
+                            bufferPtr += sizeof(float);
+                            memcpy(&posy, bufferPtr, sizeof(float));
+                            bufferPtr += sizeof(float);
                             //Get more data if needed and instantiate entity
-                            switch (codeu())
+                            switch (code)
                             {
                             case EntityCodes::blackWarrior:
                                 {
                                     BlackWarrior* warrior = new BlackWarrior(this, getNextEntityId());
-                                    warrior->init(posx() / StateGame::TILE_SIZE, posy() / StateGame::TILE_SIZE);
-                                    warrior->setDirection(data.front());
+                                    warrior->init(posx / StateGame::TILE_SIZE, posy / StateGame::TILE_SIZE);
+                                    //warrior->setDirection(data.front());
                                     addEntity(warrior);
                                 }
-                                data.pop();
+                                //data.pop();
+                                //TODO : Need to make a way to load entity data
+                                bufferPtr++;
                                 break;
                             case EntityCodes::tnt:
                                 {
-                                    TNTEntity* te = new TNTEntity(this, getNextEntityId(), sf::Vector2i(posx() / StateGame::TILE_SIZE, posy() / StateGame::TILE_SIZE));
+                                    TNTEntity* te = new TNTEntity(this, getNextEntityId(), sf::Vector2i(posx / StateGame::TILE_SIZE, posy / StateGame::TILE_SIZE));
                                     addEntity(te);
                                 }
                                 break;
@@ -120,6 +112,8 @@ void World::loadChunk(sf::Vector2i chunk)
                         }
                     }
                     chunkFile.close();
+
+                    delete buffer;
                     return;
                 }
                 else
