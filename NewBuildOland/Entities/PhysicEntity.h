@@ -6,6 +6,7 @@ class PhysicEntity : public Entities
 public:
 	PhysicEntity(World *world, unsigned id);
 	~PhysicEntity();
+
 	void update(float delta) override;
 	int touchesBlock();
 protected:

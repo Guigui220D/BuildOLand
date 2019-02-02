@@ -5,19 +5,21 @@ class TNTEntity : public Entities
 {
     public:
         TNTEntity(World* world, unsigned id, sf::Vector2i pos);
-        virtual ~TNTEntity();
+        ~TNTEntity();
+
+        inline EntityCodes getCode() const override { return EntityCodes::tnt; };
+
         void update(float delta) override;
 
         void explode(sf::Vector2i center);
 
-        std::vector<unsigned char> getBytes() override;
-
-        virtual void takePacket(sf::Packet p) override;
-
+        void takePacket(sf::Packet p) override;
 
     private:
         sf::Clock fuse;
         sf::Vector2i worldPos;
+
+        float fuseLenght;
 };
 
 

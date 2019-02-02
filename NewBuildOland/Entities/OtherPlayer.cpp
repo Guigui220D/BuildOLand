@@ -24,8 +24,6 @@ OtherPlayer::~OtherPlayer()
     //dtor
 }
 
-std::vector<unsigned char> OtherPlayer::getBytes() { return std::vector<unsigned char>(); };
-
 void OtherPlayer::takePacket(sf::Packet p)
 {
     p >> movement;

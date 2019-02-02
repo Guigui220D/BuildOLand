@@ -6,6 +6,8 @@ class BlackWarrior : public LivingEntity {
 public:
     BlackWarrior(World *world, unsigned id);
 
+    inline EntityCodes getCode() const override { return EntityCodes::blackWarrior; };
+
     inline void setDirection(unsigned char dir) { direction = dir; };
 
 protected:
@@ -17,8 +19,6 @@ protected:
     std::vector<sf::IntRect> getWestWalkAnim() override;
 
     void updateMovement(float dt) override;
-
-    virtual std::vector<unsigned char> getBytes() override;
 
 private:
     unsigned char direction = 0;

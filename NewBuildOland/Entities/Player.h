@@ -10,13 +10,14 @@ class Player : public LivingEntity
 public:
 	Player(World *world, sf::String displayName, unsigned int id);
 	~Player();
+
+	inline EntityCodes getCode() const override { return EntityCodes::player; };
+
 	void drawMore(sf::RenderWindow& window) override;
 
 	inline void setCurrentWorld(World* newWorld) { currentWorld = newWorld; };
 
 	inline sf::String getDisplayName() { return nameText.getString(); };
-
-	std::vector<unsigned char> getBytes() override;
 
 private:
 	sf::Vector2i lastPos;

@@ -12,13 +12,13 @@ class OtherPlayer : public LivingEntity
         OtherPlayer(World *world, sf::String displayName, unsigned id);
         ~OtherPlayer();
 
+        inline EntityCodes getCode() const override { return EntityCodes::player; };
+
         void drawMore(sf::RenderWindow& window) override;
         inline void setCurrentWorld(World* newWorld) { currentWorld = newWorld; };
         inline sf::String getDisplayName() { return nameText.getString(); };
 
-        virtual void takePacket(sf::Packet p) override;
-
-        std::vector<unsigned char> getBytes() override;
+        void takePacket(sf::Packet p) override;
 
     protected:
 

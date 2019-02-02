@@ -17,8 +17,6 @@ Player::Player(World *world, sf::String displayName, unsigned int id)
 	nameText.setCharacterSize(25);
 }
 
-std::vector<unsigned char> Player::getBytes() { return std::vector<unsigned char>(); };
-
 void Player::initInventory(World* currentWorld) {
     Inventory *inventory = getInventory();
     //Later : save / load inventory from file

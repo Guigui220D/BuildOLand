@@ -32,5 +32,7 @@
 
 ### Bug fixes, corrections, minor things :
 
+- Restore entity data loading using char arrays (and tile entities?)
+- Fusion entity dand tile entity for solo chunk loading and online in one function
 - Proper kick (Online mode)
 - Versionning

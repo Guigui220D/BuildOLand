@@ -9,17 +9,6 @@ BlackWarrior::BlackWarrior(World *world, unsigned id)
     EntitySpeed = 150;
 }
 
-std::vector<unsigned char> BlackWarrior::getBytes()
-{
-    std::vector<unsigned char> bytes;
-    std::vector<unsigned char> beginningBytes = getBeginningBytes(EntityCodes::blackWarrior);
-    for (unsigned int i = 0; i < beginningBytes.size(); i++)
-        bytes.push_back(beginningBytes.at(i));
-    bytes.push_back(direction);
-    return bytes;
-}
-
-
 void BlackWarrior::updateMovement(float dt) {
     //Simple AI where the entity moves towards a direction until it finds a block
     //where it changes the direction again

@@ -23,16 +23,22 @@ public:
 
 	bool mustBeRemoved = false;
 
-	inline unsigned int getID() { return id; };
+	inline unsigned int getID() const { return id; };
+	inline virtual EntityCodes getCode() const { return EntityCodes::base; }
 
-	inline virtual void takePacket(sf::Packet p) {}
-
-	virtual std::vector<unsigned char> getBytes() = 0;
-	std::vector<unsigned char> getBeginningBytes(int code);
+	//To take a packet containing some info about the entity
+	inline virtual void takePacket(sf::Packet p) {};
+	//To take some data from a savefile
+	void takeData(unsigned char*& dataPtr);
+	inline size_t getDataSize() { return dataSize; };
 
 protected:
 	World *currentWorld = nullptr;
 	StateGame *game = nullptr;
+
+	//Determines the amount of data that should be taken with takeData
+    size_t dataSize;
+    inline void setDataSize(size_t size) { dataSize = size; };
 
 private:
 	sf::CircleShape onMap;
