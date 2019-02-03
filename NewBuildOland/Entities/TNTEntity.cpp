@@ -48,6 +48,15 @@ void TNTEntity::takePacket(sf::Packet p)
     fuse.restart();
 }
 
+unsigned char* TNTEntity::getData() const
+{
+    unsigned char* data = new unsigned char[getDataSize()];
+    memcpy(data, &worldPos, sizeof(sf::Vector2i));
+    float remainingFuse = fuseLenght - fuse.getElapsedTime().asSeconds();
+    memcpy(data + sizeof(sf::Vector2i), &remainingFuse, sizeof(float));
+    return data;
+}
+
 void TNTEntity::explode(sf::Vector2i center)
 {
     sf::Sound* boomSound = new sf::Sound();

@@ -30,7 +30,10 @@ public:
 	inline virtual void takePacket(sf::Packet p) {};
 	//To take some data from a savefile
 	void takeData(unsigned char*& dataPtr);
-	inline size_t getDataSize() { return dataSize; };
+	inline size_t getDataSize() const { return dataSize; };
+
+	//Do not forget to delete what is returned
+    virtual unsigned char* getData() const;
 
 protected:
 	World *currentWorld = nullptr;

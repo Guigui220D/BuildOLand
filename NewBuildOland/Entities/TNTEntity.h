@@ -14,6 +14,7 @@ class TNTEntity : public Entities
         void explode(sf::Vector2i center);
 
         void takePacket(sf::Packet p) override;
+        unsigned char* getData() const override;
 
     private:
         sf::Clock fuse;

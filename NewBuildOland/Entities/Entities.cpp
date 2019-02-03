@@ -1,6 +1,8 @@
 #include "Entities.h"
 #include "../States/StateGame.h"
 
+#include <assert.h>
+
 
 Entities::Entities(World *world, unsigned int id) :
     currentWorld(world),
@@ -48,4 +50,10 @@ void Entities::takeData(unsigned char*& data)
     data += dataSize;
     p << d;
     takePacket(p);
+}
+
+unsigned char* Entities::getData() const
+{
+    assert(getDataSize());
+    return nullptr;
 }
