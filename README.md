@@ -1,4 +1,4 @@
-![Title image](https://gitlab.com/buildoland/BuildOLand/blob/master/Title.png)
+![Title image](https://github.com/Guigui220D/BuildOLand/blob/master/Title.png)
 
 # BuildOLand
 
