@@ -1,5 +1,7 @@
 ![Title image](https://github.com/Guigui220D/BuildOLand/blob/master/Title.png)
 
+This project has been discontinued.
+
 # BuildOLand
 
 BuildOLand is a 2d topview multiplayer building game!
